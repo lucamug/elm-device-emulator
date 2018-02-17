@@ -122,20 +122,7 @@ jsonDecoder =
     Json.Decode.Pipeline.decode Data
         |> Json.Decode.Pipeline.required "logo" (Json.Decode.string |> Json.Decode.andThen logoDecoder)
         |> Json.Decode.Pipeline.required "text" Json.Decode.string
-        |> Json.Decode.Pipeline.required "toggle" (Json.Decode.string |> Json.Decode.andThen toggleDecoder)
-
-
-toggleDecoder : String -> Json.Decode.Decoder Bool
-toggleDecoder colorString =
-    case colorString of
-        "True" ->
-            Json.Decode.succeed True
-
-        "False" ->
-            Json.Decode.succeed False
-
-        _ ->
-            Json.Decode.fail <| "I don't know a toggle state named " ++ colorString
+        |> Json.Decode.Pipeline.required "toggle" Json.Decode.bool
 
 
 logoDecoder : String -> Json.Decode.Decoder Logo
@@ -281,7 +268,7 @@ jsonEncoder conf =
     Json.Encode.object
         [ ( "text", Json.Encode.string <| conf.text )
         , ( "logo", Json.Encode.string <| toString conf.logo )
-        , ( "toggle", Json.Encode.string <| toString conf.toggle )
+        , ( "toggle", Json.Encode.bool conf.toggle )
         ]
 
 

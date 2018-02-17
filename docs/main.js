@@ -19681,7 +19681,7 @@ var _mdgriffith$stylish_elephants$Element_Input$radio = _mdgriffith$stylish_elep
 var _mdgriffith$stylish_elephants$Element_Input$Row = {ctor: 'Row'};
 var _mdgriffith$stylish_elephants$Element_Input$radioRow = _mdgriffith$stylish_elephants$Element_Input$radioHelper(_mdgriffith$stylish_elephants$Element_Input$Row);
 
-var _lucamug$elm_pages_editor$Main$logoElm = function (height) {
+var _lucamug$elm_unbreakable_json$Main$logoElm = function (height) {
 	var c = {c1: '#F0AD00', c2: '#7FD13B', c3: '#60B5CC', c4: '#5A6378'};
 	var p = _elm_lang$svg$Svg$path;
 	var d = _elm_lang$svg$Svg_Attributes$d;
@@ -19771,7 +19771,7 @@ var _lucamug$elm_pages_editor$Main$logoElm = function (height) {
 			}
 		});
 };
-var _lucamug$elm_pages_editor$Main$logoStrawberry = function (height) {
+var _lucamug$elm_unbreakable_json$Main$logoStrawberry = function (height) {
 	return A2(
 		_elm_lang$svg$Svg$svg,
 		{
@@ -19853,7 +19853,7 @@ var _lucamug$elm_pages_editor$Main$logoStrawberry = function (height) {
 			}
 		});
 };
-var _lucamug$elm_pages_editor$Main$logoWatermelon = function (height) {
+var _lucamug$elm_unbreakable_json$Main$logoWatermelon = function (height) {
 	return A2(
 		_elm_lang$svg$Svg$svg,
 		{
@@ -20227,7 +20227,7 @@ var _lucamug$elm_pages_editor$Main$logoWatermelon = function (height) {
 			}
 		});
 };
-var _lucamug$elm_pages_editor$Main$jsonEncoder = function (conf) {
+var _lucamug$elm_unbreakable_json$Main$jsonEncoder = function (conf) {
 	return _elm_lang$core$Json_Encode$object(
 		{
 			ctor: '::',
@@ -20249,15 +20249,14 @@ var _lucamug$elm_pages_editor$Main$jsonEncoder = function (conf) {
 					_0: {
 						ctor: '_Tuple2',
 						_0: 'toggle',
-						_1: _elm_lang$core$Json_Encode$string(
-							_elm_lang$core$Basics$toString(conf.toggle))
+						_1: _elm_lang$core$Json_Encode$bool(conf.toggle)
 					},
 					_1: {ctor: '[]'}
 				}
 			}
 		});
 };
-var _lucamug$elm_pages_editor$Main$header = function (t) {
+var _lucamug$elm_unbreakable_json$Main$header = function (t) {
 	return A2(
 		_mdgriffith$stylish_elephants$Element$el,
 		{
@@ -20275,22 +20274,10 @@ var _lucamug$elm_pages_editor$Main$header = function (t) {
 		},
 		_mdgriffith$stylish_elephants$Element$text(t));
 };
-var _lucamug$elm_pages_editor$Main$subscriptions = function (model) {
+var _lucamug$elm_unbreakable_json$Main$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$none;
 };
-var _lucamug$elm_pages_editor$Main$toggleDecoder = function (colorString) {
-	var _p0 = colorString;
-	switch (_p0) {
-		case 'True':
-			return _elm_lang$core$Json_Decode$succeed(true);
-		case 'False':
-			return _elm_lang$core$Json_Decode$succeed(false);
-		default:
-			return _elm_lang$core$Json_Decode$fail(
-				A2(_elm_lang$core$Basics_ops['++'], 'I don\'t know a toggle state named ', colorString));
-	}
-};
-var _lucamug$elm_pages_editor$Main$handleNewJson = F2(
+var _lucamug$elm_unbreakable_json$Main$handleNewJson = F2(
 	function (model, newJson) {
 		return {
 			ctor: '_Tuple2',
@@ -20300,56 +20287,56 @@ var _lucamug$elm_pages_editor$Main$handleNewJson = F2(
 			_1: _elm_lang$core$Platform_Cmd$none
 		};
 	});
-var _lucamug$elm_pages_editor$Main$Data = F3(
+var _lucamug$elm_unbreakable_json$Main$Data = F3(
 	function (a, b, c) {
 		return {logo: a, text: b, toggle: c};
 	});
-var _lucamug$elm_pages_editor$Main$Model = F2(
+var _lucamug$elm_unbreakable_json$Main$Model = F2(
 	function (a, b) {
 		return {json: a, err: b};
 	});
-var _lucamug$elm_pages_editor$Main$EditorChangeJson = function (a) {
+var _lucamug$elm_unbreakable_json$Main$EditorChangeJson = function (a) {
 	return {ctor: 'EditorChangeJson', _0: a};
 };
-var _lucamug$elm_pages_editor$Main$EditorChangeLogo = function (a) {
+var _lucamug$elm_unbreakable_json$Main$EditorChangeLogo = function (a) {
 	return {ctor: 'EditorChangeLogo', _0: a};
 };
-var _lucamug$elm_pages_editor$Main$EditorChangeText = function (a) {
+var _lucamug$elm_unbreakable_json$Main$EditorChangeText = function (a) {
 	return {ctor: 'EditorChangeText', _0: a};
 };
-var _lucamug$elm_pages_editor$Main$EditorChangeToggle = function (a) {
+var _lucamug$elm_unbreakable_json$Main$EditorChangeToggle = function (a) {
 	return {ctor: 'EditorChangeToggle', _0: a};
 };
-var _lucamug$elm_pages_editor$Main$Watermelon = {ctor: 'Watermelon'};
-var _lucamug$elm_pages_editor$Main$Strawberry = {ctor: 'Strawberry'};
-var _lucamug$elm_pages_editor$Main$Elm = {ctor: 'Elm'};
-var _lucamug$elm_pages_editor$Main$initModel = {
-	json: {toggle: false, logo: _lucamug$elm_pages_editor$Main$Elm, text: 'Hello!'},
+var _lucamug$elm_unbreakable_json$Main$Watermelon = {ctor: 'Watermelon'};
+var _lucamug$elm_unbreakable_json$Main$Strawberry = {ctor: 'Strawberry'};
+var _lucamug$elm_unbreakable_json$Main$Elm = {ctor: 'Elm'};
+var _lucamug$elm_unbreakable_json$Main$initModel = {
+	json: {toggle: false, logo: _lucamug$elm_unbreakable_json$Main$Elm, text: 'Hello!'},
 	err: ''
 };
-var _lucamug$elm_pages_editor$Main$init = function () {
+var _lucamug$elm_unbreakable_json$Main$init = function () {
 	var cmd = _elm_lang$core$Platform_Cmd$none;
-	var model = _lucamug$elm_pages_editor$Main$initModel;
+	var model = _lucamug$elm_unbreakable_json$Main$initModel;
 	return {ctor: '_Tuple2', _0: model, _1: cmd};
 }();
-var _lucamug$elm_pages_editor$Main$logoDecoder = function (logoString) {
-	var _p1 = logoString;
-	switch (_p1) {
+var _lucamug$elm_unbreakable_json$Main$logoDecoder = function (logoString) {
+	var _p0 = logoString;
+	switch (_p0) {
 		case 'Elm':
-			return _elm_lang$core$Json_Decode$succeed(_lucamug$elm_pages_editor$Main$Elm);
+			return _elm_lang$core$Json_Decode$succeed(_lucamug$elm_unbreakable_json$Main$Elm);
 		case 'Strawberry':
-			return _elm_lang$core$Json_Decode$succeed(_lucamug$elm_pages_editor$Main$Strawberry);
+			return _elm_lang$core$Json_Decode$succeed(_lucamug$elm_unbreakable_json$Main$Strawberry);
 		case 'Watermelon':
-			return _elm_lang$core$Json_Decode$succeed(_lucamug$elm_pages_editor$Main$Watermelon);
+			return _elm_lang$core$Json_Decode$succeed(_lucamug$elm_unbreakable_json$Main$Watermelon);
 		default:
 			return _elm_lang$core$Json_Decode$fail(
 				A2(_elm_lang$core$Basics_ops['++'], 'I don\'t know a logo named ', logoString));
 	}
 };
-var _lucamug$elm_pages_editor$Main$jsonDecoder = A3(
+var _lucamug$elm_unbreakable_json$Main$jsonDecoder = A3(
 	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
 	'toggle',
-	A2(_elm_lang$core$Json_Decode$andThen, _lucamug$elm_pages_editor$Main$toggleDecoder, _elm_lang$core$Json_Decode$string),
+	_elm_lang$core$Json_Decode$bool,
 	A3(
 		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
 		'text',
@@ -20357,43 +20344,43 @@ var _lucamug$elm_pages_editor$Main$jsonDecoder = A3(
 		A3(
 			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
 			'logo',
-			A2(_elm_lang$core$Json_Decode$andThen, _lucamug$elm_pages_editor$Main$logoDecoder, _elm_lang$core$Json_Decode$string),
-			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_lucamug$elm_pages_editor$Main$Data))));
-var _lucamug$elm_pages_editor$Main$updateJson = F2(
+			A2(_elm_lang$core$Json_Decode$andThen, _lucamug$elm_unbreakable_json$Main$logoDecoder, _elm_lang$core$Json_Decode$string),
+			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_lucamug$elm_unbreakable_json$Main$Data))));
+var _lucamug$elm_unbreakable_json$Main$updateJson = F2(
 	function (newJsonString, oldJson) {
-		var result = A2(_elm_lang$core$Json_Decode$decodeString, _lucamug$elm_pages_editor$Main$jsonDecoder, newJsonString);
-		var _p2 = result;
-		if (_p2.ctor === 'Ok') {
-			return {ctor: '_Tuple2', _0: '', _1: _p2._0};
+		var result = A2(_elm_lang$core$Json_Decode$decodeString, _lucamug$elm_unbreakable_json$Main$jsonDecoder, newJsonString);
+		var _p1 = result;
+		if (_p1.ctor === 'Ok') {
+			return {ctor: '_Tuple2', _0: '', _1: _p1._0};
 		} else {
-			return {ctor: '_Tuple2', _0: _p2._0, _1: oldJson};
+			return {ctor: '_Tuple2', _0: _p1._0, _1: oldJson};
 		}
 	});
-var _lucamug$elm_pages_editor$Main$update = F2(
+var _lucamug$elm_unbreakable_json$Main$update = F2(
 	function (msg, model) {
 		var conf = model.json;
-		var _p3 = msg;
-		switch (_p3.ctor) {
+		var _p2 = msg;
+		switch (_p2.ctor) {
 			case 'EditorChangeToggle':
 				var newJson = _elm_lang$core$Native_Utils.update(
 					conf,
-					{toggle: _p3._0});
-				return A2(_lucamug$elm_pages_editor$Main$handleNewJson, model, newJson);
+					{toggle: _p2._0});
+				return A2(_lucamug$elm_unbreakable_json$Main$handleNewJson, model, newJson);
 			case 'EditorChangeLogo':
 				var newJson = _elm_lang$core$Native_Utils.update(
 					conf,
-					{logo: _p3._0});
-				return A2(_lucamug$elm_pages_editor$Main$handleNewJson, model, newJson);
+					{logo: _p2._0});
+				return A2(_lucamug$elm_unbreakable_json$Main$handleNewJson, model, newJson);
 			case 'EditorChangeText':
 				var newJson = _elm_lang$core$Native_Utils.update(
 					conf,
-					{text: _p3._0});
-				return A2(_lucamug$elm_pages_editor$Main$handleNewJson, model, newJson);
+					{text: _p2._0});
+				return A2(_lucamug$elm_unbreakable_json$Main$handleNewJson, model, newJson);
 			default:
 				var oldJson = model.json;
-				var _p4 = A2(_lucamug$elm_pages_editor$Main$updateJson, _p3._0, oldJson);
-				var err = _p4._0;
-				var newJson = _p4._1;
+				var _p3 = A2(_lucamug$elm_unbreakable_json$Main$updateJson, _p2._0, oldJson);
+				var err = _p3._0;
+				var newJson = _p3._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -20403,11 +20390,11 @@ var _lucamug$elm_pages_editor$Main$update = F2(
 				};
 		}
 	});
-var _lucamug$elm_pages_editor$Main$viewEditor = function (model) {
+var _lucamug$elm_unbreakable_json$Main$viewEditor = function (model) {
 	var prettyJson = A2(
 		_elm_lang$core$Json_Encode$encode,
 		4,
-		_lucamug$elm_pages_editor$Main$jsonEncoder(model.json));
+		_lucamug$elm_unbreakable_json$Main$jsonEncoder(model.json));
 	return A2(
 		_mdgriffith$stylish_elephants$Element$column,
 		{
@@ -20432,7 +20419,7 @@ var _lucamug$elm_pages_editor$Main$viewEditor = function (model) {
 					{ctor: '[]'},
 					{
 						ctor: '::',
-						_0: _lucamug$elm_pages_editor$Main$header('Json'),
+						_0: _lucamug$elm_unbreakable_json$Main$header('Json'),
 						_1: {
 							ctor: '::',
 							_0: A2(
@@ -20444,7 +20431,7 @@ var _lucamug$elm_pages_editor$Main$viewEditor = function (model) {
 									_1: {ctor: '[]'}
 								},
 								{
-									onChange: _elm_lang$core$Maybe$Just(_lucamug$elm_pages_editor$Main$EditorChangeJson),
+									onChange: _elm_lang$core$Maybe$Just(_lucamug$elm_unbreakable_json$Main$EditorChangeJson),
 									text: prettyJson,
 									placeholder: _elm_lang$core$Maybe$Nothing,
 									label: A2(
@@ -20480,8 +20467,8 @@ var _lucamug$elm_pages_editor$Main$viewEditor = function (model) {
 							label: A2(
 								_mdgriffith$stylish_elephants$Element_Input$labelAbove,
 								{ctor: '[]'},
-								_lucamug$elm_pages_editor$Main$header('Text')),
-							onChange: _elm_lang$core$Maybe$Just(_lucamug$elm_pages_editor$Main$EditorChangeText),
+								_lucamug$elm_unbreakable_json$Main$header('Text')),
+							onChange: _elm_lang$core$Maybe$Just(_lucamug$elm_unbreakable_json$Main$EditorChangeText),
 							notice: _elm_lang$core$Maybe$Nothing,
 							placeholder: _elm_lang$core$Maybe$Nothing,
 							text: model.json.text
@@ -20495,15 +20482,15 @@ var _lucamug$elm_pages_editor$Main$viewEditor = function (model) {
 								label: A2(
 									_mdgriffith$stylish_elephants$Element_Input$labelAbove,
 									{ctor: '[]'},
-									_lucamug$elm_pages_editor$Main$header('Logo')),
-								onChange: _elm_lang$core$Maybe$Just(_lucamug$elm_pages_editor$Main$EditorChangeLogo),
+									_lucamug$elm_unbreakable_json$Main$header('Logo')),
+								onChange: _elm_lang$core$Maybe$Just(_lucamug$elm_unbreakable_json$Main$EditorChangeLogo),
 								notice: _elm_lang$core$Maybe$Nothing,
 								selected: _elm_lang$core$Maybe$Just(model.json.logo),
 								options: {
 									ctor: '::',
 									_0: A2(
 										_mdgriffith$stylish_elephants$Element_Input$option,
-										_lucamug$elm_pages_editor$Main$Elm,
+										_lucamug$elm_unbreakable_json$Main$Elm,
 										A2(
 											_mdgriffith$stylish_elephants$Element$row,
 											{
@@ -20525,7 +20512,7 @@ var _lucamug$elm_pages_editor$Main$viewEditor = function (model) {
 														_1: {ctor: '[]'}
 													},
 													_mdgriffith$stylish_elephants$Element$html(
-														_lucamug$elm_pages_editor$Main$logoElm(22))),
+														_lucamug$elm_unbreakable_json$Main$logoElm(22))),
 												_1: {
 													ctor: '::',
 													_0: A2(
@@ -20543,7 +20530,7 @@ var _lucamug$elm_pages_editor$Main$viewEditor = function (model) {
 										ctor: '::',
 										_0: A2(
 											_mdgriffith$stylish_elephants$Element_Input$option,
-											_lucamug$elm_pages_editor$Main$Watermelon,
+											_lucamug$elm_unbreakable_json$Main$Watermelon,
 											A2(
 												_mdgriffith$stylish_elephants$Element$row,
 												{
@@ -20565,7 +20552,7 @@ var _lucamug$elm_pages_editor$Main$viewEditor = function (model) {
 															_1: {ctor: '[]'}
 														},
 														_mdgriffith$stylish_elephants$Element$html(
-															_lucamug$elm_pages_editor$Main$logoWatermelon(22))),
+															_lucamug$elm_unbreakable_json$Main$logoWatermelon(22))),
 													_1: {
 														ctor: '::',
 														_0: A2(
@@ -20583,7 +20570,7 @@ var _lucamug$elm_pages_editor$Main$viewEditor = function (model) {
 											ctor: '::',
 											_0: A2(
 												_mdgriffith$stylish_elephants$Element_Input$option,
-												_lucamug$elm_pages_editor$Main$Strawberry,
+												_lucamug$elm_unbreakable_json$Main$Strawberry,
 												A2(
 													_mdgriffith$stylish_elephants$Element$row,
 													{
@@ -20605,7 +20592,7 @@ var _lucamug$elm_pages_editor$Main$viewEditor = function (model) {
 																_1: {ctor: '[]'}
 															},
 															_mdgriffith$stylish_elephants$Element$html(
-																_lucamug$elm_pages_editor$Main$logoStrawberry(22))),
+																_lucamug$elm_unbreakable_json$Main$logoStrawberry(22))),
 														_1: {
 															ctor: '::',
 															_0: A2(
@@ -20638,8 +20625,8 @@ var _lucamug$elm_pages_editor$Main$viewEditor = function (model) {
 											label: A2(
 												_mdgriffith$stylish_elephants$Element_Input$labelAbove,
 												{ctor: '[]'},
-												_lucamug$elm_pages_editor$Main$header('Toggle')),
-											onChange: _elm_lang$core$Maybe$Just(_lucamug$elm_pages_editor$Main$EditorChangeToggle),
+												_lucamug$elm_unbreakable_json$Main$header('Toggle')),
+											onChange: _elm_lang$core$Maybe$Just(_lucamug$elm_unbreakable_json$Main$EditorChangeToggle),
 											notice: _elm_lang$core$Maybe$Nothing,
 											checked: model.json.toggle,
 											icon: _elm_lang$core$Maybe$Nothing
@@ -20653,7 +20640,7 @@ var _lucamug$elm_pages_editor$Main$viewEditor = function (model) {
 			}
 		});
 };
-var _lucamug$elm_pages_editor$Main$view = function (model) {
+var _lucamug$elm_unbreakable_json$Main$view = function (model) {
 	return A2(
 		_mdgriffith$stylish_elephants$Element$layout,
 		{
@@ -20702,17 +20689,17 @@ var _lucamug$elm_pages_editor$Main$view = function (model) {
 			},
 			{
 				ctor: '::',
-				_0: _lucamug$elm_pages_editor$Main$viewEditor(model),
+				_0: _lucamug$elm_unbreakable_json$Main$viewEditor(model),
 				_1: {ctor: '[]'}
 			}));
 };
-var _lucamug$elm_pages_editor$Main$main = _elm_lang$html$Html$program(
-	{init: _lucamug$elm_pages_editor$Main$init, view: _lucamug$elm_pages_editor$Main$view, update: _lucamug$elm_pages_editor$Main$update, subscriptions: _lucamug$elm_pages_editor$Main$subscriptions})();
+var _lucamug$elm_unbreakable_json$Main$main = _elm_lang$html$Html$program(
+	{init: _lucamug$elm_unbreakable_json$Main$init, view: _lucamug$elm_unbreakable_json$Main$view, update: _lucamug$elm_unbreakable_json$Main$update, subscriptions: _lucamug$elm_unbreakable_json$Main$subscriptions})();
 
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};
-if (typeof _lucamug$elm_pages_editor$Main$main !== 'undefined') {
-    _lucamug$elm_pages_editor$Main$main(Elm['Main'], 'Main', undefined);
+if (typeof _lucamug$elm_unbreakable_json$Main$main !== 'undefined') {
+    _lucamug$elm_unbreakable_json$Main$main(Elm['Main'], 'Main', undefined);
 }
 
 if (typeof define === "function" && define['amd'])
