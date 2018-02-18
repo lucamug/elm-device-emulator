@@ -1,8 +1,8 @@
-# Elm Responsive Emulator
+# Elm Device Emulator
 
 ## Demo
 
-* http://guupa.com/elm-responsive-emulator/
+* http://guupa.com/elm-device-emulator/
 
 ## Post
 
@@ -10,4 +10,4 @@
 
 ## Usage
 
-* elm-live --output=docs/main.js src/Main.elm --dir=docs
+* elm-live --output=docs/main.js src/DeviceEmulator.elm --dir=docs
