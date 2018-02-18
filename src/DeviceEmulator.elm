@@ -20,6 +20,7 @@ import Element.Font as Font
 import Html
 import Html.Attributes
 import Main
+import Navigation
 import Task
 import Window
 
@@ -39,6 +40,7 @@ type Msg
     | ToggleFullscreen
     | ChangeDevice DeviceType
     | WindowSize Window.Size
+    | UrlChange Navigation.Location
 
 
 type DeviceType
@@ -55,28 +57,34 @@ type alias ModelDeviceEmulator =
     }
 
 
-initModel : Model
-initModel =
-    { modelMain = Main.initModel
-    , modelDeviceEmulator =
-        { deviceType = IPhone7
-        , windowSize =
-            { width = 0
-            , height = 0
+init flag location =
+    let
+        ( initModel, initCmd ) =
+            Main.init flag location
+    in
+    ( { modelMain = initModel
+      , modelDeviceEmulator =
+            { deviceType = IPhone7
+            , windowSize =
+                { width = 0
+                , height = 0
+                }
+            , fullscreen = False
             }
-        , fullscreen = False
-        }
-    }
-
-
-initCmd : Cmd Msg
-initCmd =
-    Task.perform WindowSize Window.size
+      }
+    , Cmd.batch
+        [ -- initCmd
+          Task.perform WindowSize Window.size
+        ]
+    )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        UrlChange url ->
+            ( model, Cmd.none )
+
         MsgMain msg ->
             let
                 ( newMain, newCmd ) =
@@ -115,10 +123,28 @@ update msg model =
             ( { model | modelDeviceEmulator = newModel }, Cmd.none )
 
 
-main : Program Never Model Msg
+
+{-
+   main : Program Never Model Msg
+   main =
+       Html.program
+           { init = init
+           , view = view
+           , update = update
+           , subscriptions = subscriptions
+           }
+
+-}
+
+
+type alias Flag =
+    String
+
+
 main =
-    Html.program
-        { init = ( initModel, initCmd )
+    -- Navigation.programWithFlags (Route.fromLocation >> SetRoute)
+    Navigation.programWithFlags UrlChange
+        { init = init
         , view = view
         , update = update
         , subscriptions = subscriptions
@@ -155,7 +181,8 @@ view model =
             ]
             [ if model.modelDeviceEmulator.windowSize.width > 0 then
                 if model.modelDeviceEmulator.fullscreen then
-                    Element.map MsgMain (Main.viewElement model.modelMain)
+                    html (Html.map MsgMain (Main.view model.modelMain))
+                    -- text "ciao"
                 else
                     viewDevice model
               else
@@ -183,8 +210,9 @@ viewDevice : Model -> Element Msg
 viewDevice model =
     let
         content =
-            Element.map MsgMain (Main.viewElement model.modelMain)
+            html (Html.map MsgMain (Main.view model.modelMain))
 
+        -- text "ciao"
         deviceBorderTop =
             80
 

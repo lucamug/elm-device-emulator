@@ -1,4 +1,4 @@
-module Main exposing (main)
+module Main exposing (..)
 
 import Data.Article exposing (Slug)
 import Data.Session as Session exposing (Session)

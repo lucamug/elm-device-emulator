@@ -5837,172 +5837,39 @@ var _NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required = F3(
 			decoder);
 	});
 
-var _elm_lang$core$Color$fmod = F2(
-	function (f, n) {
-		var integer = _elm_lang$core$Basics$floor(f);
-		return (_elm_lang$core$Basics$toFloat(
-			A2(_elm_lang$core$Basics_ops['%'], integer, n)) + f) - _elm_lang$core$Basics$toFloat(integer);
-	});
-var _elm_lang$core$Color$rgbToHsl = F3(
-	function (red, green, blue) {
-		var b = _elm_lang$core$Basics$toFloat(blue) / 255;
-		var g = _elm_lang$core$Basics$toFloat(green) / 255;
-		var r = _elm_lang$core$Basics$toFloat(red) / 255;
-		var cMax = A2(
-			_elm_lang$core$Basics$max,
-			A2(_elm_lang$core$Basics$max, r, g),
-			b);
-		var cMin = A2(
-			_elm_lang$core$Basics$min,
-			A2(_elm_lang$core$Basics$min, r, g),
-			b);
-		var c = cMax - cMin;
-		var lightness = (cMax + cMin) / 2;
-		var saturation = _elm_lang$core$Native_Utils.eq(lightness, 0) ? 0 : (c / (1 - _elm_lang$core$Basics$abs((2 * lightness) - 1)));
-		var hue = _elm_lang$core$Basics$degrees(60) * (_elm_lang$core$Native_Utils.eq(cMax, r) ? A2(_elm_lang$core$Color$fmod, (g - b) / c, 6) : (_elm_lang$core$Native_Utils.eq(cMax, g) ? (((b - r) / c) + 2) : (((r - g) / c) + 4)));
-		return {ctor: '_Tuple3', _0: hue, _1: saturation, _2: lightness};
-	});
-var _elm_lang$core$Color$hslToRgb = F3(
-	function (hue, saturation, lightness) {
-		var normHue = hue / _elm_lang$core$Basics$degrees(60);
-		var chroma = (1 - _elm_lang$core$Basics$abs((2 * lightness) - 1)) * saturation;
-		var x = chroma * (1 - _elm_lang$core$Basics$abs(
-			A2(_elm_lang$core$Color$fmod, normHue, 2) - 1));
-		var _p0 = (_elm_lang$core$Native_Utils.cmp(normHue, 0) < 0) ? {ctor: '_Tuple3', _0: 0, _1: 0, _2: 0} : ((_elm_lang$core$Native_Utils.cmp(normHue, 1) < 0) ? {ctor: '_Tuple3', _0: chroma, _1: x, _2: 0} : ((_elm_lang$core$Native_Utils.cmp(normHue, 2) < 0) ? {ctor: '_Tuple3', _0: x, _1: chroma, _2: 0} : ((_elm_lang$core$Native_Utils.cmp(normHue, 3) < 0) ? {ctor: '_Tuple3', _0: 0, _1: chroma, _2: x} : ((_elm_lang$core$Native_Utils.cmp(normHue, 4) < 0) ? {ctor: '_Tuple3', _0: 0, _1: x, _2: chroma} : ((_elm_lang$core$Native_Utils.cmp(normHue, 5) < 0) ? {ctor: '_Tuple3', _0: x, _1: 0, _2: chroma} : ((_elm_lang$core$Native_Utils.cmp(normHue, 6) < 0) ? {ctor: '_Tuple3', _0: chroma, _1: 0, _2: x} : {ctor: '_Tuple3', _0: 0, _1: 0, _2: 0}))))));
-		var r = _p0._0;
-		var g = _p0._1;
-		var b = _p0._2;
-		var m = lightness - (chroma / 2);
-		return {ctor: '_Tuple3', _0: r + m, _1: g + m, _2: b + m};
-	});
-var _elm_lang$core$Color$toRgb = function (color) {
-	var _p1 = color;
-	if (_p1.ctor === 'RGBA') {
-		return {red: _p1._0, green: _p1._1, blue: _p1._2, alpha: _p1._3};
-	} else {
-		var _p2 = A3(_elm_lang$core$Color$hslToRgb, _p1._0, _p1._1, _p1._2);
-		var r = _p2._0;
-		var g = _p2._1;
-		var b = _p2._2;
-		return {
-			red: _elm_lang$core$Basics$round(255 * r),
-			green: _elm_lang$core$Basics$round(255 * g),
-			blue: _elm_lang$core$Basics$round(255 * b),
-			alpha: _p1._3
-		};
-	}
-};
-var _elm_lang$core$Color$toHsl = function (color) {
-	var _p3 = color;
-	if (_p3.ctor === 'HSLA') {
-		return {hue: _p3._0, saturation: _p3._1, lightness: _p3._2, alpha: _p3._3};
-	} else {
-		var _p4 = A3(_elm_lang$core$Color$rgbToHsl, _p3._0, _p3._1, _p3._2);
-		var h = _p4._0;
-		var s = _p4._1;
-		var l = _p4._2;
-		return {hue: h, saturation: s, lightness: l, alpha: _p3._3};
-	}
-};
-var _elm_lang$core$Color$HSLA = F4(
-	function (a, b, c, d) {
-		return {ctor: 'HSLA', _0: a, _1: b, _2: c, _3: d};
-	});
-var _elm_lang$core$Color$hsla = F4(
-	function (hue, saturation, lightness, alpha) {
-		return A4(
-			_elm_lang$core$Color$HSLA,
-			hue - _elm_lang$core$Basics$turns(
-				_elm_lang$core$Basics$toFloat(
-					_elm_lang$core$Basics$floor(hue / (2 * _elm_lang$core$Basics$pi)))),
-			saturation,
-			lightness,
-			alpha);
-	});
-var _elm_lang$core$Color$hsl = F3(
-	function (hue, saturation, lightness) {
-		return A4(_elm_lang$core$Color$hsla, hue, saturation, lightness, 1);
-	});
-var _elm_lang$core$Color$complement = function (color) {
-	var _p5 = color;
-	if (_p5.ctor === 'HSLA') {
-		return A4(
-			_elm_lang$core$Color$hsla,
-			_p5._0 + _elm_lang$core$Basics$degrees(180),
-			_p5._1,
-			_p5._2,
-			_p5._3);
-	} else {
-		var _p6 = A3(_elm_lang$core$Color$rgbToHsl, _p5._0, _p5._1, _p5._2);
-		var h = _p6._0;
-		var s = _p6._1;
-		var l = _p6._2;
-		return A4(
-			_elm_lang$core$Color$hsla,
-			h + _elm_lang$core$Basics$degrees(180),
-			s,
-			l,
-			_p5._3);
-	}
-};
-var _elm_lang$core$Color$grayscale = function (p) {
-	return A4(_elm_lang$core$Color$HSLA, 0, 0, 1 - p, 1);
-};
-var _elm_lang$core$Color$greyscale = function (p) {
-	return A4(_elm_lang$core$Color$HSLA, 0, 0, 1 - p, 1);
-};
-var _elm_lang$core$Color$RGBA = F4(
-	function (a, b, c, d) {
-		return {ctor: 'RGBA', _0: a, _1: b, _2: c, _3: d};
-	});
-var _elm_lang$core$Color$rgba = _elm_lang$core$Color$RGBA;
-var _elm_lang$core$Color$rgb = F3(
-	function (r, g, b) {
-		return A4(_elm_lang$core$Color$RGBA, r, g, b, 1);
-	});
-var _elm_lang$core$Color$lightRed = A4(_elm_lang$core$Color$RGBA, 239, 41, 41, 1);
-var _elm_lang$core$Color$red = A4(_elm_lang$core$Color$RGBA, 204, 0, 0, 1);
-var _elm_lang$core$Color$darkRed = A4(_elm_lang$core$Color$RGBA, 164, 0, 0, 1);
-var _elm_lang$core$Color$lightOrange = A4(_elm_lang$core$Color$RGBA, 252, 175, 62, 1);
-var _elm_lang$core$Color$orange = A4(_elm_lang$core$Color$RGBA, 245, 121, 0, 1);
-var _elm_lang$core$Color$darkOrange = A4(_elm_lang$core$Color$RGBA, 206, 92, 0, 1);
-var _elm_lang$core$Color$lightYellow = A4(_elm_lang$core$Color$RGBA, 255, 233, 79, 1);
-var _elm_lang$core$Color$yellow = A4(_elm_lang$core$Color$RGBA, 237, 212, 0, 1);
-var _elm_lang$core$Color$darkYellow = A4(_elm_lang$core$Color$RGBA, 196, 160, 0, 1);
-var _elm_lang$core$Color$lightGreen = A4(_elm_lang$core$Color$RGBA, 138, 226, 52, 1);
-var _elm_lang$core$Color$green = A4(_elm_lang$core$Color$RGBA, 115, 210, 22, 1);
-var _elm_lang$core$Color$darkGreen = A4(_elm_lang$core$Color$RGBA, 78, 154, 6, 1);
-var _elm_lang$core$Color$lightBlue = A4(_elm_lang$core$Color$RGBA, 114, 159, 207, 1);
-var _elm_lang$core$Color$blue = A4(_elm_lang$core$Color$RGBA, 52, 101, 164, 1);
-var _elm_lang$core$Color$darkBlue = A4(_elm_lang$core$Color$RGBA, 32, 74, 135, 1);
-var _elm_lang$core$Color$lightPurple = A4(_elm_lang$core$Color$RGBA, 173, 127, 168, 1);
-var _elm_lang$core$Color$purple = A4(_elm_lang$core$Color$RGBA, 117, 80, 123, 1);
-var _elm_lang$core$Color$darkPurple = A4(_elm_lang$core$Color$RGBA, 92, 53, 102, 1);
-var _elm_lang$core$Color$lightBrown = A4(_elm_lang$core$Color$RGBA, 233, 185, 110, 1);
-var _elm_lang$core$Color$brown = A4(_elm_lang$core$Color$RGBA, 193, 125, 17, 1);
-var _elm_lang$core$Color$darkBrown = A4(_elm_lang$core$Color$RGBA, 143, 89, 2, 1);
-var _elm_lang$core$Color$black = A4(_elm_lang$core$Color$RGBA, 0, 0, 0, 1);
-var _elm_lang$core$Color$white = A4(_elm_lang$core$Color$RGBA, 255, 255, 255, 1);
-var _elm_lang$core$Color$lightGrey = A4(_elm_lang$core$Color$RGBA, 238, 238, 236, 1);
-var _elm_lang$core$Color$grey = A4(_elm_lang$core$Color$RGBA, 211, 215, 207, 1);
-var _elm_lang$core$Color$darkGrey = A4(_elm_lang$core$Color$RGBA, 186, 189, 182, 1);
-var _elm_lang$core$Color$lightGray = A4(_elm_lang$core$Color$RGBA, 238, 238, 236, 1);
-var _elm_lang$core$Color$gray = A4(_elm_lang$core$Color$RGBA, 211, 215, 207, 1);
-var _elm_lang$core$Color$darkGray = A4(_elm_lang$core$Color$RGBA, 186, 189, 182, 1);
-var _elm_lang$core$Color$lightCharcoal = A4(_elm_lang$core$Color$RGBA, 136, 138, 133, 1);
-var _elm_lang$core$Color$charcoal = A4(_elm_lang$core$Color$RGBA, 85, 87, 83, 1);
-var _elm_lang$core$Color$darkCharcoal = A4(_elm_lang$core$Color$RGBA, 46, 52, 54, 1);
-var _elm_lang$core$Color$Radial = F5(
-	function (a, b, c, d, e) {
-		return {ctor: 'Radial', _0: a, _1: b, _2: c, _3: d, _4: e};
-	});
-var _elm_lang$core$Color$radial = _elm_lang$core$Color$Radial;
-var _elm_lang$core$Color$Linear = F3(
-	function (a, b, c) {
-		return {ctor: 'Linear', _0: a, _1: b, _2: c};
-	});
-var _elm_lang$core$Color$linear = _elm_lang$core$Color$Linear;
+//import Result //
 
+var _elm_lang$core$Native_Date = function() {
+
+function fromString(str)
+{
+	var date = new Date(str);
+	return isNaN(date.getTime())
+		? _elm_lang$core$Result$Err('Unable to parse \'' + str + '\' as a date. Dates must be in the ISO 8601 format.')
+		: _elm_lang$core$Result$Ok(date);
+}
+
+var dayTable = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+var monthTable =
+	['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+	 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+
+return {
+	fromString: fromString,
+	year: function(d) { return d.getFullYear(); },
+	month: function(d) { return { ctor: monthTable[d.getMonth()] }; },
+	day: function(d) { return d.getDate(); },
+	hour: function(d) { return d.getHours(); },
+	minute: function(d) { return d.getMinutes(); },
+	second: function(d) { return d.getSeconds(); },
+	millisecond: function(d) { return d.getMilliseconds(); },
+	toTime: function(d) { return d.getTime(); },
+	fromTime: function(t) { return new Date(t); },
+	dayOfWeek: function(d) { return { ctor: dayTable[d.getDay()] }; }
+};
+
+}();
 var _elm_lang$core$Task$onError = _elm_lang$core$Native_Scheduler.onError;
 var _elm_lang$core$Task$andThen = _elm_lang$core$Native_Scheduler.andThen;
 var _elm_lang$core$Task$spawnCmd = F2(
@@ -6415,6 +6282,540 @@ var _elm_lang$core$Time$subMap = F2(
 	});
 _elm_lang$core$Native_Platform.effectManagers['Time'] = {pkg: 'elm-lang/core', init: _elm_lang$core$Time$init, onEffects: _elm_lang$core$Time$onEffects, onSelfMsg: _elm_lang$core$Time$onSelfMsg, tag: 'sub', subMap: _elm_lang$core$Time$subMap};
 
+var _elm_lang$core$Date$millisecond = _elm_lang$core$Native_Date.millisecond;
+var _elm_lang$core$Date$second = _elm_lang$core$Native_Date.second;
+var _elm_lang$core$Date$minute = _elm_lang$core$Native_Date.minute;
+var _elm_lang$core$Date$hour = _elm_lang$core$Native_Date.hour;
+var _elm_lang$core$Date$dayOfWeek = _elm_lang$core$Native_Date.dayOfWeek;
+var _elm_lang$core$Date$day = _elm_lang$core$Native_Date.day;
+var _elm_lang$core$Date$month = _elm_lang$core$Native_Date.month;
+var _elm_lang$core$Date$year = _elm_lang$core$Native_Date.year;
+var _elm_lang$core$Date$fromTime = _elm_lang$core$Native_Date.fromTime;
+var _elm_lang$core$Date$toTime = _elm_lang$core$Native_Date.toTime;
+var _elm_lang$core$Date$fromString = _elm_lang$core$Native_Date.fromString;
+var _elm_lang$core$Date$now = A2(_elm_lang$core$Task$map, _elm_lang$core$Date$fromTime, _elm_lang$core$Time$now);
+var _elm_lang$core$Date$Date = {ctor: 'Date'};
+var _elm_lang$core$Date$Sun = {ctor: 'Sun'};
+var _elm_lang$core$Date$Sat = {ctor: 'Sat'};
+var _elm_lang$core$Date$Fri = {ctor: 'Fri'};
+var _elm_lang$core$Date$Thu = {ctor: 'Thu'};
+var _elm_lang$core$Date$Wed = {ctor: 'Wed'};
+var _elm_lang$core$Date$Tue = {ctor: 'Tue'};
+var _elm_lang$core$Date$Mon = {ctor: 'Mon'};
+var _elm_lang$core$Date$Dec = {ctor: 'Dec'};
+var _elm_lang$core$Date$Nov = {ctor: 'Nov'};
+var _elm_lang$core$Date$Oct = {ctor: 'Oct'};
+var _elm_lang$core$Date$Sep = {ctor: 'Sep'};
+var _elm_lang$core$Date$Aug = {ctor: 'Aug'};
+var _elm_lang$core$Date$Jul = {ctor: 'Jul'};
+var _elm_lang$core$Date$Jun = {ctor: 'Jun'};
+var _elm_lang$core$Date$May = {ctor: 'May'};
+var _elm_lang$core$Date$Apr = {ctor: 'Apr'};
+var _elm_lang$core$Date$Mar = {ctor: 'Mar'};
+var _elm_lang$core$Date$Feb = {ctor: 'Feb'};
+var _elm_lang$core$Date$Jan = {ctor: 'Jan'};
+
+var _elm_lang$core$Set$foldr = F3(
+	function (f, b, _p0) {
+		var _p1 = _p0;
+		return A3(
+			_elm_lang$core$Dict$foldr,
+			F3(
+				function (k, _p2, b) {
+					return A2(f, k, b);
+				}),
+			b,
+			_p1._0);
+	});
+var _elm_lang$core$Set$foldl = F3(
+	function (f, b, _p3) {
+		var _p4 = _p3;
+		return A3(
+			_elm_lang$core$Dict$foldl,
+			F3(
+				function (k, _p5, b) {
+					return A2(f, k, b);
+				}),
+			b,
+			_p4._0);
+	});
+var _elm_lang$core$Set$toList = function (_p6) {
+	var _p7 = _p6;
+	return _elm_lang$core$Dict$keys(_p7._0);
+};
+var _elm_lang$core$Set$size = function (_p8) {
+	var _p9 = _p8;
+	return _elm_lang$core$Dict$size(_p9._0);
+};
+var _elm_lang$core$Set$member = F2(
+	function (k, _p10) {
+		var _p11 = _p10;
+		return A2(_elm_lang$core$Dict$member, k, _p11._0);
+	});
+var _elm_lang$core$Set$isEmpty = function (_p12) {
+	var _p13 = _p12;
+	return _elm_lang$core$Dict$isEmpty(_p13._0);
+};
+var _elm_lang$core$Set$Set_elm_builtin = function (a) {
+	return {ctor: 'Set_elm_builtin', _0: a};
+};
+var _elm_lang$core$Set$empty = _elm_lang$core$Set$Set_elm_builtin(_elm_lang$core$Dict$empty);
+var _elm_lang$core$Set$singleton = function (k) {
+	return _elm_lang$core$Set$Set_elm_builtin(
+		A2(
+			_elm_lang$core$Dict$singleton,
+			k,
+			{ctor: '_Tuple0'}));
+};
+var _elm_lang$core$Set$insert = F2(
+	function (k, _p14) {
+		var _p15 = _p14;
+		return _elm_lang$core$Set$Set_elm_builtin(
+			A3(
+				_elm_lang$core$Dict$insert,
+				k,
+				{ctor: '_Tuple0'},
+				_p15._0));
+	});
+var _elm_lang$core$Set$fromList = function (xs) {
+	return A3(_elm_lang$core$List$foldl, _elm_lang$core$Set$insert, _elm_lang$core$Set$empty, xs);
+};
+var _elm_lang$core$Set$map = F2(
+	function (f, s) {
+		return _elm_lang$core$Set$fromList(
+			A2(
+				_elm_lang$core$List$map,
+				f,
+				_elm_lang$core$Set$toList(s)));
+	});
+var _elm_lang$core$Set$remove = F2(
+	function (k, _p16) {
+		var _p17 = _p16;
+		return _elm_lang$core$Set$Set_elm_builtin(
+			A2(_elm_lang$core$Dict$remove, k, _p17._0));
+	});
+var _elm_lang$core$Set$union = F2(
+	function (_p19, _p18) {
+		var _p20 = _p19;
+		var _p21 = _p18;
+		return _elm_lang$core$Set$Set_elm_builtin(
+			A2(_elm_lang$core$Dict$union, _p20._0, _p21._0));
+	});
+var _elm_lang$core$Set$intersect = F2(
+	function (_p23, _p22) {
+		var _p24 = _p23;
+		var _p25 = _p22;
+		return _elm_lang$core$Set$Set_elm_builtin(
+			A2(_elm_lang$core$Dict$intersect, _p24._0, _p25._0));
+	});
+var _elm_lang$core$Set$diff = F2(
+	function (_p27, _p26) {
+		var _p28 = _p27;
+		var _p29 = _p26;
+		return _elm_lang$core$Set$Set_elm_builtin(
+			A2(_elm_lang$core$Dict$diff, _p28._0, _p29._0));
+	});
+var _elm_lang$core$Set$filter = F2(
+	function (p, _p30) {
+		var _p31 = _p30;
+		return _elm_lang$core$Set$Set_elm_builtin(
+			A2(
+				_elm_lang$core$Dict$filter,
+				F2(
+					function (k, _p32) {
+						return p(k);
+					}),
+				_p31._0));
+	});
+var _elm_lang$core$Set$partition = F2(
+	function (p, _p33) {
+		var _p34 = _p33;
+		var _p35 = A2(
+			_elm_lang$core$Dict$partition,
+			F2(
+				function (k, _p36) {
+					return p(k);
+				}),
+			_p34._0);
+		var p1 = _p35._0;
+		var p2 = _p35._1;
+		return {
+			ctor: '_Tuple2',
+			_0: _elm_lang$core$Set$Set_elm_builtin(p1),
+			_1: _elm_lang$core$Set$Set_elm_builtin(p2)
+		};
+	});
+
+var _elm_community$json_extra$Json_Decode_Extra$combine = A2(
+	_elm_lang$core$List$foldr,
+	_elm_lang$core$Json_Decode$map2(
+		F2(
+			function (x, y) {
+				return {ctor: '::', _0: x, _1: y};
+			})),
+	_elm_lang$core$Json_Decode$succeed(
+		{ctor: '[]'}));
+var _elm_community$json_extra$Json_Decode_Extra$collection = function (decoder) {
+	return A2(
+		_elm_lang$core$Json_Decode$andThen,
+		function (length) {
+			return _elm_community$json_extra$Json_Decode_Extra$combine(
+				A2(
+					_elm_lang$core$List$map,
+					function (index) {
+						return A2(
+							_elm_lang$core$Json_Decode$field,
+							_elm_lang$core$Basics$toString(index),
+							decoder);
+					},
+					A2(_elm_lang$core$List$range, 0, length - 1)));
+		},
+		A2(_elm_lang$core$Json_Decode$field, 'length', _elm_lang$core$Json_Decode$int));
+};
+var _elm_community$json_extra$Json_Decode_Extra$fromResult = function (result) {
+	var _p0 = result;
+	if (_p0.ctor === 'Ok') {
+		return _elm_lang$core$Json_Decode$succeed(_p0._0);
+	} else {
+		return _elm_lang$core$Json_Decode$fail(_p0._0);
+	}
+};
+var _elm_community$json_extra$Json_Decode_Extra$parseInt = A2(
+	_elm_lang$core$Json_Decode$andThen,
+	function (_p1) {
+		return _elm_community$json_extra$Json_Decode_Extra$fromResult(
+			_elm_lang$core$String$toInt(_p1));
+	},
+	_elm_lang$core$Json_Decode$string);
+var _elm_community$json_extra$Json_Decode_Extra$parseFloat = A2(
+	_elm_lang$core$Json_Decode$andThen,
+	function (_p2) {
+		return _elm_community$json_extra$Json_Decode_Extra$fromResult(
+			_elm_lang$core$String$toFloat(_p2));
+	},
+	_elm_lang$core$Json_Decode$string);
+var _elm_community$json_extra$Json_Decode_Extra$doubleEncoded = function (decoder) {
+	return A2(
+		_elm_lang$core$Json_Decode$andThen,
+		function (_p3) {
+			return _elm_community$json_extra$Json_Decode_Extra$fromResult(
+				A2(_elm_lang$core$Json_Decode$decodeString, decoder, _p3));
+		},
+		_elm_lang$core$Json_Decode$string);
+};
+var _elm_community$json_extra$Json_Decode_Extra$keys = A2(
+	_elm_lang$core$Json_Decode$map,
+	A2(
+		_elm_lang$core$List$foldl,
+		F2(
+			function (_p4, acc) {
+				var _p5 = _p4;
+				return {ctor: '::', _0: _p5._0, _1: acc};
+			}),
+		{ctor: '[]'}),
+	_elm_lang$core$Json_Decode$keyValuePairs(
+		_elm_lang$core$Json_Decode$succeed(
+			{ctor: '_Tuple0'})));
+var _elm_community$json_extra$Json_Decode_Extra$sequenceHelp = F2(
+	function (decoders, jsonValues) {
+		return (!_elm_lang$core$Native_Utils.eq(
+			_elm_lang$core$List$length(jsonValues),
+			_elm_lang$core$List$length(decoders))) ? _elm_lang$core$Json_Decode$fail('Number of decoders does not match number of values') : _elm_community$json_extra$Json_Decode_Extra$fromResult(
+			A3(
+				_elm_lang$core$List$foldr,
+				_elm_lang$core$Result$map2(
+					F2(
+						function (x, y) {
+							return {ctor: '::', _0: x, _1: y};
+						})),
+				_elm_lang$core$Result$Ok(
+					{ctor: '[]'}),
+				A3(_elm_lang$core$List$map2, _elm_lang$core$Json_Decode$decodeValue, decoders, jsonValues)));
+	});
+var _elm_community$json_extra$Json_Decode_Extra$sequence = function (decoders) {
+	return A2(
+		_elm_lang$core$Json_Decode$andThen,
+		_elm_community$json_extra$Json_Decode_Extra$sequenceHelp(decoders),
+		_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$value));
+};
+var _elm_community$json_extra$Json_Decode_Extra$indexedList = function (indexedDecoder) {
+	return A2(
+		_elm_lang$core$Json_Decode$andThen,
+		function (values) {
+			return _elm_community$json_extra$Json_Decode_Extra$sequence(
+				A2(
+					_elm_lang$core$List$map,
+					indexedDecoder,
+					A2(
+						_elm_lang$core$List$range,
+						0,
+						_elm_lang$core$List$length(values) - 1)));
+		},
+		_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$value));
+};
+var _elm_community$json_extra$Json_Decode_Extra$optionalField = F2(
+	function (fieldName, decoder) {
+		var finishDecoding = function (json) {
+			var _p6 = A2(
+				_elm_lang$core$Json_Decode$decodeValue,
+				A2(_elm_lang$core$Json_Decode$field, fieldName, _elm_lang$core$Json_Decode$value),
+				json);
+			if (_p6.ctor === 'Ok') {
+				return A2(
+					_elm_lang$core$Json_Decode$map,
+					_elm_lang$core$Maybe$Just,
+					A2(_elm_lang$core$Json_Decode$field, fieldName, decoder));
+			} else {
+				return _elm_lang$core$Json_Decode$succeed(_elm_lang$core$Maybe$Nothing);
+			}
+		};
+		return A2(_elm_lang$core$Json_Decode$andThen, finishDecoding, _elm_lang$core$Json_Decode$value);
+	});
+var _elm_community$json_extra$Json_Decode_Extra$withDefault = F2(
+	function (fallback, decoder) {
+		return A2(
+			_elm_lang$core$Json_Decode$map,
+			_elm_lang$core$Maybe$withDefault(fallback),
+			_elm_lang$core$Json_Decode$maybe(decoder));
+	});
+var _elm_community$json_extra$Json_Decode_Extra$decodeDictFromTuples = F2(
+	function (keyDecoder, tuples) {
+		var _p7 = tuples;
+		if (_p7.ctor === '[]') {
+			return _elm_lang$core$Json_Decode$succeed(_elm_lang$core$Dict$empty);
+		} else {
+			var _p8 = A2(_elm_lang$core$Json_Decode$decodeString, keyDecoder, _p7._0._0);
+			if (_p8.ctor === 'Ok') {
+				return A2(
+					_elm_lang$core$Json_Decode$andThen,
+					function (_p9) {
+						return _elm_lang$core$Json_Decode$succeed(
+							A3(_elm_lang$core$Dict$insert, _p8._0, _p7._0._1, _p9));
+					},
+					A2(_elm_community$json_extra$Json_Decode_Extra$decodeDictFromTuples, keyDecoder, _p7._1));
+			} else {
+				return _elm_lang$core$Json_Decode$fail(_p8._0);
+			}
+		}
+	});
+var _elm_community$json_extra$Json_Decode_Extra$dict2 = F2(
+	function (keyDecoder, valueDecoder) {
+		return A2(
+			_elm_lang$core$Json_Decode$andThen,
+			_elm_community$json_extra$Json_Decode_Extra$decodeDictFromTuples(keyDecoder),
+			_elm_lang$core$Json_Decode$keyValuePairs(valueDecoder));
+	});
+var _elm_community$json_extra$Json_Decode_Extra$set = function (decoder) {
+	return A2(
+		_elm_lang$core$Json_Decode$map,
+		_elm_lang$core$Set$fromList,
+		_elm_lang$core$Json_Decode$list(decoder));
+};
+var _elm_community$json_extra$Json_Decode_Extra$date = A2(
+	_elm_lang$core$Json_Decode$andThen,
+	function (_p10) {
+		return _elm_community$json_extra$Json_Decode_Extra$fromResult(
+			_elm_lang$core$Date$fromString(_p10));
+	},
+	_elm_lang$core$Json_Decode$string);
+var _elm_community$json_extra$Json_Decode_Extra$andMap = _elm_lang$core$Json_Decode$map2(
+	F2(
+		function (x, y) {
+			return y(x);
+		}));
+var _elm_community$json_extra$Json_Decode_Extra_ops = _elm_community$json_extra$Json_Decode_Extra_ops || {};
+_elm_community$json_extra$Json_Decode_Extra_ops['|:'] = _elm_lang$core$Basics$flip(_elm_community$json_extra$Json_Decode_Extra$andMap);
+
+var _elm_community$json_extra$Json_Encode_Extra$dict = F3(
+	function (toKey, toValue, dict) {
+		return _elm_lang$core$Json_Encode$object(
+			A2(
+				_elm_lang$core$List$map,
+				function (_p0) {
+					var _p1 = _p0;
+					return {
+						ctor: '_Tuple2',
+						_0: toKey(_p1._0),
+						_1: toValue(_p1._1)
+					};
+				},
+				_elm_lang$core$Dict$toList(dict)));
+	});
+var _elm_community$json_extra$Json_Encode_Extra$maybe = function (encoder) {
+	return function (_p2) {
+		return A2(
+			_elm_lang$core$Maybe$withDefault,
+			_elm_lang$core$Json_Encode$null,
+			A2(_elm_lang$core$Maybe$map, encoder, _p2));
+	};
+};
+
+var _elm_lang$core$Color$fmod = F2(
+	function (f, n) {
+		var integer = _elm_lang$core$Basics$floor(f);
+		return (_elm_lang$core$Basics$toFloat(
+			A2(_elm_lang$core$Basics_ops['%'], integer, n)) + f) - _elm_lang$core$Basics$toFloat(integer);
+	});
+var _elm_lang$core$Color$rgbToHsl = F3(
+	function (red, green, blue) {
+		var b = _elm_lang$core$Basics$toFloat(blue) / 255;
+		var g = _elm_lang$core$Basics$toFloat(green) / 255;
+		var r = _elm_lang$core$Basics$toFloat(red) / 255;
+		var cMax = A2(
+			_elm_lang$core$Basics$max,
+			A2(_elm_lang$core$Basics$max, r, g),
+			b);
+		var cMin = A2(
+			_elm_lang$core$Basics$min,
+			A2(_elm_lang$core$Basics$min, r, g),
+			b);
+		var c = cMax - cMin;
+		var lightness = (cMax + cMin) / 2;
+		var saturation = _elm_lang$core$Native_Utils.eq(lightness, 0) ? 0 : (c / (1 - _elm_lang$core$Basics$abs((2 * lightness) - 1)));
+		var hue = _elm_lang$core$Basics$degrees(60) * (_elm_lang$core$Native_Utils.eq(cMax, r) ? A2(_elm_lang$core$Color$fmod, (g - b) / c, 6) : (_elm_lang$core$Native_Utils.eq(cMax, g) ? (((b - r) / c) + 2) : (((r - g) / c) + 4)));
+		return {ctor: '_Tuple3', _0: hue, _1: saturation, _2: lightness};
+	});
+var _elm_lang$core$Color$hslToRgb = F3(
+	function (hue, saturation, lightness) {
+		var normHue = hue / _elm_lang$core$Basics$degrees(60);
+		var chroma = (1 - _elm_lang$core$Basics$abs((2 * lightness) - 1)) * saturation;
+		var x = chroma * (1 - _elm_lang$core$Basics$abs(
+			A2(_elm_lang$core$Color$fmod, normHue, 2) - 1));
+		var _p0 = (_elm_lang$core$Native_Utils.cmp(normHue, 0) < 0) ? {ctor: '_Tuple3', _0: 0, _1: 0, _2: 0} : ((_elm_lang$core$Native_Utils.cmp(normHue, 1) < 0) ? {ctor: '_Tuple3', _0: chroma, _1: x, _2: 0} : ((_elm_lang$core$Native_Utils.cmp(normHue, 2) < 0) ? {ctor: '_Tuple3', _0: x, _1: chroma, _2: 0} : ((_elm_lang$core$Native_Utils.cmp(normHue, 3) < 0) ? {ctor: '_Tuple3', _0: 0, _1: chroma, _2: x} : ((_elm_lang$core$Native_Utils.cmp(normHue, 4) < 0) ? {ctor: '_Tuple3', _0: 0, _1: x, _2: chroma} : ((_elm_lang$core$Native_Utils.cmp(normHue, 5) < 0) ? {ctor: '_Tuple3', _0: x, _1: 0, _2: chroma} : ((_elm_lang$core$Native_Utils.cmp(normHue, 6) < 0) ? {ctor: '_Tuple3', _0: chroma, _1: 0, _2: x} : {ctor: '_Tuple3', _0: 0, _1: 0, _2: 0}))))));
+		var r = _p0._0;
+		var g = _p0._1;
+		var b = _p0._2;
+		var m = lightness - (chroma / 2);
+		return {ctor: '_Tuple3', _0: r + m, _1: g + m, _2: b + m};
+	});
+var _elm_lang$core$Color$toRgb = function (color) {
+	var _p1 = color;
+	if (_p1.ctor === 'RGBA') {
+		return {red: _p1._0, green: _p1._1, blue: _p1._2, alpha: _p1._3};
+	} else {
+		var _p2 = A3(_elm_lang$core$Color$hslToRgb, _p1._0, _p1._1, _p1._2);
+		var r = _p2._0;
+		var g = _p2._1;
+		var b = _p2._2;
+		return {
+			red: _elm_lang$core$Basics$round(255 * r),
+			green: _elm_lang$core$Basics$round(255 * g),
+			blue: _elm_lang$core$Basics$round(255 * b),
+			alpha: _p1._3
+		};
+	}
+};
+var _elm_lang$core$Color$toHsl = function (color) {
+	var _p3 = color;
+	if (_p3.ctor === 'HSLA') {
+		return {hue: _p3._0, saturation: _p3._1, lightness: _p3._2, alpha: _p3._3};
+	} else {
+		var _p4 = A3(_elm_lang$core$Color$rgbToHsl, _p3._0, _p3._1, _p3._2);
+		var h = _p4._0;
+		var s = _p4._1;
+		var l = _p4._2;
+		return {hue: h, saturation: s, lightness: l, alpha: _p3._3};
+	}
+};
+var _elm_lang$core$Color$HSLA = F4(
+	function (a, b, c, d) {
+		return {ctor: 'HSLA', _0: a, _1: b, _2: c, _3: d};
+	});
+var _elm_lang$core$Color$hsla = F4(
+	function (hue, saturation, lightness, alpha) {
+		return A4(
+			_elm_lang$core$Color$HSLA,
+			hue - _elm_lang$core$Basics$turns(
+				_elm_lang$core$Basics$toFloat(
+					_elm_lang$core$Basics$floor(hue / (2 * _elm_lang$core$Basics$pi)))),
+			saturation,
+			lightness,
+			alpha);
+	});
+var _elm_lang$core$Color$hsl = F3(
+	function (hue, saturation, lightness) {
+		return A4(_elm_lang$core$Color$hsla, hue, saturation, lightness, 1);
+	});
+var _elm_lang$core$Color$complement = function (color) {
+	var _p5 = color;
+	if (_p5.ctor === 'HSLA') {
+		return A4(
+			_elm_lang$core$Color$hsla,
+			_p5._0 + _elm_lang$core$Basics$degrees(180),
+			_p5._1,
+			_p5._2,
+			_p5._3);
+	} else {
+		var _p6 = A3(_elm_lang$core$Color$rgbToHsl, _p5._0, _p5._1, _p5._2);
+		var h = _p6._0;
+		var s = _p6._1;
+		var l = _p6._2;
+		return A4(
+			_elm_lang$core$Color$hsla,
+			h + _elm_lang$core$Basics$degrees(180),
+			s,
+			l,
+			_p5._3);
+	}
+};
+var _elm_lang$core$Color$grayscale = function (p) {
+	return A4(_elm_lang$core$Color$HSLA, 0, 0, 1 - p, 1);
+};
+var _elm_lang$core$Color$greyscale = function (p) {
+	return A4(_elm_lang$core$Color$HSLA, 0, 0, 1 - p, 1);
+};
+var _elm_lang$core$Color$RGBA = F4(
+	function (a, b, c, d) {
+		return {ctor: 'RGBA', _0: a, _1: b, _2: c, _3: d};
+	});
+var _elm_lang$core$Color$rgba = _elm_lang$core$Color$RGBA;
+var _elm_lang$core$Color$rgb = F3(
+	function (r, g, b) {
+		return A4(_elm_lang$core$Color$RGBA, r, g, b, 1);
+	});
+var _elm_lang$core$Color$lightRed = A4(_elm_lang$core$Color$RGBA, 239, 41, 41, 1);
+var _elm_lang$core$Color$red = A4(_elm_lang$core$Color$RGBA, 204, 0, 0, 1);
+var _elm_lang$core$Color$darkRed = A4(_elm_lang$core$Color$RGBA, 164, 0, 0, 1);
+var _elm_lang$core$Color$lightOrange = A4(_elm_lang$core$Color$RGBA, 252, 175, 62, 1);
+var _elm_lang$core$Color$orange = A4(_elm_lang$core$Color$RGBA, 245, 121, 0, 1);
+var _elm_lang$core$Color$darkOrange = A4(_elm_lang$core$Color$RGBA, 206, 92, 0, 1);
+var _elm_lang$core$Color$lightYellow = A4(_elm_lang$core$Color$RGBA, 255, 233, 79, 1);
+var _elm_lang$core$Color$yellow = A4(_elm_lang$core$Color$RGBA, 237, 212, 0, 1);
+var _elm_lang$core$Color$darkYellow = A4(_elm_lang$core$Color$RGBA, 196, 160, 0, 1);
+var _elm_lang$core$Color$lightGreen = A4(_elm_lang$core$Color$RGBA, 138, 226, 52, 1);
+var _elm_lang$core$Color$green = A4(_elm_lang$core$Color$RGBA, 115, 210, 22, 1);
+var _elm_lang$core$Color$darkGreen = A4(_elm_lang$core$Color$RGBA, 78, 154, 6, 1);
+var _elm_lang$core$Color$lightBlue = A4(_elm_lang$core$Color$RGBA, 114, 159, 207, 1);
+var _elm_lang$core$Color$blue = A4(_elm_lang$core$Color$RGBA, 52, 101, 164, 1);
+var _elm_lang$core$Color$darkBlue = A4(_elm_lang$core$Color$RGBA, 32, 74, 135, 1);
+var _elm_lang$core$Color$lightPurple = A4(_elm_lang$core$Color$RGBA, 173, 127, 168, 1);
+var _elm_lang$core$Color$purple = A4(_elm_lang$core$Color$RGBA, 117, 80, 123, 1);
+var _elm_lang$core$Color$darkPurple = A4(_elm_lang$core$Color$RGBA, 92, 53, 102, 1);
+var _elm_lang$core$Color$lightBrown = A4(_elm_lang$core$Color$RGBA, 233, 185, 110, 1);
+var _elm_lang$core$Color$brown = A4(_elm_lang$core$Color$RGBA, 193, 125, 17, 1);
+var _elm_lang$core$Color$darkBrown = A4(_elm_lang$core$Color$RGBA, 143, 89, 2, 1);
+var _elm_lang$core$Color$black = A4(_elm_lang$core$Color$RGBA, 0, 0, 0, 1);
+var _elm_lang$core$Color$white = A4(_elm_lang$core$Color$RGBA, 255, 255, 255, 1);
+var _elm_lang$core$Color$lightGrey = A4(_elm_lang$core$Color$RGBA, 238, 238, 236, 1);
+var _elm_lang$core$Color$grey = A4(_elm_lang$core$Color$RGBA, 211, 215, 207, 1);
+var _elm_lang$core$Color$darkGrey = A4(_elm_lang$core$Color$RGBA, 186, 189, 182, 1);
+var _elm_lang$core$Color$lightGray = A4(_elm_lang$core$Color$RGBA, 238, 238, 236, 1);
+var _elm_lang$core$Color$gray = A4(_elm_lang$core$Color$RGBA, 211, 215, 207, 1);
+var _elm_lang$core$Color$darkGray = A4(_elm_lang$core$Color$RGBA, 186, 189, 182, 1);
+var _elm_lang$core$Color$lightCharcoal = A4(_elm_lang$core$Color$RGBA, 136, 138, 133, 1);
+var _elm_lang$core$Color$charcoal = A4(_elm_lang$core$Color$RGBA, 85, 87, 83, 1);
+var _elm_lang$core$Color$darkCharcoal = A4(_elm_lang$core$Color$RGBA, 46, 52, 54, 1);
+var _elm_lang$core$Color$Radial = F5(
+	function (a, b, c, d, e) {
+		return {ctor: 'Radial', _0: a, _1: b, _2: c, _3: d, _4: e};
+	});
+var _elm_lang$core$Color$radial = _elm_lang$core$Color$Radial;
+var _elm_lang$core$Color$Linear = F3(
+	function (a, b, c) {
+		return {ctor: 'Linear', _0: a, _1: b, _2: c};
+	});
+var _elm_lang$core$Color$linear = _elm_lang$core$Color$Linear;
+
 //import Maybe, Native.List //
 
 var _elm_lang$core$Native_Regex = function() {
@@ -6555,137 +6956,6 @@ var _elm_lang$core$Regex$AtMost = function (a) {
 	return {ctor: 'AtMost', _0: a};
 };
 var _elm_lang$core$Regex$All = {ctor: 'All'};
-
-var _elm_lang$core$Set$foldr = F3(
-	function (f, b, _p0) {
-		var _p1 = _p0;
-		return A3(
-			_elm_lang$core$Dict$foldr,
-			F3(
-				function (k, _p2, b) {
-					return A2(f, k, b);
-				}),
-			b,
-			_p1._0);
-	});
-var _elm_lang$core$Set$foldl = F3(
-	function (f, b, _p3) {
-		var _p4 = _p3;
-		return A3(
-			_elm_lang$core$Dict$foldl,
-			F3(
-				function (k, _p5, b) {
-					return A2(f, k, b);
-				}),
-			b,
-			_p4._0);
-	});
-var _elm_lang$core$Set$toList = function (_p6) {
-	var _p7 = _p6;
-	return _elm_lang$core$Dict$keys(_p7._0);
-};
-var _elm_lang$core$Set$size = function (_p8) {
-	var _p9 = _p8;
-	return _elm_lang$core$Dict$size(_p9._0);
-};
-var _elm_lang$core$Set$member = F2(
-	function (k, _p10) {
-		var _p11 = _p10;
-		return A2(_elm_lang$core$Dict$member, k, _p11._0);
-	});
-var _elm_lang$core$Set$isEmpty = function (_p12) {
-	var _p13 = _p12;
-	return _elm_lang$core$Dict$isEmpty(_p13._0);
-};
-var _elm_lang$core$Set$Set_elm_builtin = function (a) {
-	return {ctor: 'Set_elm_builtin', _0: a};
-};
-var _elm_lang$core$Set$empty = _elm_lang$core$Set$Set_elm_builtin(_elm_lang$core$Dict$empty);
-var _elm_lang$core$Set$singleton = function (k) {
-	return _elm_lang$core$Set$Set_elm_builtin(
-		A2(
-			_elm_lang$core$Dict$singleton,
-			k,
-			{ctor: '_Tuple0'}));
-};
-var _elm_lang$core$Set$insert = F2(
-	function (k, _p14) {
-		var _p15 = _p14;
-		return _elm_lang$core$Set$Set_elm_builtin(
-			A3(
-				_elm_lang$core$Dict$insert,
-				k,
-				{ctor: '_Tuple0'},
-				_p15._0));
-	});
-var _elm_lang$core$Set$fromList = function (xs) {
-	return A3(_elm_lang$core$List$foldl, _elm_lang$core$Set$insert, _elm_lang$core$Set$empty, xs);
-};
-var _elm_lang$core$Set$map = F2(
-	function (f, s) {
-		return _elm_lang$core$Set$fromList(
-			A2(
-				_elm_lang$core$List$map,
-				f,
-				_elm_lang$core$Set$toList(s)));
-	});
-var _elm_lang$core$Set$remove = F2(
-	function (k, _p16) {
-		var _p17 = _p16;
-		return _elm_lang$core$Set$Set_elm_builtin(
-			A2(_elm_lang$core$Dict$remove, k, _p17._0));
-	});
-var _elm_lang$core$Set$union = F2(
-	function (_p19, _p18) {
-		var _p20 = _p19;
-		var _p21 = _p18;
-		return _elm_lang$core$Set$Set_elm_builtin(
-			A2(_elm_lang$core$Dict$union, _p20._0, _p21._0));
-	});
-var _elm_lang$core$Set$intersect = F2(
-	function (_p23, _p22) {
-		var _p24 = _p23;
-		var _p25 = _p22;
-		return _elm_lang$core$Set$Set_elm_builtin(
-			A2(_elm_lang$core$Dict$intersect, _p24._0, _p25._0));
-	});
-var _elm_lang$core$Set$diff = F2(
-	function (_p27, _p26) {
-		var _p28 = _p27;
-		var _p29 = _p26;
-		return _elm_lang$core$Set$Set_elm_builtin(
-			A2(_elm_lang$core$Dict$diff, _p28._0, _p29._0));
-	});
-var _elm_lang$core$Set$filter = F2(
-	function (p, _p30) {
-		var _p31 = _p30;
-		return _elm_lang$core$Set$Set_elm_builtin(
-			A2(
-				_elm_lang$core$Dict$filter,
-				F2(
-					function (k, _p32) {
-						return p(k);
-					}),
-				_p31._0));
-	});
-var _elm_lang$core$Set$partition = F2(
-	function (p, _p33) {
-		var _p34 = _p33;
-		var _p35 = A2(
-			_elm_lang$core$Dict$partition,
-			F2(
-				function (k, _p36) {
-					return p(k);
-				}),
-			_p34._0);
-		var p1 = _p35._0;
-		var p2 = _p35._1;
-		return {
-			ctor: '_Tuple2',
-			_0: _elm_lang$core$Set$Set_elm_builtin(p1),
-			_1: _elm_lang$core$Set$Set_elm_builtin(p2)
-		};
-	});
 
 var _elm_lang$dom$Native_Dom = function() {
 
@@ -6870,8 +7140,34 @@ return {
 
 }();
 
+var _elm_lang$dom$Dom$blur = _elm_lang$dom$Native_Dom.blur;
+var _elm_lang$dom$Dom$focus = _elm_lang$dom$Native_Dom.focus;
+var _elm_lang$dom$Dom$NotFound = function (a) {
+	return {ctor: 'NotFound', _0: a};
+};
+
 var _elm_lang$dom$Dom_LowLevel$onWindow = _elm_lang$dom$Native_Dom.onWindow;
 var _elm_lang$dom$Dom_LowLevel$onDocument = _elm_lang$dom$Native_Dom.onDocument;
+
+var _elm_lang$dom$Dom_Size$width = _elm_lang$dom$Native_Dom.width;
+var _elm_lang$dom$Dom_Size$height = _elm_lang$dom$Native_Dom.height;
+var _elm_lang$dom$Dom_Size$VisibleContentWithBordersAndMargins = {ctor: 'VisibleContentWithBordersAndMargins'};
+var _elm_lang$dom$Dom_Size$VisibleContentWithBorders = {ctor: 'VisibleContentWithBorders'};
+var _elm_lang$dom$Dom_Size$VisibleContent = {ctor: 'VisibleContent'};
+var _elm_lang$dom$Dom_Size$Content = {ctor: 'Content'};
+
+var _elm_lang$dom$Dom_Scroll$toX = _elm_lang$dom$Native_Dom.setScrollLeft;
+var _elm_lang$dom$Dom_Scroll$x = _elm_lang$dom$Native_Dom.getScrollLeft;
+var _elm_lang$dom$Dom_Scroll$toRight = _elm_lang$dom$Native_Dom.toRight;
+var _elm_lang$dom$Dom_Scroll$toLeft = function (id) {
+	return A2(_elm_lang$dom$Dom_Scroll$toX, id, 0);
+};
+var _elm_lang$dom$Dom_Scroll$toY = _elm_lang$dom$Native_Dom.setScrollTop;
+var _elm_lang$dom$Dom_Scroll$y = _elm_lang$dom$Native_Dom.getScrollTop;
+var _elm_lang$dom$Dom_Scroll$toBottom = _elm_lang$dom$Native_Dom.toBottom;
+var _elm_lang$dom$Dom_Scroll$toTop = function (id) {
+	return A2(_elm_lang$dom$Dom_Scroll$toY, id, 0);
+};
 
 var _elm_lang$virtual_dom$VirtualDom_Debug$wrap;
 var _elm_lang$virtual_dom$VirtualDom_Debug$wrapWithFlags;
@@ -9376,346 +9672,772 @@ var _elm_lang$html$Html_Events$Options = F2(
 		return {stopPropagation: a, preventDefault: b};
 	});
 
-var _elm_lang$svg$Svg$map = _elm_lang$virtual_dom$VirtualDom$map;
-var _elm_lang$svg$Svg$text = _elm_lang$virtual_dom$VirtualDom$text;
-var _elm_lang$svg$Svg$svgNamespace = A2(
-	_elm_lang$virtual_dom$VirtualDom$property,
-	'namespace',
-	_elm_lang$core$Json_Encode$string('http://www.w3.org/2000/svg'));
-var _elm_lang$svg$Svg$node = F3(
-	function (name, attributes, children) {
-		return A3(
-			_elm_lang$virtual_dom$VirtualDom$node,
-			name,
-			{ctor: '::', _0: _elm_lang$svg$Svg$svgNamespace, _1: attributes},
-			children);
-	});
-var _elm_lang$svg$Svg$svg = _elm_lang$svg$Svg$node('svg');
-var _elm_lang$svg$Svg$foreignObject = _elm_lang$svg$Svg$node('foreignObject');
-var _elm_lang$svg$Svg$animate = _elm_lang$svg$Svg$node('animate');
-var _elm_lang$svg$Svg$animateColor = _elm_lang$svg$Svg$node('animateColor');
-var _elm_lang$svg$Svg$animateMotion = _elm_lang$svg$Svg$node('animateMotion');
-var _elm_lang$svg$Svg$animateTransform = _elm_lang$svg$Svg$node('animateTransform');
-var _elm_lang$svg$Svg$mpath = _elm_lang$svg$Svg$node('mpath');
-var _elm_lang$svg$Svg$set = _elm_lang$svg$Svg$node('set');
-var _elm_lang$svg$Svg$a = _elm_lang$svg$Svg$node('a');
-var _elm_lang$svg$Svg$defs = _elm_lang$svg$Svg$node('defs');
-var _elm_lang$svg$Svg$g = _elm_lang$svg$Svg$node('g');
-var _elm_lang$svg$Svg$marker = _elm_lang$svg$Svg$node('marker');
-var _elm_lang$svg$Svg$mask = _elm_lang$svg$Svg$node('mask');
-var _elm_lang$svg$Svg$pattern = _elm_lang$svg$Svg$node('pattern');
-var _elm_lang$svg$Svg$switch = _elm_lang$svg$Svg$node('switch');
-var _elm_lang$svg$Svg$symbol = _elm_lang$svg$Svg$node('symbol');
-var _elm_lang$svg$Svg$desc = _elm_lang$svg$Svg$node('desc');
-var _elm_lang$svg$Svg$metadata = _elm_lang$svg$Svg$node('metadata');
-var _elm_lang$svg$Svg$title = _elm_lang$svg$Svg$node('title');
-var _elm_lang$svg$Svg$feBlend = _elm_lang$svg$Svg$node('feBlend');
-var _elm_lang$svg$Svg$feColorMatrix = _elm_lang$svg$Svg$node('feColorMatrix');
-var _elm_lang$svg$Svg$feComponentTransfer = _elm_lang$svg$Svg$node('feComponentTransfer');
-var _elm_lang$svg$Svg$feComposite = _elm_lang$svg$Svg$node('feComposite');
-var _elm_lang$svg$Svg$feConvolveMatrix = _elm_lang$svg$Svg$node('feConvolveMatrix');
-var _elm_lang$svg$Svg$feDiffuseLighting = _elm_lang$svg$Svg$node('feDiffuseLighting');
-var _elm_lang$svg$Svg$feDisplacementMap = _elm_lang$svg$Svg$node('feDisplacementMap');
-var _elm_lang$svg$Svg$feFlood = _elm_lang$svg$Svg$node('feFlood');
-var _elm_lang$svg$Svg$feFuncA = _elm_lang$svg$Svg$node('feFuncA');
-var _elm_lang$svg$Svg$feFuncB = _elm_lang$svg$Svg$node('feFuncB');
-var _elm_lang$svg$Svg$feFuncG = _elm_lang$svg$Svg$node('feFuncG');
-var _elm_lang$svg$Svg$feFuncR = _elm_lang$svg$Svg$node('feFuncR');
-var _elm_lang$svg$Svg$feGaussianBlur = _elm_lang$svg$Svg$node('feGaussianBlur');
-var _elm_lang$svg$Svg$feImage = _elm_lang$svg$Svg$node('feImage');
-var _elm_lang$svg$Svg$feMerge = _elm_lang$svg$Svg$node('feMerge');
-var _elm_lang$svg$Svg$feMergeNode = _elm_lang$svg$Svg$node('feMergeNode');
-var _elm_lang$svg$Svg$feMorphology = _elm_lang$svg$Svg$node('feMorphology');
-var _elm_lang$svg$Svg$feOffset = _elm_lang$svg$Svg$node('feOffset');
-var _elm_lang$svg$Svg$feSpecularLighting = _elm_lang$svg$Svg$node('feSpecularLighting');
-var _elm_lang$svg$Svg$feTile = _elm_lang$svg$Svg$node('feTile');
-var _elm_lang$svg$Svg$feTurbulence = _elm_lang$svg$Svg$node('feTurbulence');
-var _elm_lang$svg$Svg$font = _elm_lang$svg$Svg$node('font');
-var _elm_lang$svg$Svg$linearGradient = _elm_lang$svg$Svg$node('linearGradient');
-var _elm_lang$svg$Svg$radialGradient = _elm_lang$svg$Svg$node('radialGradient');
-var _elm_lang$svg$Svg$stop = _elm_lang$svg$Svg$node('stop');
-var _elm_lang$svg$Svg$circle = _elm_lang$svg$Svg$node('circle');
-var _elm_lang$svg$Svg$ellipse = _elm_lang$svg$Svg$node('ellipse');
-var _elm_lang$svg$Svg$image = _elm_lang$svg$Svg$node('image');
-var _elm_lang$svg$Svg$line = _elm_lang$svg$Svg$node('line');
-var _elm_lang$svg$Svg$path = _elm_lang$svg$Svg$node('path');
-var _elm_lang$svg$Svg$polygon = _elm_lang$svg$Svg$node('polygon');
-var _elm_lang$svg$Svg$polyline = _elm_lang$svg$Svg$node('polyline');
-var _elm_lang$svg$Svg$rect = _elm_lang$svg$Svg$node('rect');
-var _elm_lang$svg$Svg$use = _elm_lang$svg$Svg$node('use');
-var _elm_lang$svg$Svg$feDistantLight = _elm_lang$svg$Svg$node('feDistantLight');
-var _elm_lang$svg$Svg$fePointLight = _elm_lang$svg$Svg$node('fePointLight');
-var _elm_lang$svg$Svg$feSpotLight = _elm_lang$svg$Svg$node('feSpotLight');
-var _elm_lang$svg$Svg$altGlyph = _elm_lang$svg$Svg$node('altGlyph');
-var _elm_lang$svg$Svg$altGlyphDef = _elm_lang$svg$Svg$node('altGlyphDef');
-var _elm_lang$svg$Svg$altGlyphItem = _elm_lang$svg$Svg$node('altGlyphItem');
-var _elm_lang$svg$Svg$glyph = _elm_lang$svg$Svg$node('glyph');
-var _elm_lang$svg$Svg$glyphRef = _elm_lang$svg$Svg$node('glyphRef');
-var _elm_lang$svg$Svg$textPath = _elm_lang$svg$Svg$node('textPath');
-var _elm_lang$svg$Svg$text_ = _elm_lang$svg$Svg$node('text');
-var _elm_lang$svg$Svg$tref = _elm_lang$svg$Svg$node('tref');
-var _elm_lang$svg$Svg$tspan = _elm_lang$svg$Svg$node('tspan');
-var _elm_lang$svg$Svg$clipPath = _elm_lang$svg$Svg$node('clipPath');
-var _elm_lang$svg$Svg$colorProfile = _elm_lang$svg$Svg$node('colorProfile');
-var _elm_lang$svg$Svg$cursor = _elm_lang$svg$Svg$node('cursor');
-var _elm_lang$svg$Svg$filter = _elm_lang$svg$Svg$node('filter');
-var _elm_lang$svg$Svg$script = _elm_lang$svg$Svg$node('script');
-var _elm_lang$svg$Svg$style = _elm_lang$svg$Svg$node('style');
-var _elm_lang$svg$Svg$view = _elm_lang$svg$Svg$node('view');
+var _elm_lang$html$Html_Lazy$lazy3 = _elm_lang$virtual_dom$VirtualDom$lazy3;
+var _elm_lang$html$Html_Lazy$lazy2 = _elm_lang$virtual_dom$VirtualDom$lazy2;
+var _elm_lang$html$Html_Lazy$lazy = _elm_lang$virtual_dom$VirtualDom$lazy;
 
-var _elm_lang$svg$Svg_Attributes$writingMode = _elm_lang$virtual_dom$VirtualDom$attribute('writing-mode');
-var _elm_lang$svg$Svg_Attributes$wordSpacing = _elm_lang$virtual_dom$VirtualDom$attribute('word-spacing');
-var _elm_lang$svg$Svg_Attributes$visibility = _elm_lang$virtual_dom$VirtualDom$attribute('visibility');
-var _elm_lang$svg$Svg_Attributes$unicodeBidi = _elm_lang$virtual_dom$VirtualDom$attribute('unicode-bidi');
-var _elm_lang$svg$Svg_Attributes$textRendering = _elm_lang$virtual_dom$VirtualDom$attribute('text-rendering');
-var _elm_lang$svg$Svg_Attributes$textDecoration = _elm_lang$virtual_dom$VirtualDom$attribute('text-decoration');
-var _elm_lang$svg$Svg_Attributes$textAnchor = _elm_lang$virtual_dom$VirtualDom$attribute('text-anchor');
-var _elm_lang$svg$Svg_Attributes$stroke = _elm_lang$virtual_dom$VirtualDom$attribute('stroke');
-var _elm_lang$svg$Svg_Attributes$strokeWidth = _elm_lang$virtual_dom$VirtualDom$attribute('stroke-width');
-var _elm_lang$svg$Svg_Attributes$strokeOpacity = _elm_lang$virtual_dom$VirtualDom$attribute('stroke-opacity');
-var _elm_lang$svg$Svg_Attributes$strokeMiterlimit = _elm_lang$virtual_dom$VirtualDom$attribute('stroke-miterlimit');
-var _elm_lang$svg$Svg_Attributes$strokeLinejoin = _elm_lang$virtual_dom$VirtualDom$attribute('stroke-linejoin');
-var _elm_lang$svg$Svg_Attributes$strokeLinecap = _elm_lang$virtual_dom$VirtualDom$attribute('stroke-linecap');
-var _elm_lang$svg$Svg_Attributes$strokeDashoffset = _elm_lang$virtual_dom$VirtualDom$attribute('stroke-dashoffset');
-var _elm_lang$svg$Svg_Attributes$strokeDasharray = _elm_lang$virtual_dom$VirtualDom$attribute('stroke-dasharray');
-var _elm_lang$svg$Svg_Attributes$stopOpacity = _elm_lang$virtual_dom$VirtualDom$attribute('stop-opacity');
-var _elm_lang$svg$Svg_Attributes$stopColor = _elm_lang$virtual_dom$VirtualDom$attribute('stop-color');
-var _elm_lang$svg$Svg_Attributes$shapeRendering = _elm_lang$virtual_dom$VirtualDom$attribute('shape-rendering');
-var _elm_lang$svg$Svg_Attributes$pointerEvents = _elm_lang$virtual_dom$VirtualDom$attribute('pointer-events');
-var _elm_lang$svg$Svg_Attributes$overflow = _elm_lang$virtual_dom$VirtualDom$attribute('overflow');
-var _elm_lang$svg$Svg_Attributes$opacity = _elm_lang$virtual_dom$VirtualDom$attribute('opacity');
-var _elm_lang$svg$Svg_Attributes$mask = _elm_lang$virtual_dom$VirtualDom$attribute('mask');
-var _elm_lang$svg$Svg_Attributes$markerStart = _elm_lang$virtual_dom$VirtualDom$attribute('marker-start');
-var _elm_lang$svg$Svg_Attributes$markerMid = _elm_lang$virtual_dom$VirtualDom$attribute('marker-mid');
-var _elm_lang$svg$Svg_Attributes$markerEnd = _elm_lang$virtual_dom$VirtualDom$attribute('marker-end');
-var _elm_lang$svg$Svg_Attributes$lightingColor = _elm_lang$virtual_dom$VirtualDom$attribute('lighting-color');
-var _elm_lang$svg$Svg_Attributes$letterSpacing = _elm_lang$virtual_dom$VirtualDom$attribute('letter-spacing');
-var _elm_lang$svg$Svg_Attributes$kerning = _elm_lang$virtual_dom$VirtualDom$attribute('kerning');
-var _elm_lang$svg$Svg_Attributes$imageRendering = _elm_lang$virtual_dom$VirtualDom$attribute('image-rendering');
-var _elm_lang$svg$Svg_Attributes$glyphOrientationVertical = _elm_lang$virtual_dom$VirtualDom$attribute('glyph-orientation-vertical');
-var _elm_lang$svg$Svg_Attributes$glyphOrientationHorizontal = _elm_lang$virtual_dom$VirtualDom$attribute('glyph-orientation-horizontal');
-var _elm_lang$svg$Svg_Attributes$fontWeight = _elm_lang$virtual_dom$VirtualDom$attribute('font-weight');
-var _elm_lang$svg$Svg_Attributes$fontVariant = _elm_lang$virtual_dom$VirtualDom$attribute('font-variant');
-var _elm_lang$svg$Svg_Attributes$fontStyle = _elm_lang$virtual_dom$VirtualDom$attribute('font-style');
-var _elm_lang$svg$Svg_Attributes$fontStretch = _elm_lang$virtual_dom$VirtualDom$attribute('font-stretch');
-var _elm_lang$svg$Svg_Attributes$fontSize = _elm_lang$virtual_dom$VirtualDom$attribute('font-size');
-var _elm_lang$svg$Svg_Attributes$fontSizeAdjust = _elm_lang$virtual_dom$VirtualDom$attribute('font-size-adjust');
-var _elm_lang$svg$Svg_Attributes$fontFamily = _elm_lang$virtual_dom$VirtualDom$attribute('font-family');
-var _elm_lang$svg$Svg_Attributes$floodOpacity = _elm_lang$virtual_dom$VirtualDom$attribute('flood-opacity');
-var _elm_lang$svg$Svg_Attributes$floodColor = _elm_lang$virtual_dom$VirtualDom$attribute('flood-color');
-var _elm_lang$svg$Svg_Attributes$filter = _elm_lang$virtual_dom$VirtualDom$attribute('filter');
-var _elm_lang$svg$Svg_Attributes$fill = _elm_lang$virtual_dom$VirtualDom$attribute('fill');
-var _elm_lang$svg$Svg_Attributes$fillRule = _elm_lang$virtual_dom$VirtualDom$attribute('fill-rule');
-var _elm_lang$svg$Svg_Attributes$fillOpacity = _elm_lang$virtual_dom$VirtualDom$attribute('fill-opacity');
-var _elm_lang$svg$Svg_Attributes$enableBackground = _elm_lang$virtual_dom$VirtualDom$attribute('enable-background');
-var _elm_lang$svg$Svg_Attributes$dominantBaseline = _elm_lang$virtual_dom$VirtualDom$attribute('dominant-baseline');
-var _elm_lang$svg$Svg_Attributes$display = _elm_lang$virtual_dom$VirtualDom$attribute('display');
-var _elm_lang$svg$Svg_Attributes$direction = _elm_lang$virtual_dom$VirtualDom$attribute('direction');
-var _elm_lang$svg$Svg_Attributes$cursor = _elm_lang$virtual_dom$VirtualDom$attribute('cursor');
-var _elm_lang$svg$Svg_Attributes$color = _elm_lang$virtual_dom$VirtualDom$attribute('color');
-var _elm_lang$svg$Svg_Attributes$colorRendering = _elm_lang$virtual_dom$VirtualDom$attribute('color-rendering');
-var _elm_lang$svg$Svg_Attributes$colorProfile = _elm_lang$virtual_dom$VirtualDom$attribute('color-profile');
-var _elm_lang$svg$Svg_Attributes$colorInterpolation = _elm_lang$virtual_dom$VirtualDom$attribute('color-interpolation');
-var _elm_lang$svg$Svg_Attributes$colorInterpolationFilters = _elm_lang$virtual_dom$VirtualDom$attribute('color-interpolation-filters');
-var _elm_lang$svg$Svg_Attributes$clip = _elm_lang$virtual_dom$VirtualDom$attribute('clip');
-var _elm_lang$svg$Svg_Attributes$clipRule = _elm_lang$virtual_dom$VirtualDom$attribute('clip-rule');
-var _elm_lang$svg$Svg_Attributes$clipPath = _elm_lang$virtual_dom$VirtualDom$attribute('clip-path');
-var _elm_lang$svg$Svg_Attributes$baselineShift = _elm_lang$virtual_dom$VirtualDom$attribute('baseline-shift');
-var _elm_lang$svg$Svg_Attributes$alignmentBaseline = _elm_lang$virtual_dom$VirtualDom$attribute('alignment-baseline');
-var _elm_lang$svg$Svg_Attributes$zoomAndPan = _elm_lang$virtual_dom$VirtualDom$attribute('zoomAndPan');
-var _elm_lang$svg$Svg_Attributes$z = _elm_lang$virtual_dom$VirtualDom$attribute('z');
-var _elm_lang$svg$Svg_Attributes$yChannelSelector = _elm_lang$virtual_dom$VirtualDom$attribute('yChannelSelector');
-var _elm_lang$svg$Svg_Attributes$y2 = _elm_lang$virtual_dom$VirtualDom$attribute('y2');
-var _elm_lang$svg$Svg_Attributes$y1 = _elm_lang$virtual_dom$VirtualDom$attribute('y1');
-var _elm_lang$svg$Svg_Attributes$y = _elm_lang$virtual_dom$VirtualDom$attribute('y');
-var _elm_lang$svg$Svg_Attributes$xmlSpace = A2(_elm_lang$virtual_dom$VirtualDom$attributeNS, 'http://www.w3.org/XML/1998/namespace', 'xml:space');
-var _elm_lang$svg$Svg_Attributes$xmlLang = A2(_elm_lang$virtual_dom$VirtualDom$attributeNS, 'http://www.w3.org/XML/1998/namespace', 'xml:lang');
-var _elm_lang$svg$Svg_Attributes$xmlBase = A2(_elm_lang$virtual_dom$VirtualDom$attributeNS, 'http://www.w3.org/XML/1998/namespace', 'xml:base');
-var _elm_lang$svg$Svg_Attributes$xlinkType = A2(_elm_lang$virtual_dom$VirtualDom$attributeNS, 'http://www.w3.org/1999/xlink', 'xlink:type');
-var _elm_lang$svg$Svg_Attributes$xlinkTitle = A2(_elm_lang$virtual_dom$VirtualDom$attributeNS, 'http://www.w3.org/1999/xlink', 'xlink:title');
-var _elm_lang$svg$Svg_Attributes$xlinkShow = A2(_elm_lang$virtual_dom$VirtualDom$attributeNS, 'http://www.w3.org/1999/xlink', 'xlink:show');
-var _elm_lang$svg$Svg_Attributes$xlinkRole = A2(_elm_lang$virtual_dom$VirtualDom$attributeNS, 'http://www.w3.org/1999/xlink', 'xlink:role');
-var _elm_lang$svg$Svg_Attributes$xlinkHref = A2(_elm_lang$virtual_dom$VirtualDom$attributeNS, 'http://www.w3.org/1999/xlink', 'xlink:href');
-var _elm_lang$svg$Svg_Attributes$xlinkArcrole = A2(_elm_lang$virtual_dom$VirtualDom$attributeNS, 'http://www.w3.org/1999/xlink', 'xlink:arcrole');
-var _elm_lang$svg$Svg_Attributes$xlinkActuate = A2(_elm_lang$virtual_dom$VirtualDom$attributeNS, 'http://www.w3.org/1999/xlink', 'xlink:actuate');
-var _elm_lang$svg$Svg_Attributes$xChannelSelector = _elm_lang$virtual_dom$VirtualDom$attribute('xChannelSelector');
-var _elm_lang$svg$Svg_Attributes$x2 = _elm_lang$virtual_dom$VirtualDom$attribute('x2');
-var _elm_lang$svg$Svg_Attributes$x1 = _elm_lang$virtual_dom$VirtualDom$attribute('x1');
-var _elm_lang$svg$Svg_Attributes$xHeight = _elm_lang$virtual_dom$VirtualDom$attribute('x-height');
-var _elm_lang$svg$Svg_Attributes$x = _elm_lang$virtual_dom$VirtualDom$attribute('x');
-var _elm_lang$svg$Svg_Attributes$widths = _elm_lang$virtual_dom$VirtualDom$attribute('widths');
-var _elm_lang$svg$Svg_Attributes$width = _elm_lang$virtual_dom$VirtualDom$attribute('width');
-var _elm_lang$svg$Svg_Attributes$viewTarget = _elm_lang$virtual_dom$VirtualDom$attribute('viewTarget');
-var _elm_lang$svg$Svg_Attributes$viewBox = _elm_lang$virtual_dom$VirtualDom$attribute('viewBox');
-var _elm_lang$svg$Svg_Attributes$vertOriginY = _elm_lang$virtual_dom$VirtualDom$attribute('vert-origin-y');
-var _elm_lang$svg$Svg_Attributes$vertOriginX = _elm_lang$virtual_dom$VirtualDom$attribute('vert-origin-x');
-var _elm_lang$svg$Svg_Attributes$vertAdvY = _elm_lang$virtual_dom$VirtualDom$attribute('vert-adv-y');
-var _elm_lang$svg$Svg_Attributes$version = _elm_lang$virtual_dom$VirtualDom$attribute('version');
-var _elm_lang$svg$Svg_Attributes$values = _elm_lang$virtual_dom$VirtualDom$attribute('values');
-var _elm_lang$svg$Svg_Attributes$vMathematical = _elm_lang$virtual_dom$VirtualDom$attribute('v-mathematical');
-var _elm_lang$svg$Svg_Attributes$vIdeographic = _elm_lang$virtual_dom$VirtualDom$attribute('v-ideographic');
-var _elm_lang$svg$Svg_Attributes$vHanging = _elm_lang$virtual_dom$VirtualDom$attribute('v-hanging');
-var _elm_lang$svg$Svg_Attributes$vAlphabetic = _elm_lang$virtual_dom$VirtualDom$attribute('v-alphabetic');
-var _elm_lang$svg$Svg_Attributes$unitsPerEm = _elm_lang$virtual_dom$VirtualDom$attribute('units-per-em');
-var _elm_lang$svg$Svg_Attributes$unicodeRange = _elm_lang$virtual_dom$VirtualDom$attribute('unicode-range');
-var _elm_lang$svg$Svg_Attributes$unicode = _elm_lang$virtual_dom$VirtualDom$attribute('unicode');
-var _elm_lang$svg$Svg_Attributes$underlineThickness = _elm_lang$virtual_dom$VirtualDom$attribute('underline-thickness');
-var _elm_lang$svg$Svg_Attributes$underlinePosition = _elm_lang$virtual_dom$VirtualDom$attribute('underline-position');
-var _elm_lang$svg$Svg_Attributes$u2 = _elm_lang$virtual_dom$VirtualDom$attribute('u2');
-var _elm_lang$svg$Svg_Attributes$u1 = _elm_lang$virtual_dom$VirtualDom$attribute('u1');
-var _elm_lang$svg$Svg_Attributes$type_ = _elm_lang$virtual_dom$VirtualDom$attribute('type');
-var _elm_lang$svg$Svg_Attributes$transform = _elm_lang$virtual_dom$VirtualDom$attribute('transform');
-var _elm_lang$svg$Svg_Attributes$to = _elm_lang$virtual_dom$VirtualDom$attribute('to');
-var _elm_lang$svg$Svg_Attributes$title = _elm_lang$virtual_dom$VirtualDom$attribute('title');
-var _elm_lang$svg$Svg_Attributes$textLength = _elm_lang$virtual_dom$VirtualDom$attribute('textLength');
-var _elm_lang$svg$Svg_Attributes$targetY = _elm_lang$virtual_dom$VirtualDom$attribute('targetY');
-var _elm_lang$svg$Svg_Attributes$targetX = _elm_lang$virtual_dom$VirtualDom$attribute('targetX');
-var _elm_lang$svg$Svg_Attributes$target = _elm_lang$virtual_dom$VirtualDom$attribute('target');
-var _elm_lang$svg$Svg_Attributes$tableValues = _elm_lang$virtual_dom$VirtualDom$attribute('tableValues');
-var _elm_lang$svg$Svg_Attributes$systemLanguage = _elm_lang$virtual_dom$VirtualDom$attribute('systemLanguage');
-var _elm_lang$svg$Svg_Attributes$surfaceScale = _elm_lang$virtual_dom$VirtualDom$attribute('surfaceScale');
-var _elm_lang$svg$Svg_Attributes$style = _elm_lang$virtual_dom$VirtualDom$attribute('style');
-var _elm_lang$svg$Svg_Attributes$string = _elm_lang$virtual_dom$VirtualDom$attribute('string');
-var _elm_lang$svg$Svg_Attributes$strikethroughThickness = _elm_lang$virtual_dom$VirtualDom$attribute('strikethrough-thickness');
-var _elm_lang$svg$Svg_Attributes$strikethroughPosition = _elm_lang$virtual_dom$VirtualDom$attribute('strikethrough-position');
-var _elm_lang$svg$Svg_Attributes$stitchTiles = _elm_lang$virtual_dom$VirtualDom$attribute('stitchTiles');
-var _elm_lang$svg$Svg_Attributes$stemv = _elm_lang$virtual_dom$VirtualDom$attribute('stemv');
-var _elm_lang$svg$Svg_Attributes$stemh = _elm_lang$virtual_dom$VirtualDom$attribute('stemh');
-var _elm_lang$svg$Svg_Attributes$stdDeviation = _elm_lang$virtual_dom$VirtualDom$attribute('stdDeviation');
-var _elm_lang$svg$Svg_Attributes$startOffset = _elm_lang$virtual_dom$VirtualDom$attribute('startOffset');
-var _elm_lang$svg$Svg_Attributes$spreadMethod = _elm_lang$virtual_dom$VirtualDom$attribute('spreadMethod');
-var _elm_lang$svg$Svg_Attributes$speed = _elm_lang$virtual_dom$VirtualDom$attribute('speed');
-var _elm_lang$svg$Svg_Attributes$specularExponent = _elm_lang$virtual_dom$VirtualDom$attribute('specularExponent');
-var _elm_lang$svg$Svg_Attributes$specularConstant = _elm_lang$virtual_dom$VirtualDom$attribute('specularConstant');
-var _elm_lang$svg$Svg_Attributes$spacing = _elm_lang$virtual_dom$VirtualDom$attribute('spacing');
-var _elm_lang$svg$Svg_Attributes$slope = _elm_lang$virtual_dom$VirtualDom$attribute('slope');
-var _elm_lang$svg$Svg_Attributes$seed = _elm_lang$virtual_dom$VirtualDom$attribute('seed');
-var _elm_lang$svg$Svg_Attributes$scale = _elm_lang$virtual_dom$VirtualDom$attribute('scale');
-var _elm_lang$svg$Svg_Attributes$ry = _elm_lang$virtual_dom$VirtualDom$attribute('ry');
-var _elm_lang$svg$Svg_Attributes$rx = _elm_lang$virtual_dom$VirtualDom$attribute('rx');
-var _elm_lang$svg$Svg_Attributes$rotate = _elm_lang$virtual_dom$VirtualDom$attribute('rotate');
-var _elm_lang$svg$Svg_Attributes$result = _elm_lang$virtual_dom$VirtualDom$attribute('result');
-var _elm_lang$svg$Svg_Attributes$restart = _elm_lang$virtual_dom$VirtualDom$attribute('restart');
-var _elm_lang$svg$Svg_Attributes$requiredFeatures = _elm_lang$virtual_dom$VirtualDom$attribute('requiredFeatures');
-var _elm_lang$svg$Svg_Attributes$requiredExtensions = _elm_lang$virtual_dom$VirtualDom$attribute('requiredExtensions');
-var _elm_lang$svg$Svg_Attributes$repeatDur = _elm_lang$virtual_dom$VirtualDom$attribute('repeatDur');
-var _elm_lang$svg$Svg_Attributes$repeatCount = _elm_lang$virtual_dom$VirtualDom$attribute('repeatCount');
-var _elm_lang$svg$Svg_Attributes$renderingIntent = _elm_lang$virtual_dom$VirtualDom$attribute('rendering-intent');
-var _elm_lang$svg$Svg_Attributes$refY = _elm_lang$virtual_dom$VirtualDom$attribute('refY');
-var _elm_lang$svg$Svg_Attributes$refX = _elm_lang$virtual_dom$VirtualDom$attribute('refX');
-var _elm_lang$svg$Svg_Attributes$radius = _elm_lang$virtual_dom$VirtualDom$attribute('radius');
-var _elm_lang$svg$Svg_Attributes$r = _elm_lang$virtual_dom$VirtualDom$attribute('r');
-var _elm_lang$svg$Svg_Attributes$primitiveUnits = _elm_lang$virtual_dom$VirtualDom$attribute('primitiveUnits');
-var _elm_lang$svg$Svg_Attributes$preserveAspectRatio = _elm_lang$virtual_dom$VirtualDom$attribute('preserveAspectRatio');
-var _elm_lang$svg$Svg_Attributes$preserveAlpha = _elm_lang$virtual_dom$VirtualDom$attribute('preserveAlpha');
-var _elm_lang$svg$Svg_Attributes$pointsAtZ = _elm_lang$virtual_dom$VirtualDom$attribute('pointsAtZ');
-var _elm_lang$svg$Svg_Attributes$pointsAtY = _elm_lang$virtual_dom$VirtualDom$attribute('pointsAtY');
-var _elm_lang$svg$Svg_Attributes$pointsAtX = _elm_lang$virtual_dom$VirtualDom$attribute('pointsAtX');
-var _elm_lang$svg$Svg_Attributes$points = _elm_lang$virtual_dom$VirtualDom$attribute('points');
-var _elm_lang$svg$Svg_Attributes$pointOrder = _elm_lang$virtual_dom$VirtualDom$attribute('point-order');
-var _elm_lang$svg$Svg_Attributes$patternUnits = _elm_lang$virtual_dom$VirtualDom$attribute('patternUnits');
-var _elm_lang$svg$Svg_Attributes$patternTransform = _elm_lang$virtual_dom$VirtualDom$attribute('patternTransform');
-var _elm_lang$svg$Svg_Attributes$patternContentUnits = _elm_lang$virtual_dom$VirtualDom$attribute('patternContentUnits');
-var _elm_lang$svg$Svg_Attributes$pathLength = _elm_lang$virtual_dom$VirtualDom$attribute('pathLength');
-var _elm_lang$svg$Svg_Attributes$path = _elm_lang$virtual_dom$VirtualDom$attribute('path');
-var _elm_lang$svg$Svg_Attributes$panose1 = _elm_lang$virtual_dom$VirtualDom$attribute('panose-1');
-var _elm_lang$svg$Svg_Attributes$overlineThickness = _elm_lang$virtual_dom$VirtualDom$attribute('overline-thickness');
-var _elm_lang$svg$Svg_Attributes$overlinePosition = _elm_lang$virtual_dom$VirtualDom$attribute('overline-position');
-var _elm_lang$svg$Svg_Attributes$origin = _elm_lang$virtual_dom$VirtualDom$attribute('origin');
-var _elm_lang$svg$Svg_Attributes$orientation = _elm_lang$virtual_dom$VirtualDom$attribute('orientation');
-var _elm_lang$svg$Svg_Attributes$orient = _elm_lang$virtual_dom$VirtualDom$attribute('orient');
-var _elm_lang$svg$Svg_Attributes$order = _elm_lang$virtual_dom$VirtualDom$attribute('order');
-var _elm_lang$svg$Svg_Attributes$operator = _elm_lang$virtual_dom$VirtualDom$attribute('operator');
-var _elm_lang$svg$Svg_Attributes$offset = _elm_lang$virtual_dom$VirtualDom$attribute('offset');
-var _elm_lang$svg$Svg_Attributes$numOctaves = _elm_lang$virtual_dom$VirtualDom$attribute('numOctaves');
-var _elm_lang$svg$Svg_Attributes$name = _elm_lang$virtual_dom$VirtualDom$attribute('name');
-var _elm_lang$svg$Svg_Attributes$mode = _elm_lang$virtual_dom$VirtualDom$attribute('mode');
-var _elm_lang$svg$Svg_Attributes$min = _elm_lang$virtual_dom$VirtualDom$attribute('min');
-var _elm_lang$svg$Svg_Attributes$method = _elm_lang$virtual_dom$VirtualDom$attribute('method');
-var _elm_lang$svg$Svg_Attributes$media = _elm_lang$virtual_dom$VirtualDom$attribute('media');
-var _elm_lang$svg$Svg_Attributes$max = _elm_lang$virtual_dom$VirtualDom$attribute('max');
-var _elm_lang$svg$Svg_Attributes$mathematical = _elm_lang$virtual_dom$VirtualDom$attribute('mathematical');
-var _elm_lang$svg$Svg_Attributes$maskUnits = _elm_lang$virtual_dom$VirtualDom$attribute('maskUnits');
-var _elm_lang$svg$Svg_Attributes$maskContentUnits = _elm_lang$virtual_dom$VirtualDom$attribute('maskContentUnits');
-var _elm_lang$svg$Svg_Attributes$markerWidth = _elm_lang$virtual_dom$VirtualDom$attribute('markerWidth');
-var _elm_lang$svg$Svg_Attributes$markerUnits = _elm_lang$virtual_dom$VirtualDom$attribute('markerUnits');
-var _elm_lang$svg$Svg_Attributes$markerHeight = _elm_lang$virtual_dom$VirtualDom$attribute('markerHeight');
-var _elm_lang$svg$Svg_Attributes$local = _elm_lang$virtual_dom$VirtualDom$attribute('local');
-var _elm_lang$svg$Svg_Attributes$limitingConeAngle = _elm_lang$virtual_dom$VirtualDom$attribute('limitingConeAngle');
-var _elm_lang$svg$Svg_Attributes$lengthAdjust = _elm_lang$virtual_dom$VirtualDom$attribute('lengthAdjust');
-var _elm_lang$svg$Svg_Attributes$lang = _elm_lang$virtual_dom$VirtualDom$attribute('lang');
-var _elm_lang$svg$Svg_Attributes$keyTimes = _elm_lang$virtual_dom$VirtualDom$attribute('keyTimes');
-var _elm_lang$svg$Svg_Attributes$keySplines = _elm_lang$virtual_dom$VirtualDom$attribute('keySplines');
-var _elm_lang$svg$Svg_Attributes$keyPoints = _elm_lang$virtual_dom$VirtualDom$attribute('keyPoints');
-var _elm_lang$svg$Svg_Attributes$kernelUnitLength = _elm_lang$virtual_dom$VirtualDom$attribute('kernelUnitLength');
-var _elm_lang$svg$Svg_Attributes$kernelMatrix = _elm_lang$virtual_dom$VirtualDom$attribute('kernelMatrix');
-var _elm_lang$svg$Svg_Attributes$k4 = _elm_lang$virtual_dom$VirtualDom$attribute('k4');
-var _elm_lang$svg$Svg_Attributes$k3 = _elm_lang$virtual_dom$VirtualDom$attribute('k3');
-var _elm_lang$svg$Svg_Attributes$k2 = _elm_lang$virtual_dom$VirtualDom$attribute('k2');
-var _elm_lang$svg$Svg_Attributes$k1 = _elm_lang$virtual_dom$VirtualDom$attribute('k1');
-var _elm_lang$svg$Svg_Attributes$k = _elm_lang$virtual_dom$VirtualDom$attribute('k');
-var _elm_lang$svg$Svg_Attributes$intercept = _elm_lang$virtual_dom$VirtualDom$attribute('intercept');
-var _elm_lang$svg$Svg_Attributes$in2 = _elm_lang$virtual_dom$VirtualDom$attribute('in2');
-var _elm_lang$svg$Svg_Attributes$in_ = _elm_lang$virtual_dom$VirtualDom$attribute('in');
-var _elm_lang$svg$Svg_Attributes$ideographic = _elm_lang$virtual_dom$VirtualDom$attribute('ideographic');
-var _elm_lang$svg$Svg_Attributes$id = _elm_lang$virtual_dom$VirtualDom$attribute('id');
-var _elm_lang$svg$Svg_Attributes$horizOriginY = _elm_lang$virtual_dom$VirtualDom$attribute('horiz-origin-y');
-var _elm_lang$svg$Svg_Attributes$horizOriginX = _elm_lang$virtual_dom$VirtualDom$attribute('horiz-origin-x');
-var _elm_lang$svg$Svg_Attributes$horizAdvX = _elm_lang$virtual_dom$VirtualDom$attribute('horiz-adv-x');
-var _elm_lang$svg$Svg_Attributes$height = _elm_lang$virtual_dom$VirtualDom$attribute('height');
-var _elm_lang$svg$Svg_Attributes$hanging = _elm_lang$virtual_dom$VirtualDom$attribute('hanging');
-var _elm_lang$svg$Svg_Attributes$gradientUnits = _elm_lang$virtual_dom$VirtualDom$attribute('gradientUnits');
-var _elm_lang$svg$Svg_Attributes$gradientTransform = _elm_lang$virtual_dom$VirtualDom$attribute('gradientTransform');
-var _elm_lang$svg$Svg_Attributes$glyphRef = _elm_lang$virtual_dom$VirtualDom$attribute('glyphRef');
-var _elm_lang$svg$Svg_Attributes$glyphName = _elm_lang$virtual_dom$VirtualDom$attribute('glyph-name');
-var _elm_lang$svg$Svg_Attributes$g2 = _elm_lang$virtual_dom$VirtualDom$attribute('g2');
-var _elm_lang$svg$Svg_Attributes$g1 = _elm_lang$virtual_dom$VirtualDom$attribute('g1');
-var _elm_lang$svg$Svg_Attributes$fy = _elm_lang$virtual_dom$VirtualDom$attribute('fy');
-var _elm_lang$svg$Svg_Attributes$fx = _elm_lang$virtual_dom$VirtualDom$attribute('fx');
-var _elm_lang$svg$Svg_Attributes$from = _elm_lang$virtual_dom$VirtualDom$attribute('from');
-var _elm_lang$svg$Svg_Attributes$format = _elm_lang$virtual_dom$VirtualDom$attribute('format');
-var _elm_lang$svg$Svg_Attributes$filterUnits = _elm_lang$virtual_dom$VirtualDom$attribute('filterUnits');
-var _elm_lang$svg$Svg_Attributes$filterRes = _elm_lang$virtual_dom$VirtualDom$attribute('filterRes');
-var _elm_lang$svg$Svg_Attributes$externalResourcesRequired = _elm_lang$virtual_dom$VirtualDom$attribute('externalResourcesRequired');
-var _elm_lang$svg$Svg_Attributes$exponent = _elm_lang$virtual_dom$VirtualDom$attribute('exponent');
-var _elm_lang$svg$Svg_Attributes$end = _elm_lang$virtual_dom$VirtualDom$attribute('end');
-var _elm_lang$svg$Svg_Attributes$elevation = _elm_lang$virtual_dom$VirtualDom$attribute('elevation');
-var _elm_lang$svg$Svg_Attributes$edgeMode = _elm_lang$virtual_dom$VirtualDom$attribute('edgeMode');
-var _elm_lang$svg$Svg_Attributes$dy = _elm_lang$virtual_dom$VirtualDom$attribute('dy');
-var _elm_lang$svg$Svg_Attributes$dx = _elm_lang$virtual_dom$VirtualDom$attribute('dx');
-var _elm_lang$svg$Svg_Attributes$dur = _elm_lang$virtual_dom$VirtualDom$attribute('dur');
-var _elm_lang$svg$Svg_Attributes$divisor = _elm_lang$virtual_dom$VirtualDom$attribute('divisor');
-var _elm_lang$svg$Svg_Attributes$diffuseConstant = _elm_lang$virtual_dom$VirtualDom$attribute('diffuseConstant');
-var _elm_lang$svg$Svg_Attributes$descent = _elm_lang$virtual_dom$VirtualDom$attribute('descent');
-var _elm_lang$svg$Svg_Attributes$decelerate = _elm_lang$virtual_dom$VirtualDom$attribute('decelerate');
-var _elm_lang$svg$Svg_Attributes$d = _elm_lang$virtual_dom$VirtualDom$attribute('d');
-var _elm_lang$svg$Svg_Attributes$cy = _elm_lang$virtual_dom$VirtualDom$attribute('cy');
-var _elm_lang$svg$Svg_Attributes$cx = _elm_lang$virtual_dom$VirtualDom$attribute('cx');
-var _elm_lang$svg$Svg_Attributes$contentStyleType = _elm_lang$virtual_dom$VirtualDom$attribute('contentStyleType');
-var _elm_lang$svg$Svg_Attributes$contentScriptType = _elm_lang$virtual_dom$VirtualDom$attribute('contentScriptType');
-var _elm_lang$svg$Svg_Attributes$clipPathUnits = _elm_lang$virtual_dom$VirtualDom$attribute('clipPathUnits');
-var _elm_lang$svg$Svg_Attributes$class = _elm_lang$virtual_dom$VirtualDom$attribute('class');
-var _elm_lang$svg$Svg_Attributes$capHeight = _elm_lang$virtual_dom$VirtualDom$attribute('cap-height');
-var _elm_lang$svg$Svg_Attributes$calcMode = _elm_lang$virtual_dom$VirtualDom$attribute('calcMode');
-var _elm_lang$svg$Svg_Attributes$by = _elm_lang$virtual_dom$VirtualDom$attribute('by');
-var _elm_lang$svg$Svg_Attributes$bias = _elm_lang$virtual_dom$VirtualDom$attribute('bias');
-var _elm_lang$svg$Svg_Attributes$begin = _elm_lang$virtual_dom$VirtualDom$attribute('begin');
-var _elm_lang$svg$Svg_Attributes$bbox = _elm_lang$virtual_dom$VirtualDom$attribute('bbox');
-var _elm_lang$svg$Svg_Attributes$baseProfile = _elm_lang$virtual_dom$VirtualDom$attribute('baseProfile');
-var _elm_lang$svg$Svg_Attributes$baseFrequency = _elm_lang$virtual_dom$VirtualDom$attribute('baseFrequency');
-var _elm_lang$svg$Svg_Attributes$azimuth = _elm_lang$virtual_dom$VirtualDom$attribute('azimuth');
-var _elm_lang$svg$Svg_Attributes$autoReverse = _elm_lang$virtual_dom$VirtualDom$attribute('autoReverse');
-var _elm_lang$svg$Svg_Attributes$attributeType = _elm_lang$virtual_dom$VirtualDom$attribute('attributeType');
-var _elm_lang$svg$Svg_Attributes$attributeName = _elm_lang$virtual_dom$VirtualDom$attribute('attributeName');
-var _elm_lang$svg$Svg_Attributes$ascent = _elm_lang$virtual_dom$VirtualDom$attribute('ascent');
-var _elm_lang$svg$Svg_Attributes$arabicForm = _elm_lang$virtual_dom$VirtualDom$attribute('arabic-form');
-var _elm_lang$svg$Svg_Attributes$amplitude = _elm_lang$virtual_dom$VirtualDom$attribute('amplitude');
-var _elm_lang$svg$Svg_Attributes$allowReorder = _elm_lang$virtual_dom$VirtualDom$attribute('allowReorder');
-var _elm_lang$svg$Svg_Attributes$alphabetic = _elm_lang$virtual_dom$VirtualDom$attribute('alphabetic');
-var _elm_lang$svg$Svg_Attributes$additive = _elm_lang$virtual_dom$VirtualDom$attribute('additive');
-var _elm_lang$svg$Svg_Attributes$accumulate = _elm_lang$virtual_dom$VirtualDom$attribute('accumulate');
-var _elm_lang$svg$Svg_Attributes$accelerate = _elm_lang$virtual_dom$VirtualDom$attribute('accelerate');
-var _elm_lang$svg$Svg_Attributes$accentHeight = _elm_lang$virtual_dom$VirtualDom$attribute('accent-height');
+var _elm_lang$http$Native_Http = function() {
+
+
+// ENCODING AND DECODING
+
+function encodeUri(string)
+{
+	return encodeURIComponent(string);
+}
+
+function decodeUri(string)
+{
+	try
+	{
+		return _elm_lang$core$Maybe$Just(decodeURIComponent(string));
+	}
+	catch(e)
+	{
+		return _elm_lang$core$Maybe$Nothing;
+	}
+}
+
+
+// SEND REQUEST
+
+function toTask(request, maybeProgress)
+{
+	return _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
+	{
+		var xhr = new XMLHttpRequest();
+
+		configureProgress(xhr, maybeProgress);
+
+		xhr.addEventListener('error', function() {
+			callback(_elm_lang$core$Native_Scheduler.fail({ ctor: 'NetworkError' }));
+		});
+		xhr.addEventListener('timeout', function() {
+			callback(_elm_lang$core$Native_Scheduler.fail({ ctor: 'Timeout' }));
+		});
+		xhr.addEventListener('load', function() {
+			callback(handleResponse(xhr, request.expect.responseToResult));
+		});
+
+		try
+		{
+			xhr.open(request.method, request.url, true);
+		}
+		catch (e)
+		{
+			return callback(_elm_lang$core$Native_Scheduler.fail({ ctor: 'BadUrl', _0: request.url }));
+		}
+
+		configureRequest(xhr, request);
+		send(xhr, request.body);
+
+		return function() { xhr.abort(); };
+	});
+}
+
+function configureProgress(xhr, maybeProgress)
+{
+	if (maybeProgress.ctor === 'Nothing')
+	{
+		return;
+	}
+
+	xhr.addEventListener('progress', function(event) {
+		if (!event.lengthComputable)
+		{
+			return;
+		}
+		_elm_lang$core$Native_Scheduler.rawSpawn(maybeProgress._0({
+			bytes: event.loaded,
+			bytesExpected: event.total
+		}));
+	});
+}
+
+function configureRequest(xhr, request)
+{
+	function setHeader(pair)
+	{
+		xhr.setRequestHeader(pair._0, pair._1);
+	}
+
+	A2(_elm_lang$core$List$map, setHeader, request.headers);
+	xhr.responseType = request.expect.responseType;
+	xhr.withCredentials = request.withCredentials;
+
+	if (request.timeout.ctor === 'Just')
+	{
+		xhr.timeout = request.timeout._0;
+	}
+}
+
+function send(xhr, body)
+{
+	switch (body.ctor)
+	{
+		case 'EmptyBody':
+			xhr.send();
+			return;
+
+		case 'StringBody':
+			xhr.setRequestHeader('Content-Type', body._0);
+			xhr.send(body._1);
+			return;
+
+		case 'FormDataBody':
+			xhr.send(body._0);
+			return;
+	}
+}
+
+
+// RESPONSES
+
+function handleResponse(xhr, responseToResult)
+{
+	var response = toResponse(xhr);
+
+	if (xhr.status < 200 || 300 <= xhr.status)
+	{
+		response.body = xhr.responseText;
+		return _elm_lang$core$Native_Scheduler.fail({
+			ctor: 'BadStatus',
+			_0: response
+		});
+	}
+
+	var result = responseToResult(response);
+
+	if (result.ctor === 'Ok')
+	{
+		return _elm_lang$core$Native_Scheduler.succeed(result._0);
+	}
+	else
+	{
+		response.body = xhr.responseText;
+		return _elm_lang$core$Native_Scheduler.fail({
+			ctor: 'BadPayload',
+			_0: result._0,
+			_1: response
+		});
+	}
+}
+
+function toResponse(xhr)
+{
+	return {
+		status: { code: xhr.status, message: xhr.statusText },
+		headers: parseHeaders(xhr.getAllResponseHeaders()),
+		url: xhr.responseURL,
+		body: xhr.response
+	};
+}
+
+function parseHeaders(rawHeaders)
+{
+	var headers = _elm_lang$core$Dict$empty;
+
+	if (!rawHeaders)
+	{
+		return headers;
+	}
+
+	var headerPairs = rawHeaders.split('\u000d\u000a');
+	for (var i = headerPairs.length; i--; )
+	{
+		var headerPair = headerPairs[i];
+		var index = headerPair.indexOf('\u003a\u0020');
+		if (index > 0)
+		{
+			var key = headerPair.substring(0, index);
+			var value = headerPair.substring(index + 2);
+
+			headers = A3(_elm_lang$core$Dict$update, key, function(oldValue) {
+				if (oldValue.ctor === 'Just')
+				{
+					return _elm_lang$core$Maybe$Just(value + ', ' + oldValue._0);
+				}
+				return _elm_lang$core$Maybe$Just(value);
+			}, headers);
+		}
+	}
+
+	return headers;
+}
+
+
+// EXPECTORS
+
+function expectStringResponse(responseToResult)
+{
+	return {
+		responseType: 'text',
+		responseToResult: responseToResult
+	};
+}
+
+function mapExpect(func, expect)
+{
+	return {
+		responseType: expect.responseType,
+		responseToResult: function(response) {
+			var convertedResponse = expect.responseToResult(response);
+			return A2(_elm_lang$core$Result$map, func, convertedResponse);
+		}
+	};
+}
+
+
+// BODY
+
+function multipart(parts)
+{
+	var formData = new FormData();
+
+	while (parts.ctor !== '[]')
+	{
+		var part = parts._0;
+		formData.append(part._0, part._1);
+		parts = parts._1;
+	}
+
+	return { ctor: 'FormDataBody', _0: formData };
+}
+
+return {
+	toTask: F2(toTask),
+	expectStringResponse: expectStringResponse,
+	mapExpect: F2(mapExpect),
+	multipart: multipart,
+	encodeUri: encodeUri,
+	decodeUri: decodeUri
+};
+
+}();
+
+var _elm_lang$http$Http_Internal$map = F2(
+	function (func, request) {
+		return _elm_lang$core$Native_Utils.update(
+			request,
+			{
+				expect: A2(_elm_lang$http$Native_Http.mapExpect, func, request.expect)
+			});
+	});
+var _elm_lang$http$Http_Internal$RawRequest = F7(
+	function (a, b, c, d, e, f, g) {
+		return {method: a, headers: b, url: c, body: d, expect: e, timeout: f, withCredentials: g};
+	});
+var _elm_lang$http$Http_Internal$Request = function (a) {
+	return {ctor: 'Request', _0: a};
+};
+var _elm_lang$http$Http_Internal$Expect = {ctor: 'Expect'};
+var _elm_lang$http$Http_Internal$FormDataBody = {ctor: 'FormDataBody'};
+var _elm_lang$http$Http_Internal$StringBody = F2(
+	function (a, b) {
+		return {ctor: 'StringBody', _0: a, _1: b};
+	});
+var _elm_lang$http$Http_Internal$EmptyBody = {ctor: 'EmptyBody'};
+var _elm_lang$http$Http_Internal$Header = F2(
+	function (a, b) {
+		return {ctor: 'Header', _0: a, _1: b};
+	});
+
+var _elm_lang$http$Http$decodeUri = _elm_lang$http$Native_Http.decodeUri;
+var _elm_lang$http$Http$encodeUri = _elm_lang$http$Native_Http.encodeUri;
+var _elm_lang$http$Http$expectStringResponse = _elm_lang$http$Native_Http.expectStringResponse;
+var _elm_lang$http$Http$expectJson = function (decoder) {
+	return _elm_lang$http$Http$expectStringResponse(
+		function (response) {
+			return A2(_elm_lang$core$Json_Decode$decodeString, decoder, response.body);
+		});
+};
+var _elm_lang$http$Http$expectString = _elm_lang$http$Http$expectStringResponse(
+	function (response) {
+		return _elm_lang$core$Result$Ok(response.body);
+	});
+var _elm_lang$http$Http$multipartBody = _elm_lang$http$Native_Http.multipart;
+var _elm_lang$http$Http$stringBody = _elm_lang$http$Http_Internal$StringBody;
+var _elm_lang$http$Http$jsonBody = function (value) {
+	return A2(
+		_elm_lang$http$Http_Internal$StringBody,
+		'application/json',
+		A2(_elm_lang$core$Json_Encode$encode, 0, value));
+};
+var _elm_lang$http$Http$emptyBody = _elm_lang$http$Http_Internal$EmptyBody;
+var _elm_lang$http$Http$header = _elm_lang$http$Http_Internal$Header;
+var _elm_lang$http$Http$request = _elm_lang$http$Http_Internal$Request;
+var _elm_lang$http$Http$post = F3(
+	function (url, body, decoder) {
+		return _elm_lang$http$Http$request(
+			{
+				method: 'POST',
+				headers: {ctor: '[]'},
+				url: url,
+				body: body,
+				expect: _elm_lang$http$Http$expectJson(decoder),
+				timeout: _elm_lang$core$Maybe$Nothing,
+				withCredentials: false
+			});
+	});
+var _elm_lang$http$Http$get = F2(
+	function (url, decoder) {
+		return _elm_lang$http$Http$request(
+			{
+				method: 'GET',
+				headers: {ctor: '[]'},
+				url: url,
+				body: _elm_lang$http$Http$emptyBody,
+				expect: _elm_lang$http$Http$expectJson(decoder),
+				timeout: _elm_lang$core$Maybe$Nothing,
+				withCredentials: false
+			});
+	});
+var _elm_lang$http$Http$getString = function (url) {
+	return _elm_lang$http$Http$request(
+		{
+			method: 'GET',
+			headers: {ctor: '[]'},
+			url: url,
+			body: _elm_lang$http$Http$emptyBody,
+			expect: _elm_lang$http$Http$expectString,
+			timeout: _elm_lang$core$Maybe$Nothing,
+			withCredentials: false
+		});
+};
+var _elm_lang$http$Http$toTask = function (_p0) {
+	var _p1 = _p0;
+	return A2(_elm_lang$http$Native_Http.toTask, _p1._0, _elm_lang$core$Maybe$Nothing);
+};
+var _elm_lang$http$Http$send = F2(
+	function (resultToMessage, request) {
+		return A2(
+			_elm_lang$core$Task$attempt,
+			resultToMessage,
+			_elm_lang$http$Http$toTask(request));
+	});
+var _elm_lang$http$Http$Response = F4(
+	function (a, b, c, d) {
+		return {url: a, status: b, headers: c, body: d};
+	});
+var _elm_lang$http$Http$BadPayload = F2(
+	function (a, b) {
+		return {ctor: 'BadPayload', _0: a, _1: b};
+	});
+var _elm_lang$http$Http$BadStatus = function (a) {
+	return {ctor: 'BadStatus', _0: a};
+};
+var _elm_lang$http$Http$NetworkError = {ctor: 'NetworkError'};
+var _elm_lang$http$Http$Timeout = {ctor: 'Timeout'};
+var _elm_lang$http$Http$BadUrl = function (a) {
+	return {ctor: 'BadUrl', _0: a};
+};
+var _elm_lang$http$Http$StringPart = F2(
+	function (a, b) {
+		return {ctor: 'StringPart', _0: a, _1: b};
+	});
+var _elm_lang$http$Http$stringPart = _elm_lang$http$Http$StringPart;
+
+var _elm_lang$navigation$Native_Navigation = function() {
+
+
+// FAKE NAVIGATION
+
+function go(n)
+{
+	return _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
+	{
+		if (n !== 0)
+		{
+			history.go(n);
+		}
+		callback(_elm_lang$core$Native_Scheduler.succeed(_elm_lang$core$Native_Utils.Tuple0));
+	});
+}
+
+function pushState(url)
+{
+	return _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
+	{
+		history.pushState({}, '', url);
+		callback(_elm_lang$core$Native_Scheduler.succeed(getLocation()));
+	});
+}
+
+function replaceState(url)
+{
+	return _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
+	{
+		history.replaceState({}, '', url);
+		callback(_elm_lang$core$Native_Scheduler.succeed(getLocation()));
+	});
+}
+
+
+// REAL NAVIGATION
+
+function reloadPage(skipCache)
+{
+	return _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
+	{
+		document.location.reload(skipCache);
+		callback(_elm_lang$core$Native_Scheduler.succeed(_elm_lang$core$Native_Utils.Tuple0));
+	});
+}
+
+function setLocation(url)
+{
+	return _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
+	{
+		try
+		{
+			window.location = url;
+		}
+		catch(err)
+		{
+			// Only Firefox can throw a NS_ERROR_MALFORMED_URI exception here.
+			// Other browsers reload the page, so let's be consistent about that.
+			document.location.reload(false);
+		}
+		callback(_elm_lang$core$Native_Scheduler.succeed(_elm_lang$core$Native_Utils.Tuple0));
+	});
+}
+
+
+// GET LOCATION
+
+function getLocation()
+{
+	var location = document.location;
+
+	return {
+		href: location.href,
+		host: location.host,
+		hostname: location.hostname,
+		protocol: location.protocol,
+		origin: location.origin,
+		port_: location.port,
+		pathname: location.pathname,
+		search: location.search,
+		hash: location.hash,
+		username: location.username,
+		password: location.password
+	};
+}
+
+
+// DETECT IE11 PROBLEMS
+
+function isInternetExplorer11()
+{
+	return window.navigator.userAgent.indexOf('Trident') !== -1;
+}
+
+
+return {
+	go: go,
+	setLocation: setLocation,
+	reloadPage: reloadPage,
+	pushState: pushState,
+	replaceState: replaceState,
+	getLocation: getLocation,
+	isInternetExplorer11: isInternetExplorer11
+};
+
+}();
+
+var _elm_lang$navigation$Navigation$replaceState = _elm_lang$navigation$Native_Navigation.replaceState;
+var _elm_lang$navigation$Navigation$pushState = _elm_lang$navigation$Native_Navigation.pushState;
+var _elm_lang$navigation$Navigation$go = _elm_lang$navigation$Native_Navigation.go;
+var _elm_lang$navigation$Navigation$reloadPage = _elm_lang$navigation$Native_Navigation.reloadPage;
+var _elm_lang$navigation$Navigation$setLocation = _elm_lang$navigation$Native_Navigation.setLocation;
+var _elm_lang$navigation$Navigation_ops = _elm_lang$navigation$Navigation_ops || {};
+_elm_lang$navigation$Navigation_ops['&>'] = F2(
+	function (task1, task2) {
+		return A2(
+			_elm_lang$core$Task$andThen,
+			function (_p0) {
+				return task2;
+			},
+			task1);
+	});
+var _elm_lang$navigation$Navigation$notify = F3(
+	function (router, subs, location) {
+		var send = function (_p1) {
+			var _p2 = _p1;
+			return A2(
+				_elm_lang$core$Platform$sendToApp,
+				router,
+				_p2._0(location));
+		};
+		return A2(
+			_elm_lang$navigation$Navigation_ops['&>'],
+			_elm_lang$core$Task$sequence(
+				A2(_elm_lang$core$List$map, send, subs)),
+			_elm_lang$core$Task$succeed(
+				{ctor: '_Tuple0'}));
+	});
+var _elm_lang$navigation$Navigation$cmdHelp = F3(
+	function (router, subs, cmd) {
+		var _p3 = cmd;
+		switch (_p3.ctor) {
+			case 'Jump':
+				return _elm_lang$navigation$Navigation$go(_p3._0);
+			case 'New':
+				return A2(
+					_elm_lang$core$Task$andThen,
+					A2(_elm_lang$navigation$Navigation$notify, router, subs),
+					_elm_lang$navigation$Navigation$pushState(_p3._0));
+			case 'Modify':
+				return A2(
+					_elm_lang$core$Task$andThen,
+					A2(_elm_lang$navigation$Navigation$notify, router, subs),
+					_elm_lang$navigation$Navigation$replaceState(_p3._0));
+			case 'Visit':
+				return _elm_lang$navigation$Navigation$setLocation(_p3._0);
+			default:
+				return _elm_lang$navigation$Navigation$reloadPage(_p3._0);
+		}
+	});
+var _elm_lang$navigation$Navigation$killPopWatcher = function (popWatcher) {
+	var _p4 = popWatcher;
+	if (_p4.ctor === 'Normal') {
+		return _elm_lang$core$Process$kill(_p4._0);
+	} else {
+		return A2(
+			_elm_lang$navigation$Navigation_ops['&>'],
+			_elm_lang$core$Process$kill(_p4._0),
+			_elm_lang$core$Process$kill(_p4._1));
+	}
+};
+var _elm_lang$navigation$Navigation$onSelfMsg = F3(
+	function (router, location, state) {
+		return A2(
+			_elm_lang$navigation$Navigation_ops['&>'],
+			A3(_elm_lang$navigation$Navigation$notify, router, state.subs, location),
+			_elm_lang$core$Task$succeed(state));
+	});
+var _elm_lang$navigation$Navigation$subscription = _elm_lang$core$Native_Platform.leaf('Navigation');
+var _elm_lang$navigation$Navigation$command = _elm_lang$core$Native_Platform.leaf('Navigation');
+var _elm_lang$navigation$Navigation$Location = function (a) {
+	return function (b) {
+		return function (c) {
+			return function (d) {
+				return function (e) {
+					return function (f) {
+						return function (g) {
+							return function (h) {
+								return function (i) {
+									return function (j) {
+										return function (k) {
+											return {href: a, host: b, hostname: c, protocol: d, origin: e, port_: f, pathname: g, search: h, hash: i, username: j, password: k};
+										};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
+var _elm_lang$navigation$Navigation$State = F2(
+	function (a, b) {
+		return {subs: a, popWatcher: b};
+	});
+var _elm_lang$navigation$Navigation$init = _elm_lang$core$Task$succeed(
+	A2(
+		_elm_lang$navigation$Navigation$State,
+		{ctor: '[]'},
+		_elm_lang$core$Maybe$Nothing));
+var _elm_lang$navigation$Navigation$Reload = function (a) {
+	return {ctor: 'Reload', _0: a};
+};
+var _elm_lang$navigation$Navigation$reload = _elm_lang$navigation$Navigation$command(
+	_elm_lang$navigation$Navigation$Reload(false));
+var _elm_lang$navigation$Navigation$reloadAndSkipCache = _elm_lang$navigation$Navigation$command(
+	_elm_lang$navigation$Navigation$Reload(true));
+var _elm_lang$navigation$Navigation$Visit = function (a) {
+	return {ctor: 'Visit', _0: a};
+};
+var _elm_lang$navigation$Navigation$load = function (url) {
+	return _elm_lang$navigation$Navigation$command(
+		_elm_lang$navigation$Navigation$Visit(url));
+};
+var _elm_lang$navigation$Navigation$Modify = function (a) {
+	return {ctor: 'Modify', _0: a};
+};
+var _elm_lang$navigation$Navigation$modifyUrl = function (url) {
+	return _elm_lang$navigation$Navigation$command(
+		_elm_lang$navigation$Navigation$Modify(url));
+};
+var _elm_lang$navigation$Navigation$New = function (a) {
+	return {ctor: 'New', _0: a};
+};
+var _elm_lang$navigation$Navigation$newUrl = function (url) {
+	return _elm_lang$navigation$Navigation$command(
+		_elm_lang$navigation$Navigation$New(url));
+};
+var _elm_lang$navigation$Navigation$Jump = function (a) {
+	return {ctor: 'Jump', _0: a};
+};
+var _elm_lang$navigation$Navigation$back = function (n) {
+	return _elm_lang$navigation$Navigation$command(
+		_elm_lang$navigation$Navigation$Jump(0 - n));
+};
+var _elm_lang$navigation$Navigation$forward = function (n) {
+	return _elm_lang$navigation$Navigation$command(
+		_elm_lang$navigation$Navigation$Jump(n));
+};
+var _elm_lang$navigation$Navigation$cmdMap = F2(
+	function (_p5, myCmd) {
+		var _p6 = myCmd;
+		switch (_p6.ctor) {
+			case 'Jump':
+				return _elm_lang$navigation$Navigation$Jump(_p6._0);
+			case 'New':
+				return _elm_lang$navigation$Navigation$New(_p6._0);
+			case 'Modify':
+				return _elm_lang$navigation$Navigation$Modify(_p6._0);
+			case 'Visit':
+				return _elm_lang$navigation$Navigation$Visit(_p6._0);
+			default:
+				return _elm_lang$navigation$Navigation$Reload(_p6._0);
+		}
+	});
+var _elm_lang$navigation$Navigation$Monitor = function (a) {
+	return {ctor: 'Monitor', _0: a};
+};
+var _elm_lang$navigation$Navigation$program = F2(
+	function (locationToMessage, stuff) {
+		var init = stuff.init(
+			_elm_lang$navigation$Native_Navigation.getLocation(
+				{ctor: '_Tuple0'}));
+		var subs = function (model) {
+			return _elm_lang$core$Platform_Sub$batch(
+				{
+					ctor: '::',
+					_0: _elm_lang$navigation$Navigation$subscription(
+						_elm_lang$navigation$Navigation$Monitor(locationToMessage)),
+					_1: {
+						ctor: '::',
+						_0: stuff.subscriptions(model),
+						_1: {ctor: '[]'}
+					}
+				});
+		};
+		return _elm_lang$html$Html$program(
+			{init: init, view: stuff.view, update: stuff.update, subscriptions: subs});
+	});
+var _elm_lang$navigation$Navigation$programWithFlags = F2(
+	function (locationToMessage, stuff) {
+		var init = function (flags) {
+			return A2(
+				stuff.init,
+				flags,
+				_elm_lang$navigation$Native_Navigation.getLocation(
+					{ctor: '_Tuple0'}));
+		};
+		var subs = function (model) {
+			return _elm_lang$core$Platform_Sub$batch(
+				{
+					ctor: '::',
+					_0: _elm_lang$navigation$Navigation$subscription(
+						_elm_lang$navigation$Navigation$Monitor(locationToMessage)),
+					_1: {
+						ctor: '::',
+						_0: stuff.subscriptions(model),
+						_1: {ctor: '[]'}
+					}
+				});
+		};
+		return _elm_lang$html$Html$programWithFlags(
+			{init: init, view: stuff.view, update: stuff.update, subscriptions: subs});
+	});
+var _elm_lang$navigation$Navigation$subMap = F2(
+	function (func, _p7) {
+		var _p8 = _p7;
+		return _elm_lang$navigation$Navigation$Monitor(
+			function (_p9) {
+				return func(
+					_p8._0(_p9));
+			});
+	});
+var _elm_lang$navigation$Navigation$InternetExplorer = F2(
+	function (a, b) {
+		return {ctor: 'InternetExplorer', _0: a, _1: b};
+	});
+var _elm_lang$navigation$Navigation$Normal = function (a) {
+	return {ctor: 'Normal', _0: a};
+};
+var _elm_lang$navigation$Navigation$spawnPopWatcher = function (router) {
+	var reportLocation = function (_p10) {
+		return A2(
+			_elm_lang$core$Platform$sendToSelf,
+			router,
+			_elm_lang$navigation$Native_Navigation.getLocation(
+				{ctor: '_Tuple0'}));
+	};
+	return _elm_lang$navigation$Native_Navigation.isInternetExplorer11(
+		{ctor: '_Tuple0'}) ? A3(
+		_elm_lang$core$Task$map2,
+		_elm_lang$navigation$Navigation$InternetExplorer,
+		_elm_lang$core$Process$spawn(
+			A3(_elm_lang$dom$Dom_LowLevel$onWindow, 'popstate', _elm_lang$core$Json_Decode$value, reportLocation)),
+		_elm_lang$core$Process$spawn(
+			A3(_elm_lang$dom$Dom_LowLevel$onWindow, 'hashchange', _elm_lang$core$Json_Decode$value, reportLocation))) : A2(
+		_elm_lang$core$Task$map,
+		_elm_lang$navigation$Navigation$Normal,
+		_elm_lang$core$Process$spawn(
+			A3(_elm_lang$dom$Dom_LowLevel$onWindow, 'popstate', _elm_lang$core$Json_Decode$value, reportLocation)));
+};
+var _elm_lang$navigation$Navigation$onEffects = F4(
+	function (router, cmds, subs, _p11) {
+		var _p12 = _p11;
+		var _p15 = _p12.popWatcher;
+		var stepState = function () {
+			var _p13 = {ctor: '_Tuple2', _0: subs, _1: _p15};
+			_v6_2:
+			do {
+				if (_p13._0.ctor === '[]') {
+					if (_p13._1.ctor === 'Just') {
+						return A2(
+							_elm_lang$navigation$Navigation_ops['&>'],
+							_elm_lang$navigation$Navigation$killPopWatcher(_p13._1._0),
+							_elm_lang$core$Task$succeed(
+								A2(_elm_lang$navigation$Navigation$State, subs, _elm_lang$core$Maybe$Nothing)));
+					} else {
+						break _v6_2;
+					}
+				} else {
+					if (_p13._1.ctor === 'Nothing') {
+						return A2(
+							_elm_lang$core$Task$map,
+							function (_p14) {
+								return A2(
+									_elm_lang$navigation$Navigation$State,
+									subs,
+									_elm_lang$core$Maybe$Just(_p14));
+							},
+							_elm_lang$navigation$Navigation$spawnPopWatcher(router));
+					} else {
+						break _v6_2;
+					}
+				}
+			} while(false);
+			return _elm_lang$core$Task$succeed(
+				A2(_elm_lang$navigation$Navigation$State, subs, _p15));
+		}();
+		return A2(
+			_elm_lang$navigation$Navigation_ops['&>'],
+			_elm_lang$core$Task$sequence(
+				A2(
+					_elm_lang$core$List$map,
+					A2(_elm_lang$navigation$Navigation$cmdHelp, router, subs),
+					cmds)),
+			stepState);
+	});
+_elm_lang$core$Native_Platform.effectManagers['Navigation'] = {pkg: 'elm-lang/navigation', init: _elm_lang$navigation$Navigation$init, onEffects: _elm_lang$navigation$Navigation$onEffects, onSelfMsg: _elm_lang$navigation$Navigation$onSelfMsg, tag: 'fx', cmdMap: _elm_lang$navigation$Navigation$cmdMap, subMap: _elm_lang$navigation$Navigation$subMap};
 
 var _elm_lang$window$Native_Window = function()
 {
@@ -9838,6 +10560,1014 @@ var _elm_lang$window$Window$subMap = F2(
 			});
 	});
 _elm_lang$core$Native_Platform.effectManagers['Window'] = {pkg: 'elm-lang/window', init: _elm_lang$window$Window$init, onEffects: _elm_lang$window$Window$onEffects, onSelfMsg: _elm_lang$window$Window$onSelfMsg, tag: 'sub', subMap: _elm_lang$window$Window$subMap};
+
+var _evancz$elm_markdown$Native_Markdown = function() {
+
+
+// VIRTUAL-DOM WIDGETS
+
+function toHtml(options, factList, rawMarkdown)
+{
+	var model = {
+		options: options,
+		markdown: rawMarkdown
+	};
+	return _elm_lang$virtual_dom$Native_VirtualDom.custom(factList, model, implementation);
+}
+
+
+// WIDGET IMPLEMENTATION
+
+var implementation = {
+	render: render,
+	diff: diff
+};
+
+function render(model)
+{
+	var html = marked(model.markdown, formatOptions(model.options));
+	var div = document.createElement('div');
+	div.innerHTML = html;
+	return div;
+}
+
+function diff(a, b)
+{
+	
+	if (a.model.markdown === b.model.markdown && a.model.options === b.model.options)
+	{
+		return null;
+	}
+
+	return {
+		applyPatch: applyPatch,
+		data: marked(b.model.markdown, formatOptions(b.model.options))
+	};
+}
+
+function applyPatch(domNode, data)
+{
+	domNode.innerHTML = data;
+	return domNode;
+}
+
+
+// ACTUAL MARKDOWN PARSER
+
+var marked = function() {
+	// catch the `marked` object regardless of the outer environment.
+	// (ex. a CommonJS module compatible environment.)
+	// note that this depends on marked's implementation of environment detection.
+	var module = {};
+	var exports = module.exports = {};
+
+	/**
+	 * marked - a markdown parser
+	 * Copyright (c) 2011-2014, Christopher Jeffrey. (MIT Licensed)
+	 * https://github.com/chjj/marked
+	 * commit cd2f6f5b7091154c5526e79b5f3bfb4d15995a51
+	 */
+	(function(){var block={newline:/^\n+/,code:/^( {4}[^\n]+\n*)+/,fences:noop,hr:/^( *[-*_]){3,} *(?:\n+|$)/,heading:/^ *(#{1,6}) *([^\n]+?) *#* *(?:\n+|$)/,nptable:noop,lheading:/^([^\n]+)\n *(=|-){2,} *(?:\n+|$)/,blockquote:/^( *>[^\n]+(\n(?!def)[^\n]+)*\n*)+/,list:/^( *)(bull) [\s\S]+?(?:hr|def|\n{2,}(?! )(?!\1bull )\n*|\s*$)/,html:/^ *(?:comment *(?:\n|\s*$)|closed *(?:\n{2,}|\s*$)|closing *(?:\n{2,}|\s*$))/,def:/^ *\[([^\]]+)\]: *<?([^\s>]+)>?(?: +["(]([^\n]+)[")])? *(?:\n+|$)/,table:noop,paragraph:/^((?:[^\n]+\n?(?!hr|heading|lheading|blockquote|tag|def))+)\n*/,text:/^[^\n]+/};block.bullet=/(?:[*+-]|\d+\.)/;block.item=/^( *)(bull) [^\n]*(?:\n(?!\1bull )[^\n]*)*/;block.item=replace(block.item,"gm")(/bull/g,block.bullet)();block.list=replace(block.list)(/bull/g,block.bullet)("hr","\\n+(?=\\1?(?:[-*_] *){3,}(?:\\n+|$))")("def","\\n+(?="+block.def.source+")")();block.blockquote=replace(block.blockquote)("def",block.def)();block._tag="(?!(?:"+"a|em|strong|small|s|cite|q|dfn|abbr|data|time|code"+"|var|samp|kbd|sub|sup|i|b|u|mark|ruby|rt|rp|bdi|bdo"+"|span|br|wbr|ins|del|img)\\b)\\w+(?!:/|[^\\w\\s@]*@)\\b";block.html=replace(block.html)("comment",/<!--[\s\S]*?-->/)("closed",/<(tag)[\s\S]+?<\/\1>/)("closing",/<tag(?:"[^"]*"|'[^']*'|[^'">])*?>/)(/tag/g,block._tag)();block.paragraph=replace(block.paragraph)("hr",block.hr)("heading",block.heading)("lheading",block.lheading)("blockquote",block.blockquote)("tag","<"+block._tag)("def",block.def)();block.normal=merge({},block);block.gfm=merge({},block.normal,{fences:/^ *(`{3,}|~{3,})[ \.]*(\S+)? *\n([\s\S]*?)\s*\1 *(?:\n+|$)/,paragraph:/^/,heading:/^ *(#{1,6}) +([^\n]+?) *#* *(?:\n+|$)/});block.gfm.paragraph=replace(block.paragraph)("(?!","(?!"+block.gfm.fences.source.replace("\\1","\\2")+"|"+block.list.source.replace("\\1","\\3")+"|")();block.tables=merge({},block.gfm,{nptable:/^ *(\S.*\|.*)\n *([-:]+ *\|[-| :]*)\n((?:.*\|.*(?:\n|$))*)\n*/,table:/^ *\|(.+)\n *\|( *[-:]+[-| :]*)\n((?: *\|.*(?:\n|$))*)\n*/});function Lexer(options){this.tokens=[];this.tokens.links={};this.options=options||marked.defaults;this.rules=block.normal;if(this.options.gfm){if(this.options.tables){this.rules=block.tables}else{this.rules=block.gfm}}}Lexer.rules=block;Lexer.lex=function(src,options){var lexer=new Lexer(options);return lexer.lex(src)};Lexer.prototype.lex=function(src){src=src.replace(/\r\n|\r/g,"\n").replace(/\t/g,"    ").replace(/\u00a0/g," ").replace(/\u2424/g,"\n");return this.token(src,true)};Lexer.prototype.token=function(src,top,bq){var src=src.replace(/^ +$/gm,""),next,loose,cap,bull,b,item,space,i,l;while(src){if(cap=this.rules.newline.exec(src)){src=src.substring(cap[0].length);if(cap[0].length>1){this.tokens.push({type:"space"})}}if(cap=this.rules.code.exec(src)){src=src.substring(cap[0].length);cap=cap[0].replace(/^ {4}/gm,"");this.tokens.push({type:"code",text:!this.options.pedantic?cap.replace(/\n+$/,""):cap});continue}if(cap=this.rules.fences.exec(src)){src=src.substring(cap[0].length);this.tokens.push({type:"code",lang:cap[2],text:cap[3]||""});continue}if(cap=this.rules.heading.exec(src)){src=src.substring(cap[0].length);this.tokens.push({type:"heading",depth:cap[1].length,text:cap[2]});continue}if(top&&(cap=this.rules.nptable.exec(src))){src=src.substring(cap[0].length);item={type:"table",header:cap[1].replace(/^ *| *\| *$/g,"").split(/ *\| */),align:cap[2].replace(/^ *|\| *$/g,"").split(/ *\| */),cells:cap[3].replace(/\n$/,"").split("\n")};for(i=0;i<item.align.length;i++){if(/^ *-+: *$/.test(item.align[i])){item.align[i]="right"}else if(/^ *:-+: *$/.test(item.align[i])){item.align[i]="center"}else if(/^ *:-+ *$/.test(item.align[i])){item.align[i]="left"}else{item.align[i]=null}}for(i=0;i<item.cells.length;i++){item.cells[i]=item.cells[i].split(/ *\| */)}this.tokens.push(item);continue}if(cap=this.rules.lheading.exec(src)){src=src.substring(cap[0].length);this.tokens.push({type:"heading",depth:cap[2]==="="?1:2,text:cap[1]});continue}if(cap=this.rules.hr.exec(src)){src=src.substring(cap[0].length);this.tokens.push({type:"hr"});continue}if(cap=this.rules.blockquote.exec(src)){src=src.substring(cap[0].length);this.tokens.push({type:"blockquote_start"});cap=cap[0].replace(/^ *> ?/gm,"");this.token(cap,top,true);this.tokens.push({type:"blockquote_end"});continue}if(cap=this.rules.list.exec(src)){src=src.substring(cap[0].length);bull=cap[2];this.tokens.push({type:"list_start",ordered:bull.length>1});cap=cap[0].match(this.rules.item);next=false;l=cap.length;i=0;for(;i<l;i++){item=cap[i];space=item.length;item=item.replace(/^ *([*+-]|\d+\.) +/,"");if(~item.indexOf("\n ")){space-=item.length;item=!this.options.pedantic?item.replace(new RegExp("^ {1,"+space+"}","gm"),""):item.replace(/^ {1,4}/gm,"")}if(this.options.smartLists&&i!==l-1){b=block.bullet.exec(cap[i+1])[0];if(bull!==b&&!(bull.length>1&&b.length>1)){src=cap.slice(i+1).join("\n")+src;i=l-1}}loose=next||/\n\n(?!\s*$)/.test(item);if(i!==l-1){next=item.charAt(item.length-1)==="\n";if(!loose)loose=next}this.tokens.push({type:loose?"loose_item_start":"list_item_start"});this.token(item,false,bq);this.tokens.push({type:"list_item_end"})}this.tokens.push({type:"list_end"});continue}if(cap=this.rules.html.exec(src)){src=src.substring(cap[0].length);this.tokens.push({type:this.options.sanitize?"paragraph":"html",pre:!this.options.sanitizer&&(cap[1]==="pre"||cap[1]==="script"||cap[1]==="style"),text:cap[0]});continue}if(!bq&&top&&(cap=this.rules.def.exec(src))){src=src.substring(cap[0].length);this.tokens.links[cap[1].toLowerCase()]={href:cap[2],title:cap[3]};continue}if(top&&(cap=this.rules.table.exec(src))){src=src.substring(cap[0].length);item={type:"table",header:cap[1].replace(/^ *| *\| *$/g,"").split(/ *\| */),align:cap[2].replace(/^ *|\| *$/g,"").split(/ *\| */),cells:cap[3].replace(/(?: *\| *)?\n$/,"").split("\n")};for(i=0;i<item.align.length;i++){if(/^ *-+: *$/.test(item.align[i])){item.align[i]="right"}else if(/^ *:-+: *$/.test(item.align[i])){item.align[i]="center"}else if(/^ *:-+ *$/.test(item.align[i])){item.align[i]="left"}else{item.align[i]=null}}for(i=0;i<item.cells.length;i++){item.cells[i]=item.cells[i].replace(/^ *\| *| *\| *$/g,"").split(/ *\| */)}this.tokens.push(item);continue}if(top&&(cap=this.rules.paragraph.exec(src))){src=src.substring(cap[0].length);this.tokens.push({type:"paragraph",text:cap[1].charAt(cap[1].length-1)==="\n"?cap[1].slice(0,-1):cap[1]});continue}if(cap=this.rules.text.exec(src)){src=src.substring(cap[0].length);this.tokens.push({type:"text",text:cap[0]});continue}if(src){throw new Error("Infinite loop on byte: "+src.charCodeAt(0))}}return this.tokens};var inline={escape:/^\\([\\`*{}\[\]()#+\-.!_>])/,autolink:/^<([^ >]+(@|:\/)[^ >]+)>/,url:noop,tag:/^<!--[\s\S]*?-->|^<\/?\w+(?:"[^"]*"|'[^']*'|[^'">])*?>/,link:/^!?\[(inside)\]\(href\)/,reflink:/^!?\[(inside)\]\s*\[([^\]]*)\]/,nolink:/^!?\[((?:\[[^\]]*\]|[^\[\]])*)\]/,strong:/^__([\s\S]+?)__(?!_)|^\*\*([\s\S]+?)\*\*(?!\*)/,em:/^\b_((?:[^_]|__)+?)_\b|^\*((?:\*\*|[\s\S])+?)\*(?!\*)/,code:/^(`+)\s*([\s\S]*?[^`])\s*\1(?!`)/,br:/^ {2,}\n(?!\s*$)/,del:noop,text:/^[\s\S]+?(?=[\\<!\[_*`]| {2,}\n|$)/};inline._inside=/(?:\[[^\]]*\]|[^\[\]]|\](?=[^\[]*\]))*/;inline._href=/\s*<?([\s\S]*?)>?(?:\s+['"]([\s\S]*?)['"])?\s*/;inline.link=replace(inline.link)("inside",inline._inside)("href",inline._href)();inline.reflink=replace(inline.reflink)("inside",inline._inside)();inline.normal=merge({},inline);inline.pedantic=merge({},inline.normal,{strong:/^__(?=\S)([\s\S]*?\S)__(?!_)|^\*\*(?=\S)([\s\S]*?\S)\*\*(?!\*)/,em:/^_(?=\S)([\s\S]*?\S)_(?!_)|^\*(?=\S)([\s\S]*?\S)\*(?!\*)/});inline.gfm=merge({},inline.normal,{escape:replace(inline.escape)("])","~|])")(),url:/^(https?:\/\/[^\s<]+[^<.,:;"')\]\s])/,del:/^~~(?=\S)([\s\S]*?\S)~~/,text:replace(inline.text)("]|","~]|")("|","|https?://|")()});inline.breaks=merge({},inline.gfm,{br:replace(inline.br)("{2,}","*")(),text:replace(inline.gfm.text)("{2,}","*")()});function InlineLexer(links,options){this.options=options||marked.defaults;this.links=links;this.rules=inline.normal;this.renderer=this.options.renderer||new Renderer;this.renderer.options=this.options;if(!this.links){throw new Error("Tokens array requires a `links` property.")}if(this.options.gfm){if(this.options.breaks){this.rules=inline.breaks}else{this.rules=inline.gfm}}else if(this.options.pedantic){this.rules=inline.pedantic}}InlineLexer.rules=inline;InlineLexer.output=function(src,links,options){var inline=new InlineLexer(links,options);return inline.output(src)};InlineLexer.prototype.output=function(src){var out="",link,text,href,cap;while(src){if(cap=this.rules.escape.exec(src)){src=src.substring(cap[0].length);out+=cap[1];continue}if(cap=this.rules.autolink.exec(src)){src=src.substring(cap[0].length);if(cap[2]==="@"){text=cap[1].charAt(6)===":"?this.mangle(cap[1].substring(7)):this.mangle(cap[1]);href=this.mangle("mailto:")+text}else{text=escape(cap[1]);href=text}out+=this.renderer.link(href,null,text);continue}if(!this.inLink&&(cap=this.rules.url.exec(src))){src=src.substring(cap[0].length);text=escape(cap[1]);href=text;out+=this.renderer.link(href,null,text);continue}if(cap=this.rules.tag.exec(src)){if(!this.inLink&&/^<a /i.test(cap[0])){this.inLink=true}else if(this.inLink&&/^<\/a>/i.test(cap[0])){this.inLink=false}src=src.substring(cap[0].length);out+=this.options.sanitize?this.options.sanitizer?this.options.sanitizer(cap[0]):escape(cap[0]):cap[0];continue}if(cap=this.rules.link.exec(src)){src=src.substring(cap[0].length);this.inLink=true;out+=this.outputLink(cap,{href:cap[2],title:cap[3]});this.inLink=false;continue}if((cap=this.rules.reflink.exec(src))||(cap=this.rules.nolink.exec(src))){src=src.substring(cap[0].length);link=(cap[2]||cap[1]).replace(/\s+/g," ");link=this.links[link.toLowerCase()];if(!link||!link.href){out+=cap[0].charAt(0);src=cap[0].substring(1)+src;continue}this.inLink=true;out+=this.outputLink(cap,link);this.inLink=false;continue}if(cap=this.rules.strong.exec(src)){src=src.substring(cap[0].length);out+=this.renderer.strong(this.output(cap[2]||cap[1]));continue}if(cap=this.rules.em.exec(src)){src=src.substring(cap[0].length);out+=this.renderer.em(this.output(cap[2]||cap[1]));continue}if(cap=this.rules.code.exec(src)){src=src.substring(cap[0].length);out+=this.renderer.codespan(escape(cap[2],true));continue}if(cap=this.rules.br.exec(src)){src=src.substring(cap[0].length);out+=this.renderer.br();continue}if(cap=this.rules.del.exec(src)){src=src.substring(cap[0].length);out+=this.renderer.del(this.output(cap[1]));continue}if(cap=this.rules.text.exec(src)){src=src.substring(cap[0].length);out+=this.renderer.text(escape(this.smartypants(cap[0])));continue}if(src){throw new Error("Infinite loop on byte: "+src.charCodeAt(0))}}return out};InlineLexer.prototype.outputLink=function(cap,link){var href=escape(link.href),title=link.title?escape(link.title):null;return cap[0].charAt(0)!=="!"?this.renderer.link(href,title,this.output(cap[1])):this.renderer.image(href,title,escape(cap[1]))};InlineLexer.prototype.smartypants=function(text){if(!this.options.smartypants)return text;return text.replace(/---/g,"—").replace(/--/g,"–").replace(/(^|[-\u2014\/(\[{"\s])'/g,"$1‘").replace(/'/g,"’").replace(/(^|[-\u2014\/(\[{\u2018\s])"/g,"$1“").replace(/"/g,"”").replace(/\.{3}/g,"…")};InlineLexer.prototype.mangle=function(text){if(!this.options.mangle)return text;var out="",l=text.length,i=0,ch;for(;i<l;i++){ch=text.charCodeAt(i);if(Math.random()>.5){ch="x"+ch.toString(16)}out+="&#"+ch+";"}return out};function Renderer(options){this.options=options||{}}Renderer.prototype.code=function(code,lang,escaped){if(this.options.highlight){var out=this.options.highlight(code,lang);if(out!=null&&out!==code){escaped=true;code=out}}if(!lang){return"<pre><code>"+(escaped?code:escape(code,true))+"\n</code></pre>"}return'<pre><code class="'+this.options.langPrefix+escape(lang,true)+'">'+(escaped?code:escape(code,true))+"\n</code></pre>\n"};Renderer.prototype.blockquote=function(quote){return"<blockquote>\n"+quote+"</blockquote>\n"};Renderer.prototype.html=function(html){return html};Renderer.prototype.heading=function(text,level,raw){return"<h"+level+' id="'+this.options.headerPrefix+raw.toLowerCase().replace(/[^\w]+/g,"-")+'">'+text+"</h"+level+">\n"};Renderer.prototype.hr=function(){return this.options.xhtml?"<hr/>\n":"<hr>\n"};Renderer.prototype.list=function(body,ordered){var type=ordered?"ol":"ul";return"<"+type+">\n"+body+"</"+type+">\n"};Renderer.prototype.listitem=function(text){return"<li>"+text+"</li>\n"};Renderer.prototype.paragraph=function(text){return"<p>"+text+"</p>\n"};Renderer.prototype.table=function(header,body){return"<table>\n"+"<thead>\n"+header+"</thead>\n"+"<tbody>\n"+body+"</tbody>\n"+"</table>\n"};Renderer.prototype.tablerow=function(content){return"<tr>\n"+content+"</tr>\n"};Renderer.prototype.tablecell=function(content,flags){var type=flags.header?"th":"td";var tag=flags.align?"<"+type+' style="text-align:'+flags.align+'">':"<"+type+">";return tag+content+"</"+type+">\n"};Renderer.prototype.strong=function(text){return"<strong>"+text+"</strong>"};Renderer.prototype.em=function(text){return"<em>"+text+"</em>"};Renderer.prototype.codespan=function(text){return"<code>"+text+"</code>"};Renderer.prototype.br=function(){return this.options.xhtml?"<br/>":"<br>"};Renderer.prototype.del=function(text){return"<del>"+text+"</del>"};Renderer.prototype.link=function(href,title,text){if(this.options.sanitize){try{var prot=decodeURIComponent(unescape(href)).replace(/[^\w:]/g,"").toLowerCase()}catch(e){return""}if(prot.indexOf("javascript:")===0||prot.indexOf("vbscript:")===0||prot.indexOf("data:")===0){return""}}var out='<a href="'+href+'"';if(title){out+=' title="'+title+'"'}out+=">"+text+"</a>";return out};Renderer.prototype.image=function(href,title,text){var out='<img src="'+href+'" alt="'+text+'"';if(title){out+=' title="'+title+'"'}out+=this.options.xhtml?"/>":">";return out};Renderer.prototype.text=function(text){return text};function Parser(options){this.tokens=[];this.token=null;this.options=options||marked.defaults;this.options.renderer=this.options.renderer||new Renderer;this.renderer=this.options.renderer;this.renderer.options=this.options}Parser.parse=function(src,options,renderer){var parser=new Parser(options,renderer);return parser.parse(src)};Parser.prototype.parse=function(src){this.inline=new InlineLexer(src.links,this.options,this.renderer);this.tokens=src.reverse();var out="";while(this.next()){out+=this.tok()}return out};Parser.prototype.next=function(){return this.token=this.tokens.pop()};Parser.prototype.peek=function(){return this.tokens[this.tokens.length-1]||0};Parser.prototype.parseText=function(){var body=this.token.text;while(this.peek().type==="text"){body+="\n"+this.next().text}return this.inline.output(body)};Parser.prototype.tok=function(){switch(this.token.type){case"space":{return""}case"hr":{return this.renderer.hr()}case"heading":{return this.renderer.heading(this.inline.output(this.token.text),this.token.depth,this.token.text)}case"code":{return this.renderer.code(this.token.text,this.token.lang,this.token.escaped)}case"table":{var header="",body="",i,row,cell,flags,j;cell="";for(i=0;i<this.token.header.length;i++){flags={header:true,align:this.token.align[i]};cell+=this.renderer.tablecell(this.inline.output(this.token.header[i]),{header:true,align:this.token.align[i]})}header+=this.renderer.tablerow(cell);for(i=0;i<this.token.cells.length;i++){row=this.token.cells[i];cell="";for(j=0;j<row.length;j++){cell+=this.renderer.tablecell(this.inline.output(row[j]),{header:false,align:this.token.align[j]})}body+=this.renderer.tablerow(cell)}return this.renderer.table(header,body)}case"blockquote_start":{var body="";while(this.next().type!=="blockquote_end"){body+=this.tok()}return this.renderer.blockquote(body)}case"list_start":{var body="",ordered=this.token.ordered;while(this.next().type!=="list_end"){body+=this.tok()}return this.renderer.list(body,ordered)}case"list_item_start":{var body="";while(this.next().type!=="list_item_end"){body+=this.token.type==="text"?this.parseText():this.tok()}return this.renderer.listitem(body)}case"loose_item_start":{var body="";while(this.next().type!=="list_item_end"){body+=this.tok()}return this.renderer.listitem(body)}case"html":{var html=!this.token.pre&&!this.options.pedantic?this.inline.output(this.token.text):this.token.text;return this.renderer.html(html)}case"paragraph":{return this.renderer.paragraph(this.inline.output(this.token.text))}case"text":{return this.renderer.paragraph(this.parseText())}}};function escape(html,encode){return html.replace(!encode?/&(?!#?\w+;)/g:/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;")}function unescape(html){return html.replace(/&(#(?:\d+)|(?:#x[0-9A-Fa-f]+)|(?:\w+));?/g,function(_,n){n=n.toLowerCase();if(n==="colon")return":";if(n.charAt(0)==="#"){return n.charAt(1)==="x"?String.fromCharCode(parseInt(n.substring(2),16)):String.fromCharCode(+n.substring(1))}return""})}function replace(regex,opt){regex=regex.source;opt=opt||"";return function self(name,val){if(!name)return new RegExp(regex,opt);val=val.source||val;val=val.replace(/(^|[^\[])\^/g,"$1");regex=regex.replace(name,val);return self}}function noop(){}noop.exec=noop;function merge(obj){var i=1,target,key;for(;i<arguments.length;i++){target=arguments[i];for(key in target){if(Object.prototype.hasOwnProperty.call(target,key)){obj[key]=target[key]}}}return obj}function marked(src,opt,callback){if(callback||typeof opt==="function"){if(!callback){callback=opt;opt=null}opt=merge({},marked.defaults,opt||{});var highlight=opt.highlight,tokens,pending,i=0;try{tokens=Lexer.lex(src,opt)}catch(e){return callback(e)}pending=tokens.length;var done=function(err){if(err){opt.highlight=highlight;return callback(err)}var out;try{out=Parser.parse(tokens,opt)}catch(e){err=e}opt.highlight=highlight;return err?callback(err):callback(null,out)};if(!highlight||highlight.length<3){return done()}delete opt.highlight;if(!pending)return done();for(;i<tokens.length;i++){(function(token){if(token.type!=="code"){return--pending||done()}return highlight(token.text,token.lang,function(err,code){if(err)return done(err);if(code==null||code===token.text){return--pending||done()}token.text=code;token.escaped=true;--pending||done()})})(tokens[i])}return}try{if(opt)opt=merge({},marked.defaults,opt);return Parser.parse(Lexer.lex(src,opt),opt)}catch(e){e.message+="\nPlease report this to https://github.com/chjj/marked.";if((opt||marked.defaults).silent){return"<p>An error occured:</p><pre>"+escape(e.message+"",true)+"</pre>"}throw e}}marked.options=marked.setOptions=function(opt){merge(marked.defaults,opt);return marked};marked.defaults={gfm:true,tables:true,breaks:false,pedantic:false,sanitize:false,sanitizer:null,mangle:true,smartLists:false,silent:false,highlight:null,langPrefix:"lang-",smartypants:false,headerPrefix:"",renderer:new Renderer,xhtml:false};marked.Parser=Parser;marked.parser=Parser.parse;marked.Renderer=Renderer;marked.Lexer=Lexer;marked.lexer=Lexer.lex;marked.InlineLexer=InlineLexer;marked.inlineLexer=InlineLexer.output;marked.parse=marked;if(typeof module!=="undefined"&&typeof exports==="object"){module.exports=marked}else if(typeof define==="function"&&define.amd){define(function(){return marked})}else{this.marked=marked}}).call(function(){return this||(typeof window!=="undefined"?window:global)}());
+
+	return module.exports;
+}();
+
+
+// FORMAT OPTIONS FOR MARKED IMPLEMENTATION
+
+function formatOptions(options)
+{
+	function toHighlight(code, lang)
+	{
+		if (!lang && options.defaultHighlighting.ctor === 'Just')
+		{
+			lang = options.defaultHighlighting._0;
+		}
+
+		if (typeof hljs !== 'undefined' && lang && hljs.listLanguages().indexOf(lang) >= 0)
+		{
+			return hljs.highlight(lang, code, true).value;
+		}
+
+		return code;
+	}
+
+	var gfm = options.githubFlavored;
+	if (gfm.ctor === 'Just')
+	{
+		return {
+			highlight: toHighlight,
+			gfm: true,
+			tables: gfm._0.tables,
+			breaks: gfm._0.breaks,
+			sanitize: options.sanitize,
+			smartypants: options.smartypants
+		};
+	}
+
+	return {
+		highlight: toHighlight,
+		gfm: false,
+		tables: false,
+		breaks: false,
+		sanitize: options.sanitize,
+		smartypants: options.smartypants
+	};
+}
+
+
+// EXPORTS
+
+return {
+	toHtml: F3(toHtml)
+};
+
+}();
+
+var _evancz$elm_markdown$Markdown$toHtmlWith = _evancz$elm_markdown$Native_Markdown.toHtml;
+var _evancz$elm_markdown$Markdown$defaultOptions = {
+	githubFlavored: _elm_lang$core$Maybe$Just(
+		{tables: false, breaks: false}),
+	defaultHighlighting: _elm_lang$core$Maybe$Nothing,
+	sanitize: false,
+	smartypants: false
+};
+var _evancz$elm_markdown$Markdown$toHtml = F2(
+	function (attrs, string) {
+		return A3(_evancz$elm_markdown$Native_Markdown.toHtml, _evancz$elm_markdown$Markdown$defaultOptions, attrs, string);
+	});
+var _evancz$elm_markdown$Markdown$Options = F4(
+	function (a, b, c, d) {
+		return {githubFlavored: a, defaultHighlighting: b, sanitize: c, smartypants: d};
+	});
+
+var _evancz$url_parser$UrlParser$toKeyValuePair = function (segment) {
+	var _p0 = A2(_elm_lang$core$String$split, '=', segment);
+	if (((_p0.ctor === '::') && (_p0._1.ctor === '::')) && (_p0._1._1.ctor === '[]')) {
+		return A3(
+			_elm_lang$core$Maybe$map2,
+			F2(
+				function (v0, v1) {
+					return {ctor: '_Tuple2', _0: v0, _1: v1};
+				}),
+			_elm_lang$http$Http$decodeUri(_p0._0),
+			_elm_lang$http$Http$decodeUri(_p0._1._0));
+	} else {
+		return _elm_lang$core$Maybe$Nothing;
+	}
+};
+var _evancz$url_parser$UrlParser$parseParams = function (queryString) {
+	return _elm_lang$core$Dict$fromList(
+		A2(
+			_elm_lang$core$List$filterMap,
+			_evancz$url_parser$UrlParser$toKeyValuePair,
+			A2(
+				_elm_lang$core$String$split,
+				'&',
+				A2(_elm_lang$core$String$dropLeft, 1, queryString))));
+};
+var _evancz$url_parser$UrlParser$splitUrl = function (url) {
+	var _p1 = A2(_elm_lang$core$String$split, '/', url);
+	if ((_p1.ctor === '::') && (_p1._0 === '')) {
+		return _p1._1;
+	} else {
+		return _p1;
+	}
+};
+var _evancz$url_parser$UrlParser$parseHelp = function (states) {
+	parseHelp:
+	while (true) {
+		var _p2 = states;
+		if (_p2.ctor === '[]') {
+			return _elm_lang$core$Maybe$Nothing;
+		} else {
+			var _p4 = _p2._0;
+			var _p3 = _p4.unvisited;
+			if (_p3.ctor === '[]') {
+				return _elm_lang$core$Maybe$Just(_p4.value);
+			} else {
+				if ((_p3._0 === '') && (_p3._1.ctor === '[]')) {
+					return _elm_lang$core$Maybe$Just(_p4.value);
+				} else {
+					var _v4 = _p2._1;
+					states = _v4;
+					continue parseHelp;
+				}
+			}
+		}
+	}
+};
+var _evancz$url_parser$UrlParser$parse = F3(
+	function (_p5, url, params) {
+		var _p6 = _p5;
+		return _evancz$url_parser$UrlParser$parseHelp(
+			_p6._0(
+				{
+					visited: {ctor: '[]'},
+					unvisited: _evancz$url_parser$UrlParser$splitUrl(url),
+					params: params,
+					value: _elm_lang$core$Basics$identity
+				}));
+	});
+var _evancz$url_parser$UrlParser$parseHash = F2(
+	function (parser, location) {
+		return A3(
+			_evancz$url_parser$UrlParser$parse,
+			parser,
+			A2(_elm_lang$core$String$dropLeft, 1, location.hash),
+			_evancz$url_parser$UrlParser$parseParams(location.search));
+	});
+var _evancz$url_parser$UrlParser$parsePath = F2(
+	function (parser, location) {
+		return A3(
+			_evancz$url_parser$UrlParser$parse,
+			parser,
+			location.pathname,
+			_evancz$url_parser$UrlParser$parseParams(location.search));
+	});
+var _evancz$url_parser$UrlParser$intParamHelp = function (maybeValue) {
+	var _p7 = maybeValue;
+	if (_p7.ctor === 'Nothing') {
+		return _elm_lang$core$Maybe$Nothing;
+	} else {
+		return _elm_lang$core$Result$toMaybe(
+			_elm_lang$core$String$toInt(_p7._0));
+	}
+};
+var _evancz$url_parser$UrlParser$mapHelp = F2(
+	function (func, _p8) {
+		var _p9 = _p8;
+		return {
+			visited: _p9.visited,
+			unvisited: _p9.unvisited,
+			params: _p9.params,
+			value: func(_p9.value)
+		};
+	});
+var _evancz$url_parser$UrlParser$State = F4(
+	function (a, b, c, d) {
+		return {visited: a, unvisited: b, params: c, value: d};
+	});
+var _evancz$url_parser$UrlParser$Parser = function (a) {
+	return {ctor: 'Parser', _0: a};
+};
+var _evancz$url_parser$UrlParser$s = function (str) {
+	return _evancz$url_parser$UrlParser$Parser(
+		function (_p10) {
+			var _p11 = _p10;
+			var _p12 = _p11.unvisited;
+			if (_p12.ctor === '[]') {
+				return {ctor: '[]'};
+			} else {
+				var _p13 = _p12._0;
+				return _elm_lang$core$Native_Utils.eq(_p13, str) ? {
+					ctor: '::',
+					_0: A4(
+						_evancz$url_parser$UrlParser$State,
+						{ctor: '::', _0: _p13, _1: _p11.visited},
+						_p12._1,
+						_p11.params,
+						_p11.value),
+					_1: {ctor: '[]'}
+				} : {ctor: '[]'};
+			}
+		});
+};
+var _evancz$url_parser$UrlParser$custom = F2(
+	function (tipe, stringToSomething) {
+		return _evancz$url_parser$UrlParser$Parser(
+			function (_p14) {
+				var _p15 = _p14;
+				var _p16 = _p15.unvisited;
+				if (_p16.ctor === '[]') {
+					return {ctor: '[]'};
+				} else {
+					var _p18 = _p16._0;
+					var _p17 = stringToSomething(_p18);
+					if (_p17.ctor === 'Ok') {
+						return {
+							ctor: '::',
+							_0: A4(
+								_evancz$url_parser$UrlParser$State,
+								{ctor: '::', _0: _p18, _1: _p15.visited},
+								_p16._1,
+								_p15.params,
+								_p15.value(_p17._0)),
+							_1: {ctor: '[]'}
+						};
+					} else {
+						return {ctor: '[]'};
+					}
+				}
+			});
+	});
+var _evancz$url_parser$UrlParser$string = A2(_evancz$url_parser$UrlParser$custom, 'STRING', _elm_lang$core$Result$Ok);
+var _evancz$url_parser$UrlParser$int = A2(_evancz$url_parser$UrlParser$custom, 'NUMBER', _elm_lang$core$String$toInt);
+var _evancz$url_parser$UrlParser_ops = _evancz$url_parser$UrlParser_ops || {};
+_evancz$url_parser$UrlParser_ops['</>'] = F2(
+	function (_p20, _p19) {
+		var _p21 = _p20;
+		var _p22 = _p19;
+		return _evancz$url_parser$UrlParser$Parser(
+			function (state) {
+				return A2(
+					_elm_lang$core$List$concatMap,
+					_p22._0,
+					_p21._0(state));
+			});
+	});
+var _evancz$url_parser$UrlParser$map = F2(
+	function (subValue, _p23) {
+		var _p24 = _p23;
+		return _evancz$url_parser$UrlParser$Parser(
+			function (_p25) {
+				var _p26 = _p25;
+				return A2(
+					_elm_lang$core$List$map,
+					_evancz$url_parser$UrlParser$mapHelp(_p26.value),
+					_p24._0(
+						{visited: _p26.visited, unvisited: _p26.unvisited, params: _p26.params, value: subValue}));
+			});
+	});
+var _evancz$url_parser$UrlParser$oneOf = function (parsers) {
+	return _evancz$url_parser$UrlParser$Parser(
+		function (state) {
+			return A2(
+				_elm_lang$core$List$concatMap,
+				function (_p27) {
+					var _p28 = _p27;
+					return _p28._0(state);
+				},
+				parsers);
+		});
+};
+var _evancz$url_parser$UrlParser$top = _evancz$url_parser$UrlParser$Parser(
+	function (state) {
+		return {
+			ctor: '::',
+			_0: state,
+			_1: {ctor: '[]'}
+		};
+	});
+var _evancz$url_parser$UrlParser_ops = _evancz$url_parser$UrlParser_ops || {};
+_evancz$url_parser$UrlParser_ops['<?>'] = F2(
+	function (_p30, _p29) {
+		var _p31 = _p30;
+		var _p32 = _p29;
+		return _evancz$url_parser$UrlParser$Parser(
+			function (state) {
+				return A2(
+					_elm_lang$core$List$concatMap,
+					_p32._0,
+					_p31._0(state));
+			});
+	});
+var _evancz$url_parser$UrlParser$QueryParser = function (a) {
+	return {ctor: 'QueryParser', _0: a};
+};
+var _evancz$url_parser$UrlParser$customParam = F2(
+	function (key, func) {
+		return _evancz$url_parser$UrlParser$QueryParser(
+			function (_p33) {
+				var _p34 = _p33;
+				var _p35 = _p34.params;
+				return {
+					ctor: '::',
+					_0: A4(
+						_evancz$url_parser$UrlParser$State,
+						_p34.visited,
+						_p34.unvisited,
+						_p35,
+						_p34.value(
+							func(
+								A2(_elm_lang$core$Dict$get, key, _p35)))),
+					_1: {ctor: '[]'}
+				};
+			});
+	});
+var _evancz$url_parser$UrlParser$stringParam = function (name) {
+	return A2(_evancz$url_parser$UrlParser$customParam, name, _elm_lang$core$Basics$identity);
+};
+var _evancz$url_parser$UrlParser$intParam = function (name) {
+	return A2(_evancz$url_parser$UrlParser$customParam, name, _evancz$url_parser$UrlParser$intParamHelp);
+};
+
+var _lucamug$elm_unbreakable_json$Data_UserPhoto$photoToUrl = function (_p0) {
+	var _p1 = _p0;
+	var _p2 = _p1._0;
+	if (_p2.ctor === 'Nothing') {
+		return 'https://static.productionready.io/images/smiley-cyrus.jpg';
+	} else {
+		return _p2._0;
+	}
+};
+var _lucamug$elm_unbreakable_json$Data_UserPhoto$toMaybeString = function (_p3) {
+	var _p4 = _p3;
+	return _p4._0;
+};
+var _lucamug$elm_unbreakable_json$Data_UserPhoto$encode = function (_p5) {
+	var _p6 = _p5;
+	return A2(_elm_community$json_extra$Json_Encode_Extra$maybe, _elm_lang$core$Json_Encode$string, _p6._0);
+};
+var _lucamug$elm_unbreakable_json$Data_UserPhoto$src = function (_p7) {
+	return _elm_lang$html$Html_Attributes$src(
+		_lucamug$elm_unbreakable_json$Data_UserPhoto$photoToUrl(_p7));
+};
+var _lucamug$elm_unbreakable_json$Data_UserPhoto$UserPhoto = function (a) {
+	return {ctor: 'UserPhoto', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Data_UserPhoto$decoder = A2(
+	_elm_lang$core$Json_Decode$map,
+	_lucamug$elm_unbreakable_json$Data_UserPhoto$UserPhoto,
+	_elm_lang$core$Json_Decode$nullable(_elm_lang$core$Json_Decode$string));
+
+var _lukewestby$elm_http_builder$HttpBuilder$replace = F2(
+	function (old, $new) {
+		return function (_p0) {
+			return A2(
+				_elm_lang$core$String$join,
+				$new,
+				A2(_elm_lang$core$String$split, old, _p0));
+		};
+	});
+var _lukewestby$elm_http_builder$HttpBuilder$queryEscape = function (_p1) {
+	return A3(
+		_lukewestby$elm_http_builder$HttpBuilder$replace,
+		'%20',
+		'+',
+		_elm_lang$http$Http$encodeUri(_p1));
+};
+var _lukewestby$elm_http_builder$HttpBuilder$queryPair = function (_p2) {
+	var _p3 = _p2;
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		_lukewestby$elm_http_builder$HttpBuilder$queryEscape(_p3._0),
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			'=',
+			_lukewestby$elm_http_builder$HttpBuilder$queryEscape(_p3._1)));
+};
+var _lukewestby$elm_http_builder$HttpBuilder$joinUrlEncoded = function (args) {
+	return A2(
+		_elm_lang$core$String$join,
+		'&',
+		A2(_elm_lang$core$List$map, _lukewestby$elm_http_builder$HttpBuilder$queryPair, args));
+};
+var _lukewestby$elm_http_builder$HttpBuilder$toRequest = function (builder) {
+	var encodedParams = _lukewestby$elm_http_builder$HttpBuilder$joinUrlEncoded(builder.queryParams);
+	var fullUrl = _elm_lang$core$String$isEmpty(encodedParams) ? builder.url : A2(
+		_elm_lang$core$Basics_ops['++'],
+		builder.url,
+		A2(_elm_lang$core$Basics_ops['++'], '?', encodedParams));
+	return _elm_lang$http$Http$request(
+		{method: builder.method, url: fullUrl, headers: builder.headers, body: builder.body, expect: builder.expect, timeout: builder.timeout, withCredentials: builder.withCredentials});
+};
+var _lukewestby$elm_http_builder$HttpBuilder$toTaskPlain = function (builder) {
+	return _elm_lang$http$Http$toTask(
+		_lukewestby$elm_http_builder$HttpBuilder$toRequest(builder));
+};
+var _lukewestby$elm_http_builder$HttpBuilder$withCacheBuster = F2(
+	function (paramName, builder) {
+		return _elm_lang$core$Native_Utils.update(
+			builder,
+			{
+				cacheBuster: _elm_lang$core$Maybe$Just(paramName)
+			});
+	});
+var _lukewestby$elm_http_builder$HttpBuilder$withQueryParams = F2(
+	function (queryParams, builder) {
+		return _elm_lang$core$Native_Utils.update(
+			builder,
+			{
+				queryParams: A2(_elm_lang$core$Basics_ops['++'], builder.queryParams, queryParams)
+			});
+	});
+var _lukewestby$elm_http_builder$HttpBuilder$toTaskWithCacheBuster = F2(
+	function (paramName, builder) {
+		var request = function (timestamp) {
+			return _lukewestby$elm_http_builder$HttpBuilder$toTaskPlain(
+				A2(
+					_lukewestby$elm_http_builder$HttpBuilder$withQueryParams,
+					{
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple2',
+							_0: paramName,
+							_1: _elm_lang$core$Basics$toString(timestamp)
+						},
+						_1: {ctor: '[]'}
+					},
+					builder));
+		};
+		return A2(_elm_lang$core$Task$andThen, request, _elm_lang$core$Time$now);
+	});
+var _lukewestby$elm_http_builder$HttpBuilder$toTask = function (builder) {
+	var _p4 = builder.cacheBuster;
+	if (_p4.ctor === 'Just') {
+		return A2(_lukewestby$elm_http_builder$HttpBuilder$toTaskWithCacheBuster, _p4._0, builder);
+	} else {
+		return _lukewestby$elm_http_builder$HttpBuilder$toTaskPlain(builder);
+	}
+};
+var _lukewestby$elm_http_builder$HttpBuilder$send = F2(
+	function (tagger, builder) {
+		return A2(
+			_elm_lang$core$Task$attempt,
+			tagger,
+			_lukewestby$elm_http_builder$HttpBuilder$toTask(builder));
+	});
+var _lukewestby$elm_http_builder$HttpBuilder$withExpect = F2(
+	function (expect, builder) {
+		return _elm_lang$core$Native_Utils.update(
+			builder,
+			{expect: expect});
+	});
+var _lukewestby$elm_http_builder$HttpBuilder$withCredentials = function (builder) {
+	return _elm_lang$core$Native_Utils.update(
+		builder,
+		{withCredentials: true});
+};
+var _lukewestby$elm_http_builder$HttpBuilder$withTimeout = F2(
+	function (timeout, builder) {
+		return _elm_lang$core$Native_Utils.update(
+			builder,
+			{
+				timeout: _elm_lang$core$Maybe$Just(timeout)
+			});
+	});
+var _lukewestby$elm_http_builder$HttpBuilder$withBody = F2(
+	function (body, builder) {
+		return _elm_lang$core$Native_Utils.update(
+			builder,
+			{body: body});
+	});
+var _lukewestby$elm_http_builder$HttpBuilder$withStringBody = F2(
+	function (contentType, value) {
+		return _lukewestby$elm_http_builder$HttpBuilder$withBody(
+			A2(_elm_lang$http$Http$stringBody, contentType, value));
+	});
+var _lukewestby$elm_http_builder$HttpBuilder$withUrlEncodedBody = function (_p5) {
+	return A2(
+		_lukewestby$elm_http_builder$HttpBuilder$withStringBody,
+		'application/x-www-form-urlencoded',
+		_lukewestby$elm_http_builder$HttpBuilder$joinUrlEncoded(_p5));
+};
+var _lukewestby$elm_http_builder$HttpBuilder$withJsonBody = function (value) {
+	return _lukewestby$elm_http_builder$HttpBuilder$withBody(
+		_elm_lang$http$Http$jsonBody(value));
+};
+var _lukewestby$elm_http_builder$HttpBuilder$withMultipartStringBody = function (partPairs) {
+	return _lukewestby$elm_http_builder$HttpBuilder$withBody(
+		_elm_lang$http$Http$multipartBody(
+			A2(
+				_elm_lang$core$List$map,
+				_elm_lang$core$Basics$uncurry(_elm_lang$http$Http$stringPart),
+				partPairs)));
+};
+var _lukewestby$elm_http_builder$HttpBuilder$withHeaders = F2(
+	function (headerPairs, builder) {
+		return _elm_lang$core$Native_Utils.update(
+			builder,
+			{
+				headers: A2(
+					_elm_lang$core$Basics_ops['++'],
+					A2(
+						_elm_lang$core$List$map,
+						_elm_lang$core$Basics$uncurry(_elm_lang$http$Http$header),
+						headerPairs),
+					builder.headers)
+			});
+	});
+var _lukewestby$elm_http_builder$HttpBuilder$withHeader = F3(
+	function (key, value, builder) {
+		return _elm_lang$core$Native_Utils.update(
+			builder,
+			{
+				headers: {
+					ctor: '::',
+					_0: A2(_elm_lang$http$Http$header, key, value),
+					_1: builder.headers
+				}
+			});
+	});
+var _lukewestby$elm_http_builder$HttpBuilder$requestWithMethodAndUrl = F2(
+	function (method, url) {
+		return {
+			method: method,
+			url: url,
+			headers: {ctor: '[]'},
+			body: _elm_lang$http$Http$emptyBody,
+			expect: _elm_lang$http$Http$expectStringResponse(
+				function (_p6) {
+					return _elm_lang$core$Result$Ok(
+						{ctor: '_Tuple0'});
+				}),
+			timeout: _elm_lang$core$Maybe$Nothing,
+			withCredentials: false,
+			queryParams: {ctor: '[]'},
+			cacheBuster: _elm_lang$core$Maybe$Nothing
+		};
+	});
+var _lukewestby$elm_http_builder$HttpBuilder$get = _lukewestby$elm_http_builder$HttpBuilder$requestWithMethodAndUrl('GET');
+var _lukewestby$elm_http_builder$HttpBuilder$post = _lukewestby$elm_http_builder$HttpBuilder$requestWithMethodAndUrl('POST');
+var _lukewestby$elm_http_builder$HttpBuilder$put = _lukewestby$elm_http_builder$HttpBuilder$requestWithMethodAndUrl('PUT');
+var _lukewestby$elm_http_builder$HttpBuilder$patch = _lukewestby$elm_http_builder$HttpBuilder$requestWithMethodAndUrl('PATCH');
+var _lukewestby$elm_http_builder$HttpBuilder$delete = _lukewestby$elm_http_builder$HttpBuilder$requestWithMethodAndUrl('DELETE');
+var _lukewestby$elm_http_builder$HttpBuilder$options = _lukewestby$elm_http_builder$HttpBuilder$requestWithMethodAndUrl('OPTIONS');
+var _lukewestby$elm_http_builder$HttpBuilder$trace = _lukewestby$elm_http_builder$HttpBuilder$requestWithMethodAndUrl('TRACE');
+var _lukewestby$elm_http_builder$HttpBuilder$head = _lukewestby$elm_http_builder$HttpBuilder$requestWithMethodAndUrl('HEAD');
+var _lukewestby$elm_http_builder$HttpBuilder$RequestBuilder = F9(
+	function (a, b, c, d, e, f, g, h, i) {
+		return {method: a, headers: b, url: c, body: d, expect: e, timeout: f, withCredentials: g, queryParams: h, cacheBuster: i};
+	});
+
+var _lucamug$elm_unbreakable_json$Data_AuthToken$withAuthorization = F2(
+	function (maybeToken, builder) {
+		var _p0 = maybeToken;
+		if (_p0.ctor === 'Just') {
+			return A3(
+				_lukewestby$elm_http_builder$HttpBuilder$withHeader,
+				'authorization',
+				A2(_elm_lang$core$Basics_ops['++'], 'Token ', _p0._0._0),
+				builder);
+		} else {
+			return builder;
+		}
+	});
+var _lucamug$elm_unbreakable_json$Data_AuthToken$encode = function (_p1) {
+	var _p2 = _p1;
+	return _elm_lang$core$Json_Encode$string(_p2._0);
+};
+var _lucamug$elm_unbreakable_json$Data_AuthToken$AuthToken = function (a) {
+	return {ctor: 'AuthToken', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Data_AuthToken$decoder = A2(_elm_lang$core$Json_Decode$map, _lucamug$elm_unbreakable_json$Data_AuthToken$AuthToken, _elm_lang$core$Json_Decode$string);
+
+var _lucamug$elm_unbreakable_json$Util$appendErrors = F2(
+	function (model, errors) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				errors: A2(_elm_lang$core$Basics_ops['++'], model.errors, errors)
+			});
+	});
+var _lucamug$elm_unbreakable_json$Util$onClickStopPropagation = function (msg) {
+	return A3(
+		_elm_lang$html$Html_Events$onWithOptions,
+		'click',
+		_elm_lang$core$Native_Utils.update(
+			_elm_lang$html$Html_Events$defaultOptions,
+			{stopPropagation: true}),
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _lucamug$elm_unbreakable_json$Util$viewIf = F2(
+	function (condition, content) {
+		return condition ? content : _elm_lang$html$Html$text('');
+	});
+var _lucamug$elm_unbreakable_json$Util_ops = _lucamug$elm_unbreakable_json$Util_ops || {};
+_lucamug$elm_unbreakable_json$Util_ops['=>'] = F2(
+	function (v0, v1) {
+		return {ctor: '_Tuple2', _0: v0, _1: v1};
+	});
+var _lucamug$elm_unbreakable_json$Util$pair = F2(
+	function (first, second) {
+		return A2(_lucamug$elm_unbreakable_json$Util_ops['=>'], first, second);
+	});
+
+var _lucamug$elm_unbreakable_json$Data_User$usernameToHtml = function (_p0) {
+	var _p1 = _p0;
+	return _elm_lang$html$Html$text(_p1._0);
+};
+var _lucamug$elm_unbreakable_json$Data_User$encodeUsername = function (_p2) {
+	var _p3 = _p2;
+	return _elm_lang$core$Json_Encode$string(_p3._0);
+};
+var _lucamug$elm_unbreakable_json$Data_User$usernameToString = function (_p4) {
+	var _p5 = _p4;
+	return _p5._0;
+};
+var _lucamug$elm_unbreakable_json$Data_User$encode = function (user) {
+	return _elm_lang$core$Json_Encode$object(
+		{
+			ctor: '::',
+			_0: A2(
+				_lucamug$elm_unbreakable_json$Util_ops['=>'],
+				'email',
+				_elm_lang$core$Json_Encode$string(user.email)),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_lucamug$elm_unbreakable_json$Util_ops['=>'],
+					'token',
+					_lucamug$elm_unbreakable_json$Data_AuthToken$encode(user.token)),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						'username',
+						_lucamug$elm_unbreakable_json$Data_User$encodeUsername(user.username)),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_lucamug$elm_unbreakable_json$Util_ops['=>'],
+							'bio',
+							A2(_elm_community$json_extra$Json_Encode_Extra$maybe, _elm_lang$core$Json_Encode$string, user.bio)),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_lucamug$elm_unbreakable_json$Util_ops['=>'],
+								'image',
+								_lucamug$elm_unbreakable_json$Data_UserPhoto$encode(user.image)),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_lucamug$elm_unbreakable_json$Util_ops['=>'],
+									'createdAt',
+									_elm_lang$core$Json_Encode$string(user.createdAt)),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_lucamug$elm_unbreakable_json$Util_ops['=>'],
+										'updatedAt',
+										_elm_lang$core$Json_Encode$string(user.createdAt)),
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					}
+				}
+			}
+		});
+};
+var _lucamug$elm_unbreakable_json$Data_User$User = F7(
+	function (a, b, c, d, e, f, g) {
+		return {email: a, token: b, username: c, bio: d, image: e, createdAt: f, updatedAt: g};
+	});
+var _lucamug$elm_unbreakable_json$Data_User$Username = function (a) {
+	return {ctor: 'Username', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Data_User$usernameParser = A2(
+	_evancz$url_parser$UrlParser$custom,
+	'USERNAME',
+	function (_p6) {
+		return _elm_lang$core$Result$Ok(
+			_lucamug$elm_unbreakable_json$Data_User$Username(_p6));
+	});
+var _lucamug$elm_unbreakable_json$Data_User$usernameDecoder = A2(_elm_lang$core$Json_Decode$map, _lucamug$elm_unbreakable_json$Data_User$Username, _elm_lang$core$Json_Decode$string);
+var _lucamug$elm_unbreakable_json$Data_User$decoder = A3(
+	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+	'updatedAt',
+	_elm_lang$core$Json_Decode$string,
+	A3(
+		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+		'createdAt',
+		_elm_lang$core$Json_Decode$string,
+		A3(
+			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+			'image',
+			_lucamug$elm_unbreakable_json$Data_UserPhoto$decoder,
+			A3(
+				_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+				'bio',
+				_elm_lang$core$Json_Decode$nullable(_elm_lang$core$Json_Decode$string),
+				A3(
+					_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+					'username',
+					_lucamug$elm_unbreakable_json$Data_User$usernameDecoder,
+					A3(
+						_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+						'token',
+						_lucamug$elm_unbreakable_json$Data_AuthToken$decoder,
+						A3(
+							_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+							'email',
+							_elm_lang$core$Json_Decode$string,
+							_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_lucamug$elm_unbreakable_json$Data_User$User))))))));
+
+var _lucamug$elm_unbreakable_json$Data_Article_Author$Author = F4(
+	function (a, b, c, d) {
+		return {username: a, bio: b, image: c, following: d};
+	});
+var _lucamug$elm_unbreakable_json$Data_Article_Author$decoder = A3(
+	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+	'following',
+	_elm_lang$core$Json_Decode$bool,
+	A3(
+		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+		'image',
+		_lucamug$elm_unbreakable_json$Data_UserPhoto$decoder,
+		A3(
+			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+			'bio',
+			_elm_lang$core$Json_Decode$nullable(_elm_lang$core$Json_Decode$string),
+			A3(
+				_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+				'username',
+				_lucamug$elm_unbreakable_json$Data_User$usernameDecoder,
+				_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_lucamug$elm_unbreakable_json$Data_Article_Author$Author)))));
+
+var _lucamug$elm_unbreakable_json$Data_Article$bodyToMarkdownString = function (_p0) {
+	var _p1 = _p0;
+	return _p1._0;
+};
+var _lucamug$elm_unbreakable_json$Data_Article$bodyToHtml = F2(
+	function (_p2, attributes) {
+		var _p3 = _p2;
+		return A2(_evancz$elm_markdown$Markdown$toHtml, attributes, _p3._0);
+	});
+var _lucamug$elm_unbreakable_json$Data_Article$tagToString = function (_p4) {
+	var _p5 = _p4;
+	return _p5._0;
+};
+var _lucamug$elm_unbreakable_json$Data_Article$slugToString = function (_p6) {
+	var _p7 = _p6;
+	return _p7._0;
+};
+var _lucamug$elm_unbreakable_json$Data_Article$Article = function (a) {
+	return function (b) {
+		return function (c) {
+			return function (d) {
+				return function (e) {
+					return function (f) {
+						return function (g) {
+							return function (h) {
+								return function (i) {
+									return function (j) {
+										return {description: a, slug: b, title: c, tags: d, createdAt: e, updatedAt: f, favorited: g, favoritesCount: h, author: i, body: j};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
+var _lucamug$elm_unbreakable_json$Data_Article$Slug = function (a) {
+	return {ctor: 'Slug', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Data_Article$baseArticleDecoder = A3(
+	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+	'author',
+	_lucamug$elm_unbreakable_json$Data_Article_Author$decoder,
+	A3(
+		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+		'favoritesCount',
+		_elm_lang$core$Json_Decode$int,
+		A3(
+			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+			'favorited',
+			_elm_lang$core$Json_Decode$bool,
+			A3(
+				_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+				'updatedAt',
+				_elm_community$json_extra$Json_Decode_Extra$date,
+				A3(
+					_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+					'createdAt',
+					_elm_community$json_extra$Json_Decode_Extra$date,
+					A3(
+						_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+						'tagList',
+						_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$string),
+						A3(
+							_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+							'title',
+							_elm_lang$core$Json_Decode$string,
+							A3(
+								_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+								'slug',
+								A2(_elm_lang$core$Json_Decode$map, _lucamug$elm_unbreakable_json$Data_Article$Slug, _elm_lang$core$Json_Decode$string),
+								A3(
+									_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+									'description',
+									A2(
+										_elm_lang$core$Json_Decode$map,
+										_elm_lang$core$Maybe$withDefault(''),
+										_elm_lang$core$Json_Decode$nullable(_elm_lang$core$Json_Decode$string)),
+									_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_lucamug$elm_unbreakable_json$Data_Article$Article))))))))));
+var _lucamug$elm_unbreakable_json$Data_Article$decoder = A2(
+	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$hardcoded,
+	{ctor: '_Tuple0'},
+	_lucamug$elm_unbreakable_json$Data_Article$baseArticleDecoder);
+var _lucamug$elm_unbreakable_json$Data_Article$slugParser = A2(
+	_evancz$url_parser$UrlParser$custom,
+	'SLUG',
+	function (_p8) {
+		return _elm_lang$core$Result$Ok(
+			_lucamug$elm_unbreakable_json$Data_Article$Slug(_p8));
+	});
+var _lucamug$elm_unbreakable_json$Data_Article$Tag = function (a) {
+	return {ctor: 'Tag', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Data_Article$tagDecoder = A2(_elm_lang$core$Json_Decode$map, _lucamug$elm_unbreakable_json$Data_Article$Tag, _elm_lang$core$Json_Decode$string);
+var _lucamug$elm_unbreakable_json$Data_Article$Body = function (a) {
+	return {ctor: 'Body', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Data_Article$bodyDecoder = A2(_elm_lang$core$Json_Decode$map, _lucamug$elm_unbreakable_json$Data_Article$Body, _elm_lang$core$Json_Decode$string);
+var _lucamug$elm_unbreakable_json$Data_Article$decoderWithBody = A3(_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required, 'body', _lucamug$elm_unbreakable_json$Data_Article$bodyDecoder, _lucamug$elm_unbreakable_json$Data_Article$baseArticleDecoder);
+
+var _lucamug$elm_unbreakable_json$Data_Article_Comment$idToString = function (_p0) {
+	var _p1 = _p0;
+	return _elm_lang$core$Basics$toString(_p1._0);
+};
+var _lucamug$elm_unbreakable_json$Data_Article_Comment$Comment = F5(
+	function (a, b, c, d, e) {
+		return {id: a, body: b, createdAt: c, updatedAt: d, author: e};
+	});
+var _lucamug$elm_unbreakable_json$Data_Article_Comment$CommentId = function (a) {
+	return {ctor: 'CommentId', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Data_Article_Comment$commentIdDecoder = A2(_elm_lang$core$Json_Decode$map, _lucamug$elm_unbreakable_json$Data_Article_Comment$CommentId, _elm_lang$core$Json_Decode$int);
+var _lucamug$elm_unbreakable_json$Data_Article_Comment$decoder = A3(
+	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+	'author',
+	_lucamug$elm_unbreakable_json$Data_Article_Author$decoder,
+	A3(
+		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+		'updatedAt',
+		_elm_community$json_extra$Json_Decode_Extra$date,
+		A3(
+			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+			'createdAt',
+			_elm_community$json_extra$Json_Decode_Extra$date,
+			A3(
+				_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+				'body',
+				_elm_lang$core$Json_Decode$string,
+				A3(
+					_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+					'id',
+					_lucamug$elm_unbreakable_json$Data_Article_Comment$commentIdDecoder,
+					_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_lucamug$elm_unbreakable_json$Data_Article_Comment$Comment))))));
+
+var _lucamug$elm_unbreakable_json$Data_Article_Feed$Feed = F2(
+	function (a, b) {
+		return {articles: a, articlesCount: b};
+	});
+var _lucamug$elm_unbreakable_json$Data_Article_Feed$decoder = A3(
+	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+	'articlesCount',
+	_elm_lang$core$Json_Decode$int,
+	A3(
+		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+		'articles',
+		_elm_lang$core$Json_Decode$list(_lucamug$elm_unbreakable_json$Data_Article$decoder),
+		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_lucamug$elm_unbreakable_json$Data_Article_Feed$Feed)));
+
+var _lucamug$elm_unbreakable_json$Data_Profile$Profile = F4(
+	function (a, b, c, d) {
+		return {username: a, bio: b, image: c, following: d};
+	});
+var _lucamug$elm_unbreakable_json$Data_Profile$decoder = A3(
+	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+	'following',
+	_elm_lang$core$Json_Decode$bool,
+	A3(
+		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+		'image',
+		_lucamug$elm_unbreakable_json$Data_UserPhoto$decoder,
+		A3(
+			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+			'bio',
+			_elm_lang$core$Json_Decode$nullable(_elm_lang$core$Json_Decode$string),
+			A3(
+				_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+				'username',
+				_lucamug$elm_unbreakable_json$Data_User$usernameDecoder,
+				_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_lucamug$elm_unbreakable_json$Data_Profile$Profile)))));
+
+var _lucamug$elm_unbreakable_json$Data_Session$attempt = F3(
+	function (attemptedAction, toCmd, session) {
+		var _p0 = A2(
+			_elm_lang$core$Maybe$map,
+			function (_) {
+				return _.token;
+			},
+			session.user);
+		if (_p0.ctor === 'Nothing') {
+			return A2(
+				_lucamug$elm_unbreakable_json$Util_ops['=>'],
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$core$Basics_ops['++'],
+						'You have been signed out. Please sign back in to ',
+						A2(_elm_lang$core$Basics_ops['++'], attemptedAction, '.')),
+					_1: {ctor: '[]'}
+				},
+				_elm_lang$core$Platform_Cmd$none);
+		} else {
+			return A2(
+				_lucamug$elm_unbreakable_json$Util_ops['=>'],
+				{ctor: '[]'},
+				toCmd(_p0._0));
+		}
+	});
+var _lucamug$elm_unbreakable_json$Data_Session$Session = function (a) {
+	return {user: a};
+};
 
 var _mdgriffith$stylish_elephants$Internal_Style$class = function (cls) {
 	var _p0 = cls;
@@ -18120,2528 +19850,3036 @@ var _mdgriffith$stylish_elephants$Element_Events$Options = F2(
 		return {stopPropagation: a, preventDefault: b};
 	});
 
-var _mdgriffith$stylish_elephants$Internal_Events$keyCode = A2(_elm_lang$core$Json_Decode$field, 'keyCode', _elm_lang$core$Json_Decode$int);
-var _mdgriffith$stylish_elephants$Internal_Events$targetChecked = A2(
-	_elm_lang$core$Json_Decode$at,
-	{
-		ctor: '::',
-		_0: 'target',
-		_1: {
-			ctor: '::',
-			_0: 'checked',
-			_1: {ctor: '[]'}
-		}
-	},
-	_elm_lang$core$Json_Decode$bool);
-var _mdgriffith$stylish_elephants$Internal_Events$targetValue = A2(
-	_elm_lang$core$Json_Decode$at,
-	{
-		ctor: '::',
-		_0: 'target',
-		_1: {
-			ctor: '::',
-			_0: 'value',
-			_1: {ctor: '[]'}
-		}
-	},
-	_elm_lang$core$Json_Decode$string);
-var _mdgriffith$stylish_elephants$Internal_Events$defaultOptions = _elm_lang$virtual_dom$VirtualDom$defaultOptions;
-var _mdgriffith$stylish_elephants$Internal_Events$onWithOptions = F3(
-	function (event, options, decode) {
-		return _mdgriffith$stylish_elephants$Internal_Model$Attr(
-			A3(_elm_lang$html$Html_Events$onWithOptions, event, options, decode));
-	});
-var _mdgriffith$stylish_elephants$Internal_Events$on = F2(
-	function (event, decode) {
-		return _mdgriffith$stylish_elephants$Internal_Model$Attr(
-			A2(_elm_lang$html$Html_Events$on, event, decode));
-	});
-var _mdgriffith$stylish_elephants$Internal_Events$Coords = F2(
-	function (a, b) {
-		return {x: a, y: b};
-	});
-var _mdgriffith$stylish_elephants$Internal_Events$screenCoords = A3(
-	_elm_lang$core$Json_Decode$map2,
-	_mdgriffith$stylish_elephants$Internal_Events$Coords,
-	A2(_elm_lang$core$Json_Decode$field, 'screenX', _elm_lang$core$Json_Decode$int),
-	A2(_elm_lang$core$Json_Decode$field, 'screenY', _elm_lang$core$Json_Decode$int));
-var _mdgriffith$stylish_elephants$Internal_Events$localCoords = A3(
-	_elm_lang$core$Json_Decode$map2,
-	_mdgriffith$stylish_elephants$Internal_Events$Coords,
-	A2(_elm_lang$core$Json_Decode$field, 'offsetX', _elm_lang$core$Json_Decode$int),
-	A2(_elm_lang$core$Json_Decode$field, 'offsetY', _elm_lang$core$Json_Decode$int));
-var _mdgriffith$stylish_elephants$Internal_Events$pageCoords = A3(
-	_elm_lang$core$Json_Decode$map2,
-	_mdgriffith$stylish_elephants$Internal_Events$Coords,
-	A2(_elm_lang$core$Json_Decode$field, 'pageX', _elm_lang$core$Json_Decode$int),
-	A2(_elm_lang$core$Json_Decode$field, 'pageY', _elm_lang$core$Json_Decode$int));
-var _mdgriffith$stylish_elephants$Internal_Events$Options = F2(
-	function (a, b) {
-		return {stopPropagation: a, preventDefault: b};
-	});
+var _lucamug$elm_unbreakable_json$Request_Helpers$apiUrl = function (str) {
+	return A2(_elm_lang$core$Basics_ops['++'], 'https://conduit.productionready.io/api', str);
+};
 
-var _mdgriffith$stylish_elephants$Internal_Grid$build = F5(
-	function (rowCoord, colCoord, spacingX, spacingY, positioned) {
-		var attributes = {
-			ctor: '::',
-			_0: _mdgriffith$stylish_elephants$Internal_Model$StyleClass(
-				_mdgriffith$stylish_elephants$Internal_Model$GridPosition(
-					{row: rowCoord, col: colCoord, width: positioned.width, height: positioned.height})),
-			_1: {
-				ctor: '::',
-				_0: _mdgriffith$stylish_elephants$Internal_Model$StyleClass(
-					A2(_mdgriffith$stylish_elephants$Internal_Model$SpacingStyle, spacingX, spacingY)),
-				_1: positioned.attrs
-			}
-		};
-		var _p0 = positioned.layout;
-		switch (_p0.ctor) {
-			case 'GridElement':
-				return A5(
-					_mdgriffith$stylish_elephants$Internal_Model$element,
-					_mdgriffith$stylish_elephants$Internal_Model$noStyleSheet,
-					_mdgriffith$stylish_elephants$Internal_Model$asColumn,
-					_elm_lang$core$Maybe$Nothing,
-					attributes,
-					_mdgriffith$stylish_elephants$Internal_Model$Unkeyed(
-						_mdgriffith$stylish_elephants$Internal_Model$columnEdgeFillers(positioned.child)));
-			case 'Row':
-				return A5(
-					_mdgriffith$stylish_elephants$Internal_Model$element,
-					_mdgriffith$stylish_elephants$Internal_Model$noStyleSheet,
-					_mdgriffith$stylish_elephants$Internal_Model$asRow,
-					_elm_lang$core$Maybe$Nothing,
-					attributes,
-					_mdgriffith$stylish_elephants$Internal_Model$Unkeyed(
-						_mdgriffith$stylish_elephants$Internal_Model$rowEdgeFillers(positioned.child)));
-			default:
-				return A5(
-					_mdgriffith$stylish_elephants$Internal_Model$element,
-					_mdgriffith$stylish_elephants$Internal_Model$noStyleSheet,
-					_mdgriffith$stylish_elephants$Internal_Model$asColumn,
-					_elm_lang$core$Maybe$Nothing,
-					attributes,
-					_mdgriffith$stylish_elephants$Internal_Model$Unkeyed(
-						_mdgriffith$stylish_elephants$Internal_Model$columnEdgeFillers(positioned.child)));
-		}
+var _lucamug$elm_unbreakable_json$Request_Article$buildFromQueryParams = F2(
+	function (url, queryParams) {
+		return A2(
+			_lukewestby$elm_http_builder$HttpBuilder$withQueryParams,
+			queryParams,
+			A2(
+				_lukewestby$elm_http_builder$HttpBuilder$withExpect,
+				_elm_lang$http$Http$expectJson(_lucamug$elm_unbreakable_json$Data_Article_Feed$decoder),
+				_lukewestby$elm_http_builder$HttpBuilder$get(
+					_lucamug$elm_unbreakable_json$Request_Helpers$apiUrl(url))));
 	});
-var _mdgriffith$stylish_elephants$Internal_Grid$Around = F7(
-	function (a, b, c, d, e, f, g) {
-		return {right: a, left: b, primary: c, primaryWidth: d, defaultWidth: e, below: f, above: g};
+var _lucamug$elm_unbreakable_json$Request_Article$maybeVal = function (_p0) {
+	var _p1 = _p0;
+	var _p2 = _p1._1;
+	if (_p2.ctor === 'Nothing') {
+		return _elm_lang$core$Maybe$Nothing;
+	} else {
+		return _elm_lang$core$Maybe$Just(
+			A2(_lucamug$elm_unbreakable_json$Util_ops['=>'], _p1._0, _p2._0));
+	}
+};
+var _lucamug$elm_unbreakable_json$Request_Article$delete = F2(
+	function (slug, token) {
+		return _lukewestby$elm_http_builder$HttpBuilder$toRequest(
+			A2(
+				_lucamug$elm_unbreakable_json$Data_AuthToken$withAuthorization,
+				_elm_lang$core$Maybe$Just(token),
+				_lukewestby$elm_http_builder$HttpBuilder$delete(
+					_lucamug$elm_unbreakable_json$Request_Helpers$apiUrl(
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							'/articles/',
+							_lucamug$elm_unbreakable_json$Data_Article$slugToString(slug))))));
 	});
-var _mdgriffith$stylish_elephants$Internal_Grid$PositionedElement = F5(
-	function (a, b, c, d, e) {
-		return {layout: a, child: b, attrs: c, width: d, height: e};
-	});
-var _mdgriffith$stylish_elephants$Internal_Grid$Below = {ctor: 'Below'};
-var _mdgriffith$stylish_elephants$Internal_Grid$Above = {ctor: 'Above'};
-var _mdgriffith$stylish_elephants$Internal_Grid$OnLeft = {ctor: 'OnLeft'};
-var _mdgriffith$stylish_elephants$Internal_Grid$OnRight = {ctor: 'OnRight'};
-var _mdgriffith$stylish_elephants$Internal_Grid$createGrid = F2(
-	function (_p1, nearby) {
-		var _p2 = _p1;
-		var _p6 = _p2._1;
-		var _p5 = _p2._0;
-		var columns = _elm_lang$core$Native_Utils.eq(_elm_lang$core$Maybe$Nothing, nearby.left) ? {left: 0, primary: 1, right: 2} : {left: 1, primary: 2, right: 3};
-		var colCoord = function (pos) {
-			var _p3 = pos;
-			switch (_p3.ctor) {
-				case 'Above':
-					return columns.primary;
-				case 'Below':
-					return columns.primary;
-				case 'OnRight':
-					return columns.right;
-				default:
-					return columns.left;
-			}
-		};
-		var rows = _elm_lang$core$Native_Utils.eq(nearby.above, _elm_lang$core$Maybe$Nothing) ? {above: 0, primary: 1, below: 2} : {above: 1, primary: 2, below: 3};
-		var rowCoord = function (pos) {
-			var _p4 = pos;
-			switch (_p4.ctor) {
-				case 'Above':
-					return rows.above;
-				case 'Below':
-					return rows.below;
-				case 'OnRight':
-					return rows.primary;
-				default:
-					return rows.primary;
-			}
-		};
-		var place = F2(
-			function (pos, el) {
-				return A5(
-					_mdgriffith$stylish_elephants$Internal_Grid$build,
-					rowCoord(pos),
-					colCoord(pos),
-					_p5,
-					_p6,
-					el);
-			});
-		var colCount = _elm_lang$core$List$sum(
+var _lucamug$elm_unbreakable_json$Request_Article$update = F3(
+	function (slug, config, token) {
+		var article = _elm_lang$core$Json_Encode$object(
 			{
 				ctor: '::',
-				_0: 1,
+				_0: A2(
+					_lucamug$elm_unbreakable_json$Util_ops['=>'],
+					'title',
+					_elm_lang$core$Json_Encode$string(config.title)),
 				_1: {
 					ctor: '::',
-					_0: _elm_lang$core$Native_Utils.eq(_elm_lang$core$Maybe$Nothing, nearby.left) ? 0 : 1,
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$core$Native_Utils.eq(_elm_lang$core$Maybe$Nothing, nearby.right) ? 0 : 1,
-						_1: {ctor: '[]'}
-					}
-				}
-			});
-		var rowCount = _elm_lang$core$List$sum(
-			{
-				ctor: '::',
-				_0: 1,
-				_1: {
-					ctor: '::',
-					_0: _elm_lang$core$Native_Utils.eq(_elm_lang$core$Maybe$Nothing, nearby.above) ? 0 : 1,
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$core$Native_Utils.eq(_elm_lang$core$Maybe$Nothing, nearby.below) ? 0 : 1,
-						_1: {ctor: '[]'}
-					}
-				}
-			});
-		return {
-			ctor: '_Tuple2',
-			_0: {
-				ctor: '::',
-				_0: _mdgriffith$stylish_elephants$Internal_Model$StyleClass(
-					_mdgriffith$stylish_elephants$Internal_Model$GridTemplateStyle(
-						{
-							spacing: {
-								ctor: '_Tuple2',
-								_0: _mdgriffith$stylish_elephants$Internal_Model$Px(_p5),
-								_1: _mdgriffith$stylish_elephants$Internal_Model$Px(_p6)
-							},
-							columns: A2(
-								_elm_lang$core$List$filterMap,
-								_elm_lang$core$Basics$identity,
-								{
-									ctor: '::',
-									_0: A2(
-										_elm_lang$core$Maybe$map,
-										_elm_lang$core$Basics$always(nearby.defaultWidth),
-										nearby.left),
-									_1: {
-										ctor: '::',
-										_0: _elm_lang$core$Maybe$Just(nearby.primaryWidth),
-										_1: {
-											ctor: '::',
-											_0: A2(
-												_elm_lang$core$Maybe$map,
-												_elm_lang$core$Basics$always(nearby.defaultWidth),
-												nearby.right),
-											_1: {ctor: '[]'}
-										}
-									}
-								}),
-							rows: A2(
-								_elm_lang$core$List$map,
-								_elm_lang$core$Basics$always(_mdgriffith$stylish_elephants$Internal_Model$Content),
-								A2(_elm_lang$core$List$range, 1, rowCount))
-						})),
-				_1: {ctor: '[]'}
-			},
-			_1: A2(
-				_elm_lang$core$List$filterMap,
-				_elm_lang$core$Basics$identity,
-				{
-					ctor: '::',
-					_0: _elm_lang$core$Maybe$Just(
-						A5(
-							_mdgriffith$stylish_elephants$Internal_Model$element,
-							_mdgriffith$stylish_elephants$Internal_Model$noStyleSheet,
-							_mdgriffith$stylish_elephants$Internal_Model$asEl,
-							_elm_lang$core$Maybe$Nothing,
-							{
-								ctor: '::',
-								_0: _mdgriffith$stylish_elephants$Internal_Model$StyleClass(
-									_mdgriffith$stylish_elephants$Internal_Model$GridPosition(
-										{row: rows.primary, col: columns.primary, width: 1, height: 1})),
-								_1: {ctor: '[]'}
-							},
-							_mdgriffith$stylish_elephants$Internal_Model$Unkeyed(
-								{
-									ctor: '::',
-									_0: nearby.primary,
-									_1: {ctor: '[]'}
-								}))),
+					_0: A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						'description',
+						_elm_lang$core$Json_Encode$string(config.description)),
 					_1: {
 						ctor: '::',
 						_0: A2(
-							_elm_lang$core$Maybe$map,
-							place(_mdgriffith$stylish_elephants$Internal_Grid$OnLeft),
-							nearby.left),
+							_lucamug$elm_unbreakable_json$Util_ops['=>'],
+							'body',
+							_elm_lang$core$Json_Encode$string(config.body)),
+						_1: {ctor: '[]'}
+					}
+				}
+			});
+		var body = _elm_lang$http$Http$jsonBody(
+			_elm_lang$core$Json_Encode$object(
+				{
+					ctor: '::',
+					_0: A2(_lucamug$elm_unbreakable_json$Util_ops['=>'], 'article', article),
+					_1: {ctor: '[]'}
+				}));
+		var expect = _elm_lang$http$Http$expectJson(
+			A2(_elm_lang$core$Json_Decode$field, 'article', _lucamug$elm_unbreakable_json$Data_Article$decoderWithBody));
+		return _lukewestby$elm_http_builder$HttpBuilder$toRequest(
+			A2(
+				_lukewestby$elm_http_builder$HttpBuilder$withExpect,
+				expect,
+				A2(
+					_lukewestby$elm_http_builder$HttpBuilder$withBody,
+					body,
+					A2(
+						_lucamug$elm_unbreakable_json$Data_AuthToken$withAuthorization,
+						_elm_lang$core$Maybe$Just(token),
+						_lukewestby$elm_http_builder$HttpBuilder$put(
+							_lucamug$elm_unbreakable_json$Request_Helpers$apiUrl(
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									'/articles/',
+									_lucamug$elm_unbreakable_json$Data_Article$slugToString(slug))))))));
+	});
+var _lucamug$elm_unbreakable_json$Request_Article$create = F2(
+	function (config, token) {
+		var article = _elm_lang$core$Json_Encode$object(
+			{
+				ctor: '::',
+				_0: A2(
+					_lucamug$elm_unbreakable_json$Util_ops['=>'],
+					'title',
+					_elm_lang$core$Json_Encode$string(config.title)),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						'description',
+						_elm_lang$core$Json_Encode$string(config.description)),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_lucamug$elm_unbreakable_json$Util_ops['=>'],
+							'body',
+							_elm_lang$core$Json_Encode$string(config.body)),
 						_1: {
 							ctor: '::',
 							_0: A2(
-								_elm_lang$core$Maybe$map,
-								place(_mdgriffith$stylish_elephants$Internal_Grid$OnRight),
-								nearby.right),
+								_lucamug$elm_unbreakable_json$Util_ops['=>'],
+								'tagList',
+								_elm_lang$core$Json_Encode$list(
+									A2(_elm_lang$core$List$map, _elm_lang$core$Json_Encode$string, config.tags))),
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			});
+		var body = _elm_lang$http$Http$jsonBody(
+			_elm_lang$core$Json_Encode$object(
+				{
+					ctor: '::',
+					_0: A2(_lucamug$elm_unbreakable_json$Util_ops['=>'], 'article', article),
+					_1: {ctor: '[]'}
+				}));
+		var expect = _elm_lang$http$Http$expectJson(
+			A2(_elm_lang$core$Json_Decode$field, 'article', _lucamug$elm_unbreakable_json$Data_Article$decoderWithBody));
+		return _lukewestby$elm_http_builder$HttpBuilder$toRequest(
+			A2(
+				_lukewestby$elm_http_builder$HttpBuilder$withExpect,
+				expect,
+				A2(
+					_lukewestby$elm_http_builder$HttpBuilder$withBody,
+					body,
+					A2(
+						_lucamug$elm_unbreakable_json$Data_AuthToken$withAuthorization,
+						_elm_lang$core$Maybe$Just(token),
+						_lukewestby$elm_http_builder$HttpBuilder$post(
+							_lucamug$elm_unbreakable_json$Request_Helpers$apiUrl('/articles'))))));
+	});
+var _lucamug$elm_unbreakable_json$Request_Article$buildFavorite = F3(
+	function (builderFromUrl, slug, token) {
+		var expect = _elm_lang$http$Http$expectJson(
+			A2(_elm_lang$core$Json_Decode$field, 'article', _lucamug$elm_unbreakable_json$Data_Article$decoder));
+		return _lukewestby$elm_http_builder$HttpBuilder$toRequest(
+			A2(
+				_lukewestby$elm_http_builder$HttpBuilder$withExpect,
+				expect,
+				A2(
+					_lucamug$elm_unbreakable_json$Data_AuthToken$withAuthorization,
+					_elm_lang$core$Maybe$Just(token),
+					builderFromUrl(
+						A2(
+							_elm_lang$core$String$join,
+							'/',
+							{
+								ctor: '::',
+								_0: _lucamug$elm_unbreakable_json$Request_Helpers$apiUrl('/articles'),
+								_1: {
+									ctor: '::',
+									_0: _lucamug$elm_unbreakable_json$Data_Article$slugToString(slug),
+									_1: {
+										ctor: '::',
+										_0: 'favorite',
+										_1: {ctor: '[]'}
+									}
+								}
+							})))));
+	});
+var _lucamug$elm_unbreakable_json$Request_Article$unfavorite = _lucamug$elm_unbreakable_json$Request_Article$buildFavorite(_lukewestby$elm_http_builder$HttpBuilder$delete);
+var _lucamug$elm_unbreakable_json$Request_Article$favorite = _lucamug$elm_unbreakable_json$Request_Article$buildFavorite(_lukewestby$elm_http_builder$HttpBuilder$post);
+var _lucamug$elm_unbreakable_json$Request_Article$toggleFavorite = F2(
+	function (article, authToken) {
+		return article.favorited ? A2(_lucamug$elm_unbreakable_json$Request_Article$unfavorite, article.slug, authToken) : A2(_lucamug$elm_unbreakable_json$Request_Article$favorite, article.slug, authToken);
+	});
+var _lucamug$elm_unbreakable_json$Request_Article$tags = A2(
+	_elm_lang$http$Http$get,
+	_lucamug$elm_unbreakable_json$Request_Helpers$apiUrl('/tags'),
+	A2(
+		_elm_lang$core$Json_Decode$field,
+		'tags',
+		_elm_lang$core$Json_Decode$list(_lucamug$elm_unbreakable_json$Data_Article$tagDecoder)));
+var _lucamug$elm_unbreakable_json$Request_Article$feed = F2(
+	function (config, token) {
+		return _lukewestby$elm_http_builder$HttpBuilder$toRequest(
+			A2(
+				_lucamug$elm_unbreakable_json$Data_AuthToken$withAuthorization,
+				_elm_lang$core$Maybe$Just(token),
+				A2(
+					_lucamug$elm_unbreakable_json$Request_Article$buildFromQueryParams,
+					'/articles/feed',
+					A2(
+						_elm_lang$core$List$filterMap,
+						_lucamug$elm_unbreakable_json$Request_Article$maybeVal,
+						{
+							ctor: '::',
+							_0: A2(
+								_lucamug$elm_unbreakable_json$Util_ops['=>'],
+								'limit',
+								_elm_lang$core$Maybe$Just(
+									_elm_lang$core$Basics$toString(config.limit))),
 							_1: {
 								ctor: '::',
 								_0: A2(
-									_elm_lang$core$Maybe$map,
-									place(_mdgriffith$stylish_elephants$Internal_Grid$Above),
-									nearby.above),
+									_lucamug$elm_unbreakable_json$Util_ops['=>'],
+									'offset',
+									_elm_lang$core$Maybe$Just(
+										_elm_lang$core$Basics$toString(config.offset))),
+								_1: {ctor: '[]'}
+							}
+						}))));
+	});
+var _lucamug$elm_unbreakable_json$Request_Article$defaultFeedConfig = {limit: 10, offset: 0};
+var _lucamug$elm_unbreakable_json$Request_Article$list = F2(
+	function (config, maybeToken) {
+		return _lukewestby$elm_http_builder$HttpBuilder$toRequest(
+			A2(
+				_lucamug$elm_unbreakable_json$Data_AuthToken$withAuthorization,
+				maybeToken,
+				A2(
+					_lucamug$elm_unbreakable_json$Request_Article$buildFromQueryParams,
+					'/articles',
+					A2(
+						_elm_lang$core$List$filterMap,
+						_lucamug$elm_unbreakable_json$Request_Article$maybeVal,
+						{
+							ctor: '::',
+							_0: A2(
+								_lucamug$elm_unbreakable_json$Util_ops['=>'],
+								'tag',
+								A2(_elm_lang$core$Maybe$map, _lucamug$elm_unbreakable_json$Data_Article$tagToString, config.tag)),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_lucamug$elm_unbreakable_json$Util_ops['=>'],
+									'author',
+									A2(_elm_lang$core$Maybe$map, _lucamug$elm_unbreakable_json$Data_User$usernameToString, config.author)),
 								_1: {
 									ctor: '::',
 									_0: A2(
-										_elm_lang$core$Maybe$map,
-										place(_mdgriffith$stylish_elephants$Internal_Grid$Below),
-										nearby.below),
-									_1: {ctor: '[]'}
-								}
-							}
-						}
-					}
-				})
-		};
-	});
-var _mdgriffith$stylish_elephants$Internal_Grid$relative = F3(
-	function (node, attributes, around) {
-		var make = function (positioned) {
-			return A5(
-				_mdgriffith$stylish_elephants$Internal_Model$element,
-				_mdgriffith$stylish_elephants$Internal_Model$noStyleSheet,
-				_mdgriffith$stylish_elephants$Internal_Model$asEl,
-				_elm_lang$core$Maybe$Nothing,
-				positioned.attrs,
-				_mdgriffith$stylish_elephants$Internal_Model$Unkeyed(positioned.child));
-		};
-		var _p7 = A2(
-			_mdgriffith$stylish_elephants$Internal_Model$getSpacing,
-			attributes,
-			{ctor: '_Tuple2', _0: 5, _1: 5});
-		var sX = _p7._0;
-		var sY = _p7._1;
-		var _p8 = A2(
-			_mdgriffith$stylish_elephants$Internal_Grid$createGrid,
-			{ctor: '_Tuple2', _0: sX, _1: sY},
-			around);
-		var template = _p8._0;
-		var children = _p8._1;
-		return A5(
-			_mdgriffith$stylish_elephants$Internal_Model$element,
-			_mdgriffith$stylish_elephants$Internal_Model$noStyleSheet,
-			_mdgriffith$stylish_elephants$Internal_Model$asGrid,
-			node,
-			{
-				ctor: '::',
-				_0: _mdgriffith$stylish_elephants$Element$center,
-				_1: A2(_elm_lang$core$Basics_ops['++'], template, attributes)
-			},
-			_mdgriffith$stylish_elephants$Internal_Model$Unkeyed(children));
-	});
-var _mdgriffith$stylish_elephants$Internal_Grid$Column = {ctor: 'Column'};
-var _mdgriffith$stylish_elephants$Internal_Grid$Row = {ctor: 'Row'};
-var _mdgriffith$stylish_elephants$Internal_Grid$GridElement = {ctor: 'GridElement'};
-
-var _mdgriffith$stylish_elephants$Element_Input$defaultCheckbox = function (checked) {
-	return A2(
-		_mdgriffith$stylish_elephants$Element$el,
-		{
-			ctor: '::',
-			_0: _mdgriffith$stylish_elephants$Element$width(
-				_mdgriffith$stylish_elephants$Element$px(12)),
-			_1: {
-				ctor: '::',
-				_0: _mdgriffith$stylish_elephants$Element$height(
-					_mdgriffith$stylish_elephants$Element$px(12)),
-				_1: {
-					ctor: '::',
-					_0: _mdgriffith$stylish_elephants$Element_Font$color(_elm_lang$core$Color$white),
-					_1: {
-						ctor: '::',
-						_0: _mdgriffith$stylish_elephants$Element_Font$size(9),
-						_1: {
-							ctor: '::',
-							_0: _mdgriffith$stylish_elephants$Element_Font$center,
-							_1: {
-								ctor: '::',
-								_0: _mdgriffith$stylish_elephants$Element_Border$rounded(3),
-								_1: {
-									ctor: '::',
-									_0: _mdgriffith$stylish_elephants$Element_Border$color(
-										A3(_elm_lang$core$Color$rgb, 211, 211, 211)),
+										_lucamug$elm_unbreakable_json$Util_ops['=>'],
+										'favorited',
+										A2(_elm_lang$core$Maybe$map, _lucamug$elm_unbreakable_json$Data_User$usernameToString, config.favorited)),
 									_1: {
 										ctor: '::',
-										_0: _mdgriffith$stylish_elephants$Element_Font$family(
-											{
-												ctor: '::',
-												_0: _mdgriffith$stylish_elephants$Element_Font$typeface('georgia'),
-												_1: {
-													ctor: '::',
-													_0: _mdgriffith$stylish_elephants$Element_Font$serif,
-													_1: {ctor: '[]'}
-												}
-											}),
+										_0: A2(
+											_lucamug$elm_unbreakable_json$Util_ops['=>'],
+											'limit',
+											_elm_lang$core$Maybe$Just(
+												_elm_lang$core$Basics$toString(config.limit))),
 										_1: {
 											ctor: '::',
-											_0: _mdgriffith$stylish_elephants$Element_Border$shadow(
-												{
-													offset: {ctor: '_Tuple2', _0: 0, _1: 0},
-													blur: 1,
-													size: 2,
-													color: A3(_elm_lang$core$Color$rgb, 238, 238, 238)
-												}),
-											_1: {
-												ctor: '::',
-												_0: _mdgriffith$stylish_elephants$Element_Background$color(
-													checked ? A3(_elm_lang$core$Color$rgb, 59, 153, 252) : _elm_lang$core$Color$white),
-												_1: {
-													ctor: '::',
-													_0: _mdgriffith$stylish_elephants$Element_Border$width(
-														checked ? 0 : 1),
-													_1: {ctor: '[]'}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		checked ? _mdgriffith$stylish_elephants$Element$text('✓') : _mdgriffith$stylish_elephants$Element$empty);
-};
-var _mdgriffith$stylish_elephants$Element_Input$defaultRadioIcon = function (status) {
-	return A2(
-		_mdgriffith$stylish_elephants$Element$el,
-		{
-			ctor: '::',
-			_0: _mdgriffith$stylish_elephants$Element$width(
-				_mdgriffith$stylish_elephants$Element$px(14)),
-			_1: {
-				ctor: '::',
-				_0: _mdgriffith$stylish_elephants$Element$height(
-					_mdgriffith$stylish_elephants$Element$px(14)),
-				_1: {
-					ctor: '::',
-					_0: _mdgriffith$stylish_elephants$Element_Background$color(_elm_lang$core$Color$white),
-					_1: {
-						ctor: '::',
-						_0: _mdgriffith$stylish_elephants$Element_Border$rounded(7),
-						_1: {
-							ctor: '::',
-							_0: _mdgriffith$stylish_elephants$Element_Border$width(
-								function () {
-									var _p0 = status;
-									switch (_p0.ctor) {
-										case 'Idle':
-											return 1;
-										case 'Focused':
-											return 1;
-										default:
-											return 5;
-									}
-								}()),
-							_1: {
-								ctor: '::',
-								_0: _mdgriffith$stylish_elephants$Element_Border$color(
-									function () {
-										var _p1 = status;
-										switch (_p1.ctor) {
-											case 'Idle':
-												return A3(_elm_lang$core$Color$rgb, 208, 208, 208);
-											case 'Focused':
-												return A3(_elm_lang$core$Color$rgb, 208, 208, 208);
-											default:
-												return A3(_elm_lang$core$Color$rgb, 59, 153, 252);
-										}
-									}()),
-								_1: {ctor: '[]'}
-							}
-						}
-					}
-				}
-			}
-		},
-		_mdgriffith$stylish_elephants$Element$empty);
-};
-var _mdgriffith$stylish_elephants$Element_Input$defaultTextPadding = A2(_mdgriffith$stylish_elephants$Element$paddingXY, 12, 7);
-var _mdgriffith$stylish_elephants$Element_Input$defaultTextBoxStyle = {
-	ctor: '::',
-	_0: _mdgriffith$stylish_elephants$Element_Input$defaultTextPadding,
-	_1: {
-		ctor: '::',
-		_0: _mdgriffith$stylish_elephants$Element_Border$rounded(3),
-		_1: {
-			ctor: '::',
-			_0: _mdgriffith$stylish_elephants$Element_Border$color(_elm_lang$core$Color$lightGrey),
-			_1: {
-				ctor: '::',
-				_0: _mdgriffith$stylish_elephants$Element_Background$color(_elm_lang$core$Color$white),
-				_1: {
-					ctor: '::',
-					_0: _mdgriffith$stylish_elephants$Element_Border$width(1),
-					_1: {
-						ctor: '::',
-						_0: _mdgriffith$stylish_elephants$Element$spacing(3),
-						_1: {ctor: '[]'}
-					}
-				}
-			}
-		}
-	}
-};
-var _mdgriffith$stylish_elephants$Element_Input$autofocus = function (_p2) {
-	return _mdgriffith$stylish_elephants$Internal_Model$Attr(
-		_elm_lang$html$Html_Attributes$autofocus(_p2));
-};
-var _mdgriffith$stylish_elephants$Element_Input$autofill = function (_p3) {
-	return _mdgriffith$stylish_elephants$Internal_Model$Attr(
-		A2(_elm_lang$html$Html_Attributes$attribute, 'autocomplete', _p3));
-};
-var _mdgriffith$stylish_elephants$Element_Input$readonly = function (_p4) {
-	return _mdgriffith$stylish_elephants$Internal_Model$Attr(
-		_elm_lang$html$Html_Attributes$readonly(_p4));
-};
-var _mdgriffith$stylish_elephants$Element_Input$spellcheck = function (_p5) {
-	return _mdgriffith$stylish_elephants$Internal_Model$Attr(
-		_elm_lang$html$Html_Attributes$spellcheck(_p5));
-};
-var _mdgriffith$stylish_elephants$Element_Input$disabled = function (_p6) {
-	return _mdgriffith$stylish_elephants$Internal_Model$Attr(
-		_elm_lang$html$Html_Attributes$disabled(_p6));
-};
-var _mdgriffith$stylish_elephants$Element_Input$tabindex = function (_p7) {
-	return _mdgriffith$stylish_elephants$Internal_Model$Attr(
-		_elm_lang$html$Html_Attributes$tabindex(_p7));
-};
-var _mdgriffith$stylish_elephants$Element_Input$textValue = function (_p8) {
-	return _mdgriffith$stylish_elephants$Internal_Model$Attr(
-		_elm_lang$html$Html_Attributes$defaultValue(_p8));
-};
-var _mdgriffith$stylish_elephants$Element_Input$value = function (_p9) {
-	return _mdgriffith$stylish_elephants$Internal_Model$Attr(
-		_elm_lang$html$Html_Attributes$value(_p9));
-};
-var _mdgriffith$stylish_elephants$Element_Input$name = function (_p10) {
-	return _mdgriffith$stylish_elephants$Internal_Model$Attr(
-		_elm_lang$html$Html_Attributes$name(_p10));
-};
-var _mdgriffith$stylish_elephants$Element_Input$selected = function (_p11) {
-	return _mdgriffith$stylish_elephants$Internal_Model$Attr(
-		_elm_lang$html$Html_Attributes$selected(_p11));
-};
-var _mdgriffith$stylish_elephants$Element_Input$checked = function (_p12) {
-	return _mdgriffith$stylish_elephants$Internal_Model$Attr(
-		_elm_lang$html$Html_Attributes$checked(_p12));
-};
-var _mdgriffith$stylish_elephants$Element_Input$type_ = function (_p13) {
-	return _mdgriffith$stylish_elephants$Internal_Model$Attr(
-		_elm_lang$html$Html_Attributes$type_(_p13));
-};
-var _mdgriffith$stylish_elephants$Element_Input$onFocusIn = function (msg) {
-	return _mdgriffith$stylish_elephants$Internal_Model$Attr(
-		A2(
-			_elm_lang$html$Html_Events$on,
-			'focusin',
-			_elm_lang$core$Json_Decode$succeed(msg)));
-};
-var _mdgriffith$stylish_elephants$Element_Input$onFocusOut = function (msg) {
-	return _mdgriffith$stylish_elephants$Internal_Model$Attr(
-		A2(
-			_elm_lang$html$Html_Events$on,
-			'focusout',
-			_elm_lang$core$Json_Decode$succeed(msg)));
-};
-var _mdgriffith$stylish_elephants$Element_Input$onKeyLookup = function (lookup) {
-	var decode = function (code) {
-		var _p14 = lookup(code);
-		if (_p14.ctor === 'Nothing') {
-			return _elm_lang$core$Json_Decode$fail('No key matched');
-		} else {
-			return _elm_lang$core$Json_Decode$succeed(_p14._0);
-		}
-	};
-	var isKey = A2(
-		_elm_lang$core$Json_Decode$andThen,
-		decode,
-		A2(_elm_lang$core$Json_Decode$field, 'which', _elm_lang$core$Json_Decode$int));
-	return A2(_mdgriffith$stylish_elephants$Internal_Events$on, 'keyup', isKey);
-};
-var _mdgriffith$stylish_elephants$Element_Input$preventKeydown = F2(
-	function (desiredCode, msg) {
-		var decode = function (code) {
-			return _elm_lang$core$Native_Utils.eq(code, desiredCode) ? _elm_lang$core$Json_Decode$succeed(msg) : _elm_lang$core$Json_Decode$fail('Not the enter key');
-		};
-		var isKey = A2(
-			_elm_lang$core$Json_Decode$andThen,
-			decode,
-			A2(_elm_lang$core$Json_Decode$field, 'which', _elm_lang$core$Json_Decode$int));
-		return A3(
-			_mdgriffith$stylish_elephants$Internal_Events$onWithOptions,
-			'keydown',
-			{stopPropagation: false, preventDefault: true},
-			isKey);
-	});
-var _mdgriffith$stylish_elephants$Element_Input$onKey = F2(
-	function (desiredCode, msg) {
-		var decode = function (code) {
-			return _elm_lang$core$Native_Utils.eq(code, desiredCode) ? _elm_lang$core$Json_Decode$succeed(msg) : _elm_lang$core$Json_Decode$fail('Not the enter key');
-		};
-		var isKey = A2(
-			_elm_lang$core$Json_Decode$andThen,
-			decode,
-			A2(_elm_lang$core$Json_Decode$field, 'which', _elm_lang$core$Json_Decode$int));
-		return A3(
-			_mdgriffith$stylish_elephants$Internal_Events$onWithOptions,
-			'keyup',
-			{stopPropagation: false, preventDefault: true},
-			isKey);
-	});
-var _mdgriffith$stylish_elephants$Element_Input$space = 32;
-var _mdgriffith$stylish_elephants$Element_Input$downArrow = 40;
-var _mdgriffith$stylish_elephants$Element_Input$rightArrow = 39;
-var _mdgriffith$stylish_elephants$Element_Input$leftArrow = 37;
-var _mdgriffith$stylish_elephants$Element_Input$upArrow = 38;
-var _mdgriffith$stylish_elephants$Element_Input$backspace = 46;
-var _mdgriffith$stylish_elephants$Element_Input$delete = 8;
-var _mdgriffith$stylish_elephants$Element_Input$tab = 9;
-var _mdgriffith$stylish_elephants$Element_Input$enter = 13;
-var _mdgriffith$stylish_elephants$Element_Input$onDownArrow = function (msg) {
-	return A2(_mdgriffith$stylish_elephants$Element_Input$onKey, 40, msg);
-};
-var _mdgriffith$stylish_elephants$Element_Input$onLeftArrow = function (msg) {
-	return A2(_mdgriffith$stylish_elephants$Element_Input$onKey, 37, msg);
-};
-var _mdgriffith$stylish_elephants$Element_Input$onRightArrow = function (msg) {
-	return A2(_mdgriffith$stylish_elephants$Element_Input$onKey, 39, msg);
-};
-var _mdgriffith$stylish_elephants$Element_Input$onUpArrow = function (msg) {
-	return A2(_mdgriffith$stylish_elephants$Element_Input$onKey, 38, msg);
-};
-var _mdgriffith$stylish_elephants$Element_Input$onSpace = function (msg) {
-	return A2(_mdgriffith$stylish_elephants$Element_Input$onKey, 32, msg);
-};
-var _mdgriffith$stylish_elephants$Element_Input$onEnter = function (msg) {
-	return A2(_mdgriffith$stylish_elephants$Element_Input$onKey, 13, msg);
-};
-var _mdgriffith$stylish_elephants$Element_Input$row = F2(
-	function (attrs, children) {
-		return A5(
-			_mdgriffith$stylish_elephants$Internal_Model$element,
-			_mdgriffith$stylish_elephants$Internal_Model$noStyleSheet,
-			_mdgriffith$stylish_elephants$Internal_Model$asRow,
-			_elm_lang$core$Maybe$Nothing,
-			{
-				ctor: '::',
-				_0: _mdgriffith$stylish_elephants$Element$width(_mdgriffith$stylish_elephants$Element$fill),
-				_1: attrs
-			},
-			_mdgriffith$stylish_elephants$Internal_Model$Unkeyed(
-				_mdgriffith$stylish_elephants$Internal_Model$rowEdgeFillers(children)));
-	});
-var _mdgriffith$stylish_elephants$Element_Input$column = F2(
-	function (attrs, children) {
-		return A5(
-			_mdgriffith$stylish_elephants$Internal_Model$element,
-			_mdgriffith$stylish_elephants$Internal_Model$noStyleSheet,
-			_mdgriffith$stylish_elephants$Internal_Model$asColumn,
-			_elm_lang$core$Maybe$Nothing,
-			{
-				ctor: '::',
-				_0: _mdgriffith$stylish_elephants$Element$height(_mdgriffith$stylish_elephants$Element$shrink),
-				_1: {
-					ctor: '::',
-					_0: _mdgriffith$stylish_elephants$Element$width(_mdgriffith$stylish_elephants$Element$fill),
-					_1: attrs
-				}
-			},
-			_mdgriffith$stylish_elephants$Internal_Model$Unkeyed(children));
-	});
-var _mdgriffith$stylish_elephants$Element_Input$place = F3(
-	function (position, el, group) {
-		var _p15 = position;
-		switch (_p15.ctor) {
-			case 'Above':
-				var _p16 = group.above;
-				if (_p16.ctor === 'Nothing') {
-					return _elm_lang$core$Native_Utils.update(
-						group,
-						{
-							above: _elm_lang$core$Maybe$Just(el)
-						});
-				} else {
-					return _elm_lang$core$Native_Utils.update(
-						group,
-						{
-							above: _elm_lang$core$Maybe$Just(
-								_elm_lang$core$Native_Utils.update(
-									el,
-									{
-										child: A2(_elm_lang$core$Basics_ops['++'], el.child, _p16._0.child),
-										layout: _mdgriffith$stylish_elephants$Internal_Grid$Row
-									}))
-						});
-				}
-			case 'Below':
-				var _p17 = group.below;
-				if (_p17.ctor === 'Nothing') {
-					return _elm_lang$core$Native_Utils.update(
-						group,
-						{
-							below: _elm_lang$core$Maybe$Just(el)
-						});
-				} else {
-					return _elm_lang$core$Native_Utils.update(
-						group,
-						{
-							below: _elm_lang$core$Maybe$Just(
-								_elm_lang$core$Native_Utils.update(
-									el,
-									{
-										child: A2(_elm_lang$core$Basics_ops['++'], el.child, _p17._0.child),
-										layout: _mdgriffith$stylish_elephants$Internal_Grid$Row
-									}))
-						});
-				}
-			case 'OnRight':
-				var _p18 = group.right;
-				if (_p18.ctor === 'Nothing') {
-					return _elm_lang$core$Native_Utils.update(
-						group,
-						{
-							right: _elm_lang$core$Maybe$Just(el)
-						});
-				} else {
-					return _elm_lang$core$Native_Utils.update(
-						group,
-						{
-							right: _elm_lang$core$Maybe$Just(
-								_elm_lang$core$Native_Utils.update(
-									el,
-									{
-										child: A2(_elm_lang$core$Basics_ops['++'], el.child, _p18._0.child),
-										layout: _mdgriffith$stylish_elephants$Internal_Grid$Column
-									}))
-						});
-				}
-			default:
-				var _p19 = group.left;
-				if (_p19.ctor === 'Nothing') {
-					return _elm_lang$core$Native_Utils.update(
-						group,
-						{
-							left: _elm_lang$core$Maybe$Just(el)
-						});
-				} else {
-					return _elm_lang$core$Native_Utils.update(
-						group,
-						{
-							left: _elm_lang$core$Maybe$Just(
-								_elm_lang$core$Native_Utils.update(
-									el,
-									{
-										child: A2(_elm_lang$core$Basics_ops['++'], el.child, _p19._0.child),
-										layout: _mdgriffith$stylish_elephants$Internal_Grid$Column
-									}))
-						});
-				}
-		}
-	});
-var _mdgriffith$stylish_elephants$Element_Input$positionLabels = F4(
-	function (attributes, label, notice, input) {
-		return A3(
-			_mdgriffith$stylish_elephants$Internal_Grid$relative,
-			_elm_lang$core$Maybe$Just('label'),
-			attributes,
-			function (group) {
-				var _p20 = notice;
-				if (_p20.ctor === 'Nothing') {
-					return group;
-				} else {
-					return A3(
-						_mdgriffith$stylish_elephants$Element_Input$place,
-						_p20._0._0,
-						{
-							layout: _mdgriffith$stylish_elephants$Internal_Grid$GridElement,
-							child: {
-								ctor: '::',
-								_0: _p20._0._2,
-								_1: {ctor: '[]'}
-							},
-							attrs: {ctor: '::', _0: _mdgriffith$stylish_elephants$Element$alignLeft, _1: _p20._0._1},
-							width: 1,
-							height: 1
-						},
-						group);
-				}
-			}(
-				function (group) {
-					var _p21 = label;
-					return A3(
-						_mdgriffith$stylish_elephants$Element_Input$place,
-						_p21._0,
-						{
-							layout: _mdgriffith$stylish_elephants$Internal_Grid$GridElement,
-							child: {
-								ctor: '::',
-								_0: _p21._2,
-								_1: {ctor: '[]'}
-							},
-							attrs: {ctor: '::', _0: _mdgriffith$stylish_elephants$Element$alignLeft, _1: _p21._1},
-							width: 1,
-							height: 1
-						},
-						group);
-				}(
-					{
-						right: _elm_lang$core$Maybe$Nothing,
-						left: _elm_lang$core$Maybe$Nothing,
-						primary: input,
-						primaryWidth: _mdgriffith$stylish_elephants$Internal_Model$Fill(1),
-						defaultWidth: _mdgriffith$stylish_elephants$Internal_Model$Content,
-						below: _elm_lang$core$Maybe$Nothing,
-						above: _elm_lang$core$Maybe$Nothing
-					})));
-	});
-var _mdgriffith$stylish_elephants$Element_Input$textHelper = F3(
-	function (textType, attrs, textOptions) {
-		var textTypeAttr = function () {
-			var _p22 = textType;
-			switch (_p22.ctor) {
-				case 'Plain':
-					return {
-						ctor: '::',
-						_0: _mdgriffith$stylish_elephants$Internal_Model$Attr(
-							_elm_lang$html$Html_Attributes$type_('text')),
-						_1: {ctor: '[]'}
-					};
-				case 'Username':
-					return {
-						ctor: '::',
-						_0: _mdgriffith$stylish_elephants$Internal_Model$Attr(
-							_elm_lang$html$Html_Attributes$type_('text')),
-						_1: {
-							ctor: '::',
-							_0: _mdgriffith$stylish_elephants$Element_Input$autofill('username'),
-							_1: {ctor: '[]'}
-						}
-					};
-				case 'NewPassword':
-					return {
-						ctor: '::',
-						_0: _mdgriffith$stylish_elephants$Internal_Model$Attr(
-							_elm_lang$html$Html_Attributes$type_('password')),
-						_1: {
-							ctor: '::',
-							_0: _mdgriffith$stylish_elephants$Element_Input$autofill('new-password'),
-							_1: {ctor: '[]'}
-						}
-					};
-				case 'CurrentPassword':
-					return {
-						ctor: '::',
-						_0: _mdgriffith$stylish_elephants$Internal_Model$Attr(
-							_elm_lang$html$Html_Attributes$type_('password')),
-						_1: {
-							ctor: '::',
-							_0: _mdgriffith$stylish_elephants$Element_Input$autofill('current-password'),
-							_1: {ctor: '[]'}
-						}
-					};
-				case 'Email':
-					return {
-						ctor: '::',
-						_0: _mdgriffith$stylish_elephants$Internal_Model$Attr(
-							_elm_lang$html$Html_Attributes$type_('email')),
-						_1: {
-							ctor: '::',
-							_0: _mdgriffith$stylish_elephants$Element_Input$autofill('email'),
-							_1: {ctor: '[]'}
-						}
-					};
-				default:
-					return {
-						ctor: '::',
-						_0: _mdgriffith$stylish_elephants$Internal_Model$Attr(
-							_elm_lang$html$Html_Attributes$type_('search')),
-						_1: {ctor: '[]'}
-					};
-			}
-		}();
-		var behavior = function () {
-			var _p23 = textOptions.onChange;
-			if (_p23.ctor === 'Nothing') {
-				return {
-					ctor: '::',
-					_0: _mdgriffith$stylish_elephants$Internal_Model$Attr(
-						_elm_lang$html$Html_Attributes$disabled(true)),
-					_1: {ctor: '[]'}
-				};
-			} else {
-				return {
-					ctor: '::',
-					_0: _mdgriffith$stylish_elephants$Internal_Model$Attr(
-						_elm_lang$html$Html_Events$onInput(_p23._0)),
-					_1: {ctor: '[]'}
-				};
-			}
-		}();
-		var attributes = {
-			ctor: '::',
-			_0: _mdgriffith$stylish_elephants$Element$width(_mdgriffith$stylish_elephants$Element$fill),
-			_1: attrs
-		};
-		var attributesFromChild = A2(
-			_mdgriffith$stylish_elephants$Internal_Model$get,
-			attributes,
-			function (attr) {
-				var _p24 = attr;
-				_v12_8:
-				do {
-					switch (_p24.ctor) {
-						case 'Width':
-							if (_p24._0.ctor === 'Fill') {
-								return true;
-							} else {
-								break _v12_8;
-							}
-						case 'Height':
-							if (_p24._0.ctor === 'Fill') {
-								return true;
-							} else {
-								break _v12_8;
-							}
-						case 'AlignX':
-							return true;
-						case 'AlignY':
-							return true;
-						case 'StyleClass':
-							switch (_p24._0.ctor) {
-								case 'SpacingStyle':
-									return true;
-								case 'LineHeight':
-									return true;
-								case 'FontSize':
-									return true;
-								case 'FontFamily':
-									return true;
-								default:
-									break _v12_8;
-							}
-						default:
-							break _v12_8;
-					}
-				} while(false);
-				return false;
-			});
-		var parentAttributes = {
-			ctor: '::',
-			_0: _mdgriffith$stylish_elephants$Element$spacing(5),
-			_1: attributesFromChild
-		};
-		var inputPadding = A2(
-			_mdgriffith$stylish_elephants$Internal_Model$get,
-			attributes,
-			function (attr) {
-				var _p25 = attr;
-				if ((_p25.ctor === 'StyleClass') && (_p25._0.ctor === 'PaddingStyle')) {
-					return true;
-				} else {
-					return false;
-				}
-			});
-		var inputElement = A5(
-			_mdgriffith$stylish_elephants$Internal_Model$element,
-			_mdgriffith$stylish_elephants$Internal_Model$noStyleSheet,
-			_mdgriffith$stylish_elephants$Internal_Model$asEl,
-			_elm_lang$core$Maybe$Nothing,
-			function () {
-				var _p26 = textOptions.placeholder;
-				if (_p26.ctor === 'Nothing') {
-					return {ctor: '[]'};
-				} else {
-					return {
-						ctor: '::',
-						_0: A2(
-							_mdgriffith$stylish_elephants$Element$inFront,
-							_elm_lang$core$Native_Utils.eq(textOptions.text, ''),
-							A5(
-								_mdgriffith$stylish_elephants$Internal_Model$element,
-								_mdgriffith$stylish_elephants$Internal_Model$noStyleSheet,
-								_mdgriffith$stylish_elephants$Internal_Model$asEl,
-								_elm_lang$core$Maybe$Nothing,
-								{
-									ctor: '::',
-									_0: _mdgriffith$stylish_elephants$Element_Font$color(_elm_lang$core$Color$charcoal),
-									_1: {
-										ctor: '::',
-										_0: A2(_mdgriffith$stylish_elephants$Internal_Model$Class, 'text-selection', 'no-text-selection'),
-										_1: {
-											ctor: '::',
-											_0: _mdgriffith$stylish_elephants$Element_Input$defaultTextPadding,
-											_1: {
-												ctor: '::',
-												_0: _mdgriffith$stylish_elephants$Element$height(_mdgriffith$stylish_elephants$Element$fill),
-												_1: {
-													ctor: '::',
-													_0: _mdgriffith$stylish_elephants$Element$width(_mdgriffith$stylish_elephants$Element$fill),
-													_1: A2(_elm_lang$core$Basics_ops['++'], inputPadding, _p26._0._0)
-												}
-											}
-										}
-									}
-								},
-								_mdgriffith$stylish_elephants$Internal_Model$Unkeyed(
-									{
-										ctor: '::',
-										_0: _p26._0._1,
-										_1: {ctor: '[]'}
-									}))),
-						_1: {ctor: '[]'}
-					};
-				}
-			}(),
-			_mdgriffith$stylish_elephants$Internal_Model$Unkeyed(
-				{
-					ctor: '::',
-					_0: A5(
-						_mdgriffith$stylish_elephants$Internal_Model$element,
-						_mdgriffith$stylish_elephants$Internal_Model$noStyleSheet,
-						_mdgriffith$stylish_elephants$Internal_Model$asEl,
-						_elm_lang$core$Maybe$Just('input'),
-						_elm_lang$core$List$concat(
-							{
-								ctor: '::',
-								_0: {
-									ctor: '::',
-									_0: _mdgriffith$stylish_elephants$Element_Input$value(textOptions.text),
-									_1: {
-										ctor: '::',
-										_0: _mdgriffith$stylish_elephants$Element_Input$defaultTextPadding,
-										_1: {
-											ctor: '::',
-											_0: A2(_mdgriffith$stylish_elephants$Internal_Model$Class, 'focus', 'focus-exactly'),
+											_0: A2(
+												_lucamug$elm_unbreakable_json$Util_ops['=>'],
+												'offset',
+												_elm_lang$core$Maybe$Just(
+													_elm_lang$core$Basics$toString(config.offset))),
 											_1: {ctor: '[]'}
 										}
 									}
-								},
-								_1: {
-									ctor: '::',
-									_0: _mdgriffith$stylish_elephants$Element_Input$defaultTextBoxStyle,
-									_1: {
-										ctor: '::',
-										_0: textTypeAttr,
-										_1: {
-											ctor: '::',
-											_0: behavior,
-											_1: {
-												ctor: '::',
-												_0: attributes,
-												_1: {ctor: '[]'}
-											}
-										}
-									}
 								}
-							}),
-						_mdgriffith$stylish_elephants$Internal_Model$Unkeyed(
-							{ctor: '[]'})),
-					_1: {ctor: '[]'}
-				}));
-		return A4(
-			_mdgriffith$stylish_elephants$Element_Input$positionLabels,
-			{
-				ctor: '::',
-				_0: A2(_mdgriffith$stylish_elephants$Internal_Model$Class, 'cursor', 'cursor-text'),
-				_1: parentAttributes
-			},
-			textOptions.label,
-			textOptions.notice,
-			inputElement);
+							}
+						}))));
 	});
-var _mdgriffith$stylish_elephants$Element_Input$multilineHelper = F3(
-	function (spellchecked, attrs, textOptions) {
-		var behavior = function () {
-			var _p27 = textOptions.onChange;
-			if (_p27.ctor === 'Nothing') {
-				return {
-					ctor: '::',
-					_0: _mdgriffith$stylish_elephants$Internal_Model$Attr(
-						_elm_lang$html$Html_Attributes$disabled(true)),
-					_1: {ctor: '[]'}
-				};
-			} else {
-				return {
-					ctor: '::',
-					_0: _mdgriffith$stylish_elephants$Internal_Model$Attr(
-						_elm_lang$html$Html_Events$onInput(_p27._0)),
-					_1: {ctor: '[]'}
-				};
-			}
-		}();
-		var attributes = {
-			ctor: '::',
-			_0: _mdgriffith$stylish_elephants$Element$height(_mdgriffith$stylish_elephants$Element$shrink),
-			_1: {
-				ctor: '::',
-				_0: _mdgriffith$stylish_elephants$Element$width(_mdgriffith$stylish_elephants$Element$fill),
-				_1: A2(_elm_lang$core$Basics_ops['++'], _mdgriffith$stylish_elephants$Element_Input$defaultTextBoxStyle, attrs)
-			}
-		};
-		var _p28 = A3(
-			_elm_lang$core$List$foldr,
-			F2(
-				function (attr, _p29) {
-					var _p30 = _p29;
-					var _p38 = _p30._0;
-					var _p37 = _p30._3;
-					var _p36 = _p30._2;
-					var _p35 = _p30._1;
-					var _p31 = attr;
-					_v17_5:
-					do {
-						switch (_p31.ctor) {
-							case 'Describe':
-								return {ctor: '_Tuple4', _0: _p38, _1: _p35, _2: _p36, _3: _p37};
-							case 'Height':
-								if (_p31._0.ctor === 'Content') {
-									var _p32 = _p35;
-									if (_p32.ctor === 'Nothing') {
-										return {
-											ctor: '_Tuple4',
-											_0: _p38,
-											_1: _elm_lang$core$Maybe$Just(true),
-											_2: _p36,
-											_3: _p37
-										};
-									} else {
-										return {ctor: '_Tuple4', _0: _p38, _1: _p35, _2: _p36, _3: _p37};
-									}
-								} else {
-									var _p33 = _p35;
-									if (_p33.ctor === 'Nothing') {
-										return {
-											ctor: '_Tuple4',
-											_0: _p38,
-											_1: _elm_lang$core$Maybe$Just(false),
-											_2: _p36,
-											_3: {ctor: '::', _0: attr, _1: _p37}
-										};
-									} else {
-										return {ctor: '_Tuple4', _0: _p38, _1: _p35, _2: _p36, _3: _p37};
-									}
-								}
-							case 'StyleClass':
-								switch (_p31._0.ctor) {
-									case 'LineHeight':
-										return {ctor: '_Tuple4', _0: _p38, _1: _p35, _2: _p36, _3: _p37};
-									case 'PaddingStyle':
-										var _p34 = _p38;
-										if (_p34.ctor === 'Nothing') {
-											return {
-												ctor: '_Tuple4',
-												_0: _elm_lang$core$Maybe$Just(
-													{ctor: '_Tuple4', _0: _p31._0._0, _1: _p31._0._1, _2: _p31._0._2, _3: _p31._0._3}),
-												_1: _p35,
-												_2: _p36,
-												_3: {ctor: '::', _0: attr, _1: _p37}
-											};
-										} else {
-											return {ctor: '_Tuple4', _0: _p38, _1: _p35, _2: _p36, _3: _p37};
-										}
-									default:
-										break _v17_5;
-								}
-							default:
-								break _v17_5;
-						}
-					} while(false);
-					return {
-						ctor: '_Tuple4',
-						_0: _p38,
-						_1: _p35,
-						_2: _p36,
-						_3: {ctor: '::', _0: attr, _1: _p37}
-					};
-				}),
-			{
-				ctor: '_Tuple4',
-				_0: _elm_lang$core$Maybe$Nothing,
-				_1: _elm_lang$core$Maybe$Nothing,
-				_2: _elm_lang$core$Maybe$Nothing,
-				_3: {ctor: '[]'}
-			},
-			attributes);
-		var padding = _p28._0;
-		var heightContent = _p28._1;
-		var maybeLineHeight = _p28._2;
-		var adjustedAttributes = _p28._3;
-		var withHeight = function () {
-			var _p39 = heightContent;
-			if ((_p39.ctor === 'Just') && (_p39._0 === true)) {
-				var newlineCount = function (x) {
-					return (_elm_lang$core$Native_Utils.cmp(x, 1) < 0) ? 1 : x;
-				}(
-					_elm_lang$core$Basics$toFloat(
-						_elm_lang$core$List$length(
-							_elm_lang$core$String$lines(textOptions.text))));
-				var lineHeight = A2(_elm_lang$core$Maybe$withDefault, 1.5, maybeLineHeight);
-				var heightValue = function (count) {
-					var _p40 = A2(_elm_lang$core$Debug$log, 'padding', padding);
-					if (_p40.ctor === 'Nothing') {
-						return A2(
-							_elm_lang$core$Basics_ops['++'],
-							_elm_lang$core$Basics$toString(count * lineHeight),
-							'em');
-					} else {
-						return A2(
-							_elm_lang$core$Basics_ops['++'],
-							'calc(',
+var _lucamug$elm_unbreakable_json$Request_Article$defaultListConfig = {tag: _elm_lang$core$Maybe$Nothing, author: _elm_lang$core$Maybe$Nothing, favorited: _elm_lang$core$Maybe$Nothing, limit: 20, offset: 0};
+var _lucamug$elm_unbreakable_json$Request_Article$get = F2(
+	function (maybeToken, slug) {
+		var expect = _elm_lang$http$Http$expectJson(
+			A2(_elm_lang$core$Json_Decode$field, 'article', _lucamug$elm_unbreakable_json$Data_Article$decoderWithBody));
+		return _lukewestby$elm_http_builder$HttpBuilder$toRequest(
+			A2(
+				_lucamug$elm_unbreakable_json$Data_AuthToken$withAuthorization,
+				maybeToken,
+				A2(
+					_lukewestby$elm_http_builder$HttpBuilder$withExpect,
+					expect,
+					_lukewestby$elm_http_builder$HttpBuilder$get(
+						_lucamug$elm_unbreakable_json$Request_Helpers$apiUrl(
 							A2(
 								_elm_lang$core$Basics_ops['++'],
-								_elm_lang$core$Basics$toString(count * lineHeight),
-								A2(
-									_elm_lang$core$Basics_ops['++'],
-									'em + ',
-									A2(
-										_elm_lang$core$Basics_ops['++'],
-										_elm_lang$core$Basics$toString(_p40._0._0 + _p40._0._2),
-										'px)'))));
-					}
-				};
-				var heightClass = _mdgriffith$stylish_elephants$Internal_Model$StyleClass(
-					A3(
-						_mdgriffith$stylish_elephants$Internal_Model$Single,
+								'/articles/',
+								_lucamug$elm_unbreakable_json$Data_Article$slugToString(slug)))))));
+	});
+var _lucamug$elm_unbreakable_json$Request_Article$ListConfig = F5(
+	function (a, b, c, d, e) {
+		return {tag: a, author: b, favorited: c, limit: d, offset: e};
+	});
+var _lucamug$elm_unbreakable_json$Request_Article$FeedConfig = F2(
+	function (a, b) {
+		return {limit: a, offset: b};
+	});
+
+var _lucamug$elm_unbreakable_json$Request_Article_Comments$delete = F3(
+	function (slug, commentId, token) {
+		return _lukewestby$elm_http_builder$HttpBuilder$toRequest(
+			A2(
+				_lucamug$elm_unbreakable_json$Data_AuthToken$withAuthorization,
+				_elm_lang$core$Maybe$Just(token),
+				_lukewestby$elm_http_builder$HttpBuilder$delete(
+					_lucamug$elm_unbreakable_json$Request_Helpers$apiUrl(
 						A2(
 							_elm_lang$core$Basics_ops['++'],
-							'textarea-height-',
-							_elm_lang$core$Basics$toString(newlineCount)),
-						'height',
-						heightValue(newlineCount)));
-				return {
-					ctor: '::',
-					_0: _mdgriffith$stylish_elephants$Internal_Model$class('overflow-hidden'),
-					_1: {ctor: '::', _0: heightClass, _1: adjustedAttributes}
-				};
-			} else {
-				return adjustedAttributes;
-			}
-		}();
-		var attributesFromChild = A2(
-			_mdgriffith$stylish_elephants$Internal_Model$get,
-			{
-				ctor: '::',
-				_0: _mdgriffith$stylish_elephants$Element$width(_mdgriffith$stylish_elephants$Element$fill),
-				_1: attributes
-			},
-			function (attr) {
-				var _p41 = attr;
-				_v23_8:
-				do {
-					switch (_p41.ctor) {
-						case 'Width':
-							if (_p41._0.ctor === 'Fill') {
-								return true;
-							} else {
-								break _v23_8;
-							}
-						case 'Height':
-							if (_p41._0.ctor === 'Fill') {
-								return true;
-							} else {
-								break _v23_8;
-							}
-						case 'AlignX':
-							return true;
-						case 'AlignY':
-							return true;
-						case 'StyleClass':
-							switch (_p41._0.ctor) {
-								case 'SpacingStyle':
-									return true;
-								case 'LineHeight':
-									return true;
-								case 'FontSize':
-									return true;
-								case 'FontFamily':
-									return true;
-								default:
-									break _v23_8;
-							}
-						default:
-							break _v23_8;
-					}
-				} while(false);
-				return false;
-			});
-		var inputPadding = A2(
-			_mdgriffith$stylish_elephants$Internal_Model$get,
-			attributes,
-			function (attr) {
-				var _p42 = attr;
-				if ((_p42.ctor === 'StyleClass') && (_p42._0.ctor === 'PaddingStyle')) {
-					return true;
-				} else {
-					return false;
-				}
-			});
-		var input = A5(
-			_mdgriffith$stylish_elephants$Internal_Model$element,
-			_mdgriffith$stylish_elephants$Internal_Model$noStyleSheet,
-			_mdgriffith$stylish_elephants$Internal_Model$asEl,
-			_elm_lang$core$Maybe$Nothing,
-			function () {
-				var _p43 = textOptions.placeholder;
-				if (_p43.ctor === 'Nothing') {
-					return {ctor: '[]'};
-				} else {
-					return {
+							'/articles/',
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								_lucamug$elm_unbreakable_json$Data_Article$slugToString(slug),
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									'/comments/',
+									_lucamug$elm_unbreakable_json$Data_Article_Comment$idToString(commentId))))))));
+	});
+var _lucamug$elm_unbreakable_json$Request_Article_Comments$encodeCommentBody = function (body) {
+	return _elm_lang$core$Json_Encode$object(
+		{
+			ctor: '::',
+			_0: A2(
+				_lucamug$elm_unbreakable_json$Util_ops['=>'],
+				'comment',
+				_elm_lang$core$Json_Encode$object(
+					{
 						ctor: '::',
 						_0: A2(
-							_mdgriffith$stylish_elephants$Element$inFront,
-							_elm_lang$core$Native_Utils.eq(textOptions.text, ''),
-							A5(
-								_mdgriffith$stylish_elephants$Internal_Model$element,
-								_mdgriffith$stylish_elephants$Internal_Model$noStyleSheet,
-								_mdgriffith$stylish_elephants$Internal_Model$asEl,
-								_elm_lang$core$Maybe$Nothing,
-								{
-									ctor: '::',
-									_0: _mdgriffith$stylish_elephants$Element_Font$color(_elm_lang$core$Color$charcoal),
-									_1: {
-										ctor: '::',
-										_0: A2(_mdgriffith$stylish_elephants$Internal_Model$Class, 'text-selection', 'no-text-selection'),
-										_1: {
-											ctor: '::',
-											_0: _mdgriffith$stylish_elephants$Element_Input$defaultTextPadding,
-											_1: {
-												ctor: '::',
-												_0: A2(_mdgriffith$stylish_elephants$Internal_Model$Class, 'cursor', 'cursor-text'),
-												_1: {
-													ctor: '::',
-													_0: _mdgriffith$stylish_elephants$Element$height(_mdgriffith$stylish_elephants$Element$fill),
-													_1: {
-														ctor: '::',
-														_0: _mdgriffith$stylish_elephants$Element$width(_mdgriffith$stylish_elephants$Element$fill),
-														_1: A2(_elm_lang$core$Basics_ops['++'], inputPadding, _p43._0._0)
-													}
-												}
-											}
-										}
-									}
-								},
-								_mdgriffith$stylish_elephants$Internal_Model$Unkeyed(
-									{
-										ctor: '::',
-										_0: _p43._0._1,
-										_1: {ctor: '[]'}
-									}))),
+							_lucamug$elm_unbreakable_json$Util_ops['=>'],
+							'body',
+							_elm_lang$core$Json_Encode$string(body)),
 						_1: {ctor: '[]'}
-					};
-				}
-			}(),
-			_mdgriffith$stylish_elephants$Internal_Model$Unkeyed(
-				{
-					ctor: '::',
-					_0: A5(
-						_mdgriffith$stylish_elephants$Internal_Model$element,
-						_mdgriffith$stylish_elephants$Internal_Model$noStyleSheet,
-						_mdgriffith$stylish_elephants$Internal_Model$asEl,
-						_elm_lang$core$Maybe$Just('textarea'),
-						_elm_lang$core$List$concat(
+					})),
+			_1: {ctor: '[]'}
+		});
+};
+var _lucamug$elm_unbreakable_json$Request_Article_Comments$post = F3(
+	function (slug, body, token) {
+		return _lukewestby$elm_http_builder$HttpBuilder$toRequest(
+			A2(
+				_lucamug$elm_unbreakable_json$Data_AuthToken$withAuthorization,
+				_elm_lang$core$Maybe$Just(token),
+				A2(
+					_lukewestby$elm_http_builder$HttpBuilder$withExpect,
+					_elm_lang$http$Http$expectJson(
+						A2(_elm_lang$core$Json_Decode$field, 'comment', _lucamug$elm_unbreakable_json$Data_Article_Comment$decoder)),
+					A2(
+						_lukewestby$elm_http_builder$HttpBuilder$withBody,
+						_elm_lang$http$Http$jsonBody(
+							_lucamug$elm_unbreakable_json$Request_Article_Comments$encodeCommentBody(body)),
+						_lukewestby$elm_http_builder$HttpBuilder$post(
+							_lucamug$elm_unbreakable_json$Request_Helpers$apiUrl(
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									'/articles/',
+									A2(
+										_elm_lang$core$Basics_ops['++'],
+										_lucamug$elm_unbreakable_json$Data_Article$slugToString(slug),
+										'/comments'))))))));
+	});
+var _lucamug$elm_unbreakable_json$Request_Article_Comments$list = F2(
+	function (maybeToken, slug) {
+		return _lukewestby$elm_http_builder$HttpBuilder$toRequest(
+			A2(
+				_lucamug$elm_unbreakable_json$Data_AuthToken$withAuthorization,
+				maybeToken,
+				A2(
+					_lukewestby$elm_http_builder$HttpBuilder$withExpect,
+					_elm_lang$http$Http$expectJson(
+						A2(
+							_elm_lang$core$Json_Decode$field,
+							'comments',
+							_elm_lang$core$Json_Decode$list(_lucamug$elm_unbreakable_json$Data_Article_Comment$decoder))),
+					_lukewestby$elm_http_builder$HttpBuilder$get(
+						_lucamug$elm_unbreakable_json$Request_Helpers$apiUrl(
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								'/articles/',
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									_lucamug$elm_unbreakable_json$Data_Article$slugToString(slug),
+									'/comments')))))));
+	});
+
+var _lucamug$elm_unbreakable_json$Request_Profile$buildFollow = F3(
+	function (builderFromUrl, username, token) {
+		return _lukewestby$elm_http_builder$HttpBuilder$toRequest(
+			A2(
+				_lukewestby$elm_http_builder$HttpBuilder$withExpect,
+				_elm_lang$http$Http$expectJson(
+					A2(_elm_lang$core$Json_Decode$field, 'profile', _lucamug$elm_unbreakable_json$Data_Profile$decoder)),
+				A2(
+					_lucamug$elm_unbreakable_json$Data_AuthToken$withAuthorization,
+					_elm_lang$core$Maybe$Just(token),
+					builderFromUrl(
+						A2(
+							_elm_lang$core$String$join,
+							'/',
 							{
 								ctor: '::',
-								_0: {
-									ctor: '::',
-									_0: _mdgriffith$stylish_elephants$Element_Input$value(textOptions.text),
-									_1: {
-										ctor: '::',
-										_0: A2(_mdgriffith$stylish_elephants$Internal_Model$Class, 'focus', 'focus-exactly'),
-										_1: {
-											ctor: '::',
-											_0: function () {
-												var _p44 = spellchecked;
-												if (_p44.ctor === 'SpellChecked') {
-													return _mdgriffith$stylish_elephants$Element_Input$spellcheck(true);
-												} else {
-													return _mdgriffith$stylish_elephants$Element_Input$spellcheck(false);
-												}
-											}(),
-											_1: {
-												ctor: '::',
-												_0: function () {
-													var _p45 = maybeLineHeight;
-													if (_p45.ctor === 'Nothing') {
-														return _mdgriffith$stylish_elephants$Element_Font$lineHeight(1.5);
-													} else {
-														return _mdgriffith$stylish_elephants$Element_Font$lineHeight(_p45._0);
-													}
-												}(),
-												_1: {ctor: '[]'}
-											}
-										}
-									}
-								},
+								_0: _lucamug$elm_unbreakable_json$Request_Helpers$apiUrl('/profiles'),
 								_1: {
 									ctor: '::',
-									_0: behavior,
+									_0: _lucamug$elm_unbreakable_json$Data_User$usernameToString(username),
 									_1: {
 										ctor: '::',
-										_0: withHeight,
+										_0: 'follow',
 										_1: {ctor: '[]'}
 									}
 								}
-							}),
-						_mdgriffith$stylish_elephants$Internal_Model$Unkeyed(
-							{
-								ctor: '::',
-								_0: _mdgriffith$stylish_elephants$Internal_Model$unstyled(
-									_elm_lang$html$Html$text(textOptions.text)),
-								_1: {ctor: '[]'}
-							})),
-					_1: {ctor: '[]'}
-				}));
-		return A4(_mdgriffith$stylish_elephants$Element_Input$positionLabels, attributesFromChild, textOptions.label, textOptions.notice, input);
+							})))));
 	});
-var _mdgriffith$stylish_elephants$Element_Input$checkbox = F2(
-	function (attrs, _p46) {
-		var _p47 = _p46;
-		var _p57 = _p47.checked;
-		var attributes = A2(
-			_elm_lang$core$Basics_ops['++'],
-			function () {
-				var _p48 = _p47.onChange;
-				if (_p48.ctor === 'Nothing') {
-					return {
+var _lucamug$elm_unbreakable_json$Request_Profile$unfollow = _lucamug$elm_unbreakable_json$Request_Profile$buildFollow(_lukewestby$elm_http_builder$HttpBuilder$delete);
+var _lucamug$elm_unbreakable_json$Request_Profile$follow = _lucamug$elm_unbreakable_json$Request_Profile$buildFollow(_lukewestby$elm_http_builder$HttpBuilder$post);
+var _lucamug$elm_unbreakable_json$Request_Profile$toggleFollow = F3(
+	function (username, following, authToken) {
+		return following ? A2(_lucamug$elm_unbreakable_json$Request_Profile$unfollow, username, authToken) : A2(_lucamug$elm_unbreakable_json$Request_Profile$follow, username, authToken);
+	});
+var _lucamug$elm_unbreakable_json$Request_Profile$get = F2(
+	function (username, maybeToken) {
+		return _lukewestby$elm_http_builder$HttpBuilder$toRequest(
+			A2(
+				_lucamug$elm_unbreakable_json$Data_AuthToken$withAuthorization,
+				maybeToken,
+				A2(
+					_lukewestby$elm_http_builder$HttpBuilder$withExpect,
+					_elm_lang$http$Http$expectJson(
+						A2(_elm_lang$core$Json_Decode$field, 'profile', _lucamug$elm_unbreakable_json$Data_Profile$decoder)),
+					_lukewestby$elm_http_builder$HttpBuilder$get(
+						_lucamug$elm_unbreakable_json$Request_Helpers$apiUrl(
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								'/profiles/',
+								_lucamug$elm_unbreakable_json$Data_User$usernameToString(username)))))));
+	});
+
+var _lucamug$elm_unbreakable_json$Route$routeToString = function (page) {
+	var pieces = function () {
+		var _p0 = page;
+		switch (_p0.ctor) {
+			case 'Home':
+				return {ctor: '[]'};
+			case 'Login':
+				return {
+					ctor: '::',
+					_0: 'login',
+					_1: {ctor: '[]'}
+				};
+			case 'Logout':
+				return {
+					ctor: '::',
+					_0: 'logout',
+					_1: {ctor: '[]'}
+				};
+			case 'Register':
+				return {
+					ctor: '::',
+					_0: 'register',
+					_1: {ctor: '[]'}
+				};
+			case 'Settings':
+				return {
+					ctor: '::',
+					_0: 'settings',
+					_1: {ctor: '[]'}
+				};
+			case 'Article':
+				return {
+					ctor: '::',
+					_0: 'article',
+					_1: {
 						ctor: '::',
-						_0: _mdgriffith$stylish_elephants$Internal_Model$Attr(
-							_elm_lang$html$Html_Attributes$disabled(true)),
+						_0: _lucamug$elm_unbreakable_json$Data_Article$slugToString(_p0._0),
 						_1: {ctor: '[]'}
-					};
-				} else {
-					var _p49 = _p48._0;
-					return {
+					}
+				};
+			case 'Profile':
+				return {
+					ctor: '::',
+					_0: 'profile',
+					_1: {
 						ctor: '::',
-						_0: _mdgriffith$stylish_elephants$Internal_Model$Attr(
-							_elm_lang$html$Html_Events$onClick(
-								_p49(!_p57))),
+						_0: _lucamug$elm_unbreakable_json$Data_User$usernameToString(_p0._0),
+						_1: {ctor: '[]'}
+					}
+				};
+			case 'NewArticle':
+				return {
+					ctor: '::',
+					_0: 'editor',
+					_1: {ctor: '[]'}
+				};
+			default:
+				return {
+					ctor: '::',
+					_0: 'editor',
+					_1: {
+						ctor: '::',
+						_0: _lucamug$elm_unbreakable_json$Data_Article$slugToString(_p0._0),
+						_1: {ctor: '[]'}
+					}
+				};
+		}
+	}();
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		'#/',
+		A2(_elm_lang$core$String$join, '/', pieces));
+};
+var _lucamug$elm_unbreakable_json$Route$href = function (route) {
+	return _elm_lang$html$Html_Attributes$href(
+		_lucamug$elm_unbreakable_json$Route$routeToString(route));
+};
+var _lucamug$elm_unbreakable_json$Route$modifyUrl = function (_p1) {
+	return _elm_lang$navigation$Navigation$modifyUrl(
+		_lucamug$elm_unbreakable_json$Route$routeToString(_p1));
+};
+var _lucamug$elm_unbreakable_json$Route$EditArticle = function (a) {
+	return {ctor: 'EditArticle', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Route$NewArticle = {ctor: 'NewArticle'};
+var _lucamug$elm_unbreakable_json$Route$Profile = function (a) {
+	return {ctor: 'Profile', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Route$Article = function (a) {
+	return {ctor: 'Article', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Route$Settings = {ctor: 'Settings'};
+var _lucamug$elm_unbreakable_json$Route$Register = {ctor: 'Register'};
+var _lucamug$elm_unbreakable_json$Route$Logout = {ctor: 'Logout'};
+var _lucamug$elm_unbreakable_json$Route$Login = {ctor: 'Login'};
+var _lucamug$elm_unbreakable_json$Route$Home = {ctor: 'Home'};
+var _lucamug$elm_unbreakable_json$Route$route = _evancz$url_parser$UrlParser$oneOf(
+	{
+		ctor: '::',
+		_0: A2(
+			_evancz$url_parser$UrlParser$map,
+			_lucamug$elm_unbreakable_json$Route$Home,
+			_evancz$url_parser$UrlParser$s('')),
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_evancz$url_parser$UrlParser$map,
+				_lucamug$elm_unbreakable_json$Route$Login,
+				_evancz$url_parser$UrlParser$s('login')),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_evancz$url_parser$UrlParser$map,
+					_lucamug$elm_unbreakable_json$Route$Logout,
+					_evancz$url_parser$UrlParser$s('logout')),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_evancz$url_parser$UrlParser$map,
+						_lucamug$elm_unbreakable_json$Route$Settings,
+						_evancz$url_parser$UrlParser$s('settings')),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_evancz$url_parser$UrlParser$map,
+							_lucamug$elm_unbreakable_json$Route$Profile,
+							A2(
+								_evancz$url_parser$UrlParser_ops['</>'],
+								_evancz$url_parser$UrlParser$s('profile'),
+								_lucamug$elm_unbreakable_json$Data_User$usernameParser)),
 						_1: {
 							ctor: '::',
-							_0: _mdgriffith$stylish_elephants$Element_Input$onKeyLookup(
-								function (code) {
-									return _elm_lang$core$Native_Utils.eq(code, _mdgriffith$stylish_elephants$Element_Input$enter) ? _elm_lang$core$Maybe$Just(
-										_p49(!_p57)) : (_elm_lang$core$Native_Utils.eq(code, _mdgriffith$stylish_elephants$Element_Input$space) ? _elm_lang$core$Maybe$Just(
-										_p49(!_p57)) : _elm_lang$core$Maybe$Nothing);
+							_0: A2(
+								_evancz$url_parser$UrlParser$map,
+								_lucamug$elm_unbreakable_json$Route$Register,
+								_evancz$url_parser$UrlParser$s('register')),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_evancz$url_parser$UrlParser$map,
+									_lucamug$elm_unbreakable_json$Route$Article,
+									A2(
+										_evancz$url_parser$UrlParser_ops['</>'],
+										_evancz$url_parser$UrlParser$s('article'),
+										_lucamug$elm_unbreakable_json$Data_Article$slugParser)),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_evancz$url_parser$UrlParser$map,
+										_lucamug$elm_unbreakable_json$Route$NewArticle,
+										_evancz$url_parser$UrlParser$s('editor')),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_evancz$url_parser$UrlParser$map,
+											_lucamug$elm_unbreakable_json$Route$EditArticle,
+											A2(
+												_evancz$url_parser$UrlParser_ops['</>'],
+												_evancz$url_parser$UrlParser$s('editor'),
+												_lucamug$elm_unbreakable_json$Data_Article$slugParser)),
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	});
+var _lucamug$elm_unbreakable_json$Route$fromLocation = function (location) {
+	return _elm_lang$core$String$isEmpty(location.hash) ? _elm_lang$core$Maybe$Just(_lucamug$elm_unbreakable_json$Route$Home) : A2(_evancz$url_parser$UrlParser$parseHash, _lucamug$elm_unbreakable_json$Route$route, location);
+};
+
+var _lucamug$elm_unbreakable_json$Views_Spinner$spinner = A2(
+	_elm_lang$html$Html$li,
+	{
+		ctor: '::',
+		_0: _elm_lang$html$Html_Attributes$class('sk-three-bounce'),
+		_1: {
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$style(
+				{
+					ctor: '::',
+					_0: A2(_lucamug$elm_unbreakable_json$Util_ops['=>'], 'float', 'left'),
+					_1: {
+						ctor: '::',
+						_0: A2(_lucamug$elm_unbreakable_json$Util_ops['=>'], 'margin', '8px'),
+						_1: {ctor: '[]'}
+					}
+				}),
+			_1: {ctor: '[]'}
+		}
+	},
+	{
+		ctor: '::',
+		_0: A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('sk-child sk-bounce1'),
+				_1: {ctor: '[]'}
+			},
+			{ctor: '[]'}),
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('sk-child sk-bounce2'),
+					_1: {ctor: '[]'}
+				},
+				{ctor: '[]'}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('sk-child sk-bounce3'),
+						_1: {ctor: '[]'}
+					},
+					{ctor: '[]'}),
+				_1: {ctor: '[]'}
+			}
+		}
+	});
+
+var _lucamug$elm_unbreakable_json$Views_Page$bodyId = 'page-body';
+var _lucamug$elm_unbreakable_json$Views_Page$navbarLink = F3(
+	function (isActive, route, linkContent) {
+		return A2(
+			_elm_lang$html$Html$li,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$classList(
+					{
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'nav-item', _1: true},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'active', _1: isActive},
+							_1: {ctor: '[]'}
+						}
+					}),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$a,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('nav-link'),
+						_1: {
+							ctor: '::',
+							_0: _lucamug$elm_unbreakable_json$Route$href(route),
+							_1: {ctor: '[]'}
+						}
+					},
+					linkContent),
+				_1: {ctor: '[]'}
+			});
+	});
+var _lucamug$elm_unbreakable_json$Views_Page$viewFooter = A2(
+	_elm_lang$html$Html$footer,
+	{ctor: '[]'},
+	{
+		ctor: '::',
+		_0: A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('container'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$a,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('logo-font'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$href('/'),
+							_1: {ctor: '[]'}
+						}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('conduit'),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$span,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('attribution'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('An interactive learning project from '),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$a,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$href('https://thinkster.io'),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Thinkster'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('. Code & design licensed under MIT.'),
+									_1: {ctor: '[]'}
+								}
+							}
+						}),
+					_1: {ctor: '[]'}
+				}
+			}),
+		_1: {ctor: '[]'}
+	});
+var _lucamug$elm_unbreakable_json$Views_Page$NewArticle = {ctor: 'NewArticle'};
+var _lucamug$elm_unbreakable_json$Views_Page$Profile = function (a) {
+	return {ctor: 'Profile', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Views_Page$Settings = {ctor: 'Settings'};
+var _lucamug$elm_unbreakable_json$Views_Page$Register = {ctor: 'Register'};
+var _lucamug$elm_unbreakable_json$Views_Page$Login = {ctor: 'Login'};
+var _lucamug$elm_unbreakable_json$Views_Page$viewSignIn = F2(
+	function (page, user) {
+		var _p0 = user;
+		if (_p0.ctor === 'Nothing') {
+			return {
+				ctor: '::',
+				_0: A3(
+					_lucamug$elm_unbreakable_json$Views_Page$navbarLink,
+					_elm_lang$core$Native_Utils.eq(page, _lucamug$elm_unbreakable_json$Views_Page$Login),
+					_lucamug$elm_unbreakable_json$Route$Login,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('Sign in'),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A3(
+						_lucamug$elm_unbreakable_json$Views_Page$navbarLink,
+						_elm_lang$core$Native_Utils.eq(page, _lucamug$elm_unbreakable_json$Views_Page$Register),
+						_lucamug$elm_unbreakable_json$Route$Register,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('Sign up'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
+			};
+		} else {
+			var _p1 = _p0._0;
+			return {
+				ctor: '::',
+				_0: A3(
+					_lucamug$elm_unbreakable_json$Views_Page$navbarLink,
+					_elm_lang$core$Native_Utils.eq(page, _lucamug$elm_unbreakable_json$Views_Page$NewArticle),
+					_lucamug$elm_unbreakable_json$Route$NewArticle,
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$i,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('ion-compose'),
+								_1: {ctor: '[]'}
+							},
+							{ctor: '[]'}),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(' New Post'),
+							_1: {ctor: '[]'}
+						}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A3(
+						_lucamug$elm_unbreakable_json$Views_Page$navbarLink,
+						_elm_lang$core$Native_Utils.eq(page, _lucamug$elm_unbreakable_json$Views_Page$Settings),
+						_lucamug$elm_unbreakable_json$Route$Settings,
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$i,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('ion-gear-a'),
+									_1: {ctor: '[]'}
+								},
+								{ctor: '[]'}),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(' Settings'),
+								_1: {ctor: '[]'}
+							}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A3(
+							_lucamug$elm_unbreakable_json$Views_Page$navbarLink,
+							_elm_lang$core$Native_Utils.eq(
+								page,
+								_lucamug$elm_unbreakable_json$Views_Page$Profile(_p1.username)),
+							_lucamug$elm_unbreakable_json$Route$Profile(_p1.username),
+							{
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$img,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('user-pic'),
+										_1: {
+											ctor: '::',
+											_0: _lucamug$elm_unbreakable_json$Data_UserPhoto$src(_p1.image),
+											_1: {ctor: '[]'}
+										}
+									},
+									{ctor: '[]'}),
+								_1: {
+									ctor: '::',
+									_0: _lucamug$elm_unbreakable_json$Data_User$usernameToHtml(_p1.username),
+									_1: {ctor: '[]'}
+								}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A3(
+								_lucamug$elm_unbreakable_json$Views_Page$navbarLink,
+								false,
+								_lucamug$elm_unbreakable_json$Route$Logout,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Sign out'),
+									_1: {ctor: '[]'}
 								}),
 							_1: {ctor: '[]'}
 						}
-					};
-				}
-			}(),
-			{
-				ctor: '::',
-				_0: _mdgriffith$stylish_elephants$Element_Input$tabindex(0),
-				_1: {
-					ctor: '::',
-					_0: _mdgriffith$stylish_elephants$Element$pointer,
-					_1: {
-						ctor: '::',
-						_0: _mdgriffith$stylish_elephants$Element$alignLeft,
-						_1: {
-							ctor: '::',
-							_0: _mdgriffith$stylish_elephants$Element$width(_mdgriffith$stylish_elephants$Element$fill),
-							_1: attrs
-						}
 					}
 				}
-			});
-		var input = A5(
-			_mdgriffith$stylish_elephants$Internal_Model$element,
-			_mdgriffith$stylish_elephants$Internal_Model$noStyleSheet,
-			_mdgriffith$stylish_elephants$Internal_Model$asEl,
-			_elm_lang$core$Maybe$Just('div'),
+			};
+		}
+	});
+var _lucamug$elm_unbreakable_json$Views_Page$Home = {ctor: 'Home'};
+var _lucamug$elm_unbreakable_json$Views_Page$viewHeader = F3(
+	function (page, user, isLoading) {
+		return A2(
+			_elm_lang$html$Html$nav,
 			{
 				ctor: '::',
-				_0: _mdgriffith$stylish_elephants$Internal_Model$Attr(
-					A2(_elm_lang$html$Html_Attributes$attribute, 'role', 'checkbox')),
-				_1: {
-					ctor: '::',
-					_0: _mdgriffith$stylish_elephants$Internal_Model$Attr(
-						A2(
-							_elm_lang$html$Html_Attributes$attribute,
-							'aria-checked',
-							_p57 ? 'true' : 'false')),
-					_1: {
-						ctor: '::',
-						_0: _mdgriffith$stylish_elephants$Internal_Model$class('focusable'),
-						_1: {
-							ctor: '::',
-							_0: _mdgriffith$stylish_elephants$Element$centerY,
-							_1: {ctor: '[]'}
-						}
-					}
-				}
+				_0: _elm_lang$html$Html_Attributes$class('navbar navbar-light'),
+				_1: {ctor: '[]'}
 			},
-			_mdgriffith$stylish_elephants$Internal_Model$Unkeyed(
-				{
-					ctor: '::',
-					_0: function () {
-						var _p50 = _p47.icon;
-						if (_p50.ctor === 'Nothing') {
-							return _mdgriffith$stylish_elephants$Element_Input$defaultCheckbox(_p57);
-						} else {
-							return _p50._0;
-						}
-					}(),
-					_1: {ctor: '[]'}
-				}));
-		return A3(
-			_mdgriffith$stylish_elephants$Internal_Grid$relative,
-			_elm_lang$core$Maybe$Just('label'),
-			attributes,
-			function (group) {
-				var _p51 = _p47.notice;
-				if (_p51.ctor === 'Nothing') {
-					return group;
-				} else {
-					var _p53 = _p51._0._0;
-					return A3(
-						_mdgriffith$stylish_elephants$Element_Input$place,
-						_p53,
-						{
-							layout: _mdgriffith$stylish_elephants$Internal_Grid$GridElement,
-							child: {
-								ctor: '::',
-								_0: _p51._0._2,
-								_1: {ctor: '[]'}
-							},
-							attrs: {ctor: '::', _0: _mdgriffith$stylish_elephants$Element$alignLeft, _1: _p51._0._1},
-							width: function () {
-								var _p52 = _p53;
-								switch (_p52.ctor) {
-									case 'Above':
-										return 2;
-									case 'Below':
-										return 2;
-									default:
-										return 1;
-								}
-							}(),
-							height: 1
-						},
-						group);
-				}
-			}(
-				function (group) {
-					var _p54 = _p47.label;
-					var _p56 = _p54._0;
-					return A3(
-						_mdgriffith$stylish_elephants$Element_Input$place,
-						_p56,
-						{
-							layout: _mdgriffith$stylish_elephants$Internal_Grid$GridElement,
-							child: {
-								ctor: '::',
-								_0: _p54._2,
-								_1: {ctor: '[]'}
-							},
-							attrs: {ctor: '::', _0: _mdgriffith$stylish_elephants$Element$alignLeft, _1: _p54._1},
-							width: function () {
-								var _p55 = _p56;
-								switch (_p55.ctor) {
-									case 'Above':
-										return 2;
-									case 'Below':
-										return 2;
-									default:
-										return 1;
-								}
-							}(),
-							height: 1
-						},
-						group);
-				}(
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
 					{
-						right: _elm_lang$core$Maybe$Nothing,
-						left: _elm_lang$core$Maybe$Nothing,
-						primary: input,
-						primaryWidth: _mdgriffith$stylish_elephants$Internal_Model$Content,
-						defaultWidth: _mdgriffith$stylish_elephants$Internal_Model$Fill(1),
-						below: _elm_lang$core$Maybe$Nothing,
-						above: _elm_lang$core$Maybe$Nothing
-					})));
-	});
-var _mdgriffith$stylish_elephants$Element_Input$button = F2(
-	function (attrs, _p58) {
-		var _p59 = _p58;
-		return A5(
-			_mdgriffith$stylish_elephants$Internal_Model$element,
-			_mdgriffith$stylish_elephants$Internal_Model$noStyleSheet,
-			_mdgriffith$stylish_elephants$Internal_Model$asEl,
-			_elm_lang$core$Maybe$Nothing,
-			{
-				ctor: '::',
-				_0: _mdgriffith$stylish_elephants$Element$width(_mdgriffith$stylish_elephants$Element$shrink),
-				_1: {
-					ctor: '::',
-					_0: _mdgriffith$stylish_elephants$Element$height(_mdgriffith$stylish_elephants$Element$shrink),
-					_1: {
 						ctor: '::',
-						_0: _mdgriffith$stylish_elephants$Element$centerY,
-						_1: {
-							ctor: '::',
-							_0: _mdgriffith$stylish_elephants$Element$center,
-							_1: {
-								ctor: '::',
-								_0: _mdgriffith$stylish_elephants$Element$pointer,
-								_1: {
-									ctor: '::',
-									_0: _mdgriffith$stylish_elephants$Internal_Model$Describe(_mdgriffith$stylish_elephants$Internal_Model$Button),
-									_1: {
-										ctor: '::',
-										_0: _mdgriffith$stylish_elephants$Internal_Model$Attr(
-											_elm_lang$html$Html_Attributes$tabindex(0)),
-										_1: function () {
-											var _p60 = _p59.onPress;
-											if (_p60.ctor === 'Nothing') {
-												return {
-													ctor: '::',
-													_0: _mdgriffith$stylish_elephants$Internal_Model$Attr(
-														_elm_lang$html$Html_Attributes$disabled(true)),
-													_1: attrs
-												};
-											} else {
-												var _p61 = _p60._0;
-												return {
-													ctor: '::',
-													_0: _mdgriffith$stylish_elephants$Element_Events$onClick(_p61),
-													_1: {
-														ctor: '::',
-														_0: _mdgriffith$stylish_elephants$Element_Input$onEnter(_p61),
-														_1: attrs
-													}
-												};
-											}
-										}()
-									}
-								}
-							}
-						}
-					}
-				}
-			},
-			_mdgriffith$stylish_elephants$Internal_Model$Unkeyed(
-				{
-					ctor: '::',
-					_0: _p59.label,
-					_1: {ctor: '[]'}
-				}));
-	});
-var _mdgriffith$stylish_elephants$Element_Input$Button = F2(
-	function (a, b) {
-		return {onPress: a, label: b};
-	});
-var _mdgriffith$stylish_elephants$Element_Input$Checkbox = F5(
-	function (a, b, c, d, e) {
-		return {onChange: a, icon: b, checked: c, label: d, notice: e};
-	});
-var _mdgriffith$stylish_elephants$Element_Input$Text = F5(
-	function (a, b, c, d, e) {
-		return {onChange: a, text: b, placeholder: c, label: d, notice: e};
-	});
-var _mdgriffith$stylish_elephants$Element_Input$Radio = F5(
-	function (a, b, c, d, e) {
-		return {onChange: a, options: b, selected: c, label: d, notice: e};
-	});
-var _mdgriffith$stylish_elephants$Element_Input$Select = F6(
-	function (a, b, c, d, e, f) {
-		return {onChange: a, selected: b, menu: c, placeholder: d, label: e, notice: f};
-	});
-var _mdgriffith$stylish_elephants$Element_Input$Placeholder = F2(
-	function (a, b) {
-		return {ctor: 'Placeholder', _0: a, _1: b};
-	});
-var _mdgriffith$stylish_elephants$Element_Input$placeholder = _mdgriffith$stylish_elephants$Element_Input$Placeholder;
-var _mdgriffith$stylish_elephants$Element_Input$Label = F3(
-	function (a, b, c) {
-		return {ctor: 'Label', _0: a, _1: b, _2: c};
-	});
-var _mdgriffith$stylish_elephants$Element_Input$labelRight = _mdgriffith$stylish_elephants$Element_Input$Label(_mdgriffith$stylish_elephants$Internal_Grid$OnRight);
-var _mdgriffith$stylish_elephants$Element_Input$labelLeft = _mdgriffith$stylish_elephants$Element_Input$Label(_mdgriffith$stylish_elephants$Internal_Grid$OnLeft);
-var _mdgriffith$stylish_elephants$Element_Input$labelAbove = _mdgriffith$stylish_elephants$Element_Input$Label(_mdgriffith$stylish_elephants$Internal_Grid$Above);
-var _mdgriffith$stylish_elephants$Element_Input$labelBelow = _mdgriffith$stylish_elephants$Element_Input$Label(_mdgriffith$stylish_elephants$Internal_Grid$Below);
-var _mdgriffith$stylish_elephants$Element_Input$Notice = F3(
-	function (a, b, c) {
-		return {ctor: 'Notice', _0: a, _1: b, _2: c};
-	});
-var _mdgriffith$stylish_elephants$Element_Input$warningRight = _mdgriffith$stylish_elephants$Element_Input$Notice(_mdgriffith$stylish_elephants$Internal_Grid$OnRight);
-var _mdgriffith$stylish_elephants$Element_Input$warningLeft = _mdgriffith$stylish_elephants$Element_Input$Notice(_mdgriffith$stylish_elephants$Internal_Grid$OnLeft);
-var _mdgriffith$stylish_elephants$Element_Input$warningAbove = _mdgriffith$stylish_elephants$Element_Input$Notice(_mdgriffith$stylish_elephants$Internal_Grid$Above);
-var _mdgriffith$stylish_elephants$Element_Input$warningBelow = _mdgriffith$stylish_elephants$Element_Input$Notice(_mdgriffith$stylish_elephants$Internal_Grid$Below);
-var _mdgriffith$stylish_elephants$Element_Input$errorRight = _mdgriffith$stylish_elephants$Element_Input$Notice(_mdgriffith$stylish_elephants$Internal_Grid$OnRight);
-var _mdgriffith$stylish_elephants$Element_Input$errorLeft = _mdgriffith$stylish_elephants$Element_Input$Notice(_mdgriffith$stylish_elephants$Internal_Grid$OnLeft);
-var _mdgriffith$stylish_elephants$Element_Input$errorAbove = _mdgriffith$stylish_elephants$Element_Input$Notice(_mdgriffith$stylish_elephants$Internal_Grid$Above);
-var _mdgriffith$stylish_elephants$Element_Input$errorBelow = _mdgriffith$stylish_elephants$Element_Input$Notice(_mdgriffith$stylish_elephants$Internal_Grid$Below);
-var _mdgriffith$stylish_elephants$Element_Input$Search = {ctor: 'Search'};
-var _mdgriffith$stylish_elephants$Element_Input$search = _mdgriffith$stylish_elephants$Element_Input$textHelper(_mdgriffith$stylish_elephants$Element_Input$Search);
-var _mdgriffith$stylish_elephants$Element_Input$Email = {ctor: 'Email'};
-var _mdgriffith$stylish_elephants$Element_Input$email = _mdgriffith$stylish_elephants$Element_Input$textHelper(_mdgriffith$stylish_elephants$Element_Input$Email);
-var _mdgriffith$stylish_elephants$Element_Input$CurrentPassword = {ctor: 'CurrentPassword'};
-var _mdgriffith$stylish_elephants$Element_Input$currentPassword = _mdgriffith$stylish_elephants$Element_Input$textHelper(_mdgriffith$stylish_elephants$Element_Input$CurrentPassword);
-var _mdgriffith$stylish_elephants$Element_Input$NewPassword = {ctor: 'NewPassword'};
-var _mdgriffith$stylish_elephants$Element_Input$newPassword = _mdgriffith$stylish_elephants$Element_Input$textHelper(_mdgriffith$stylish_elephants$Element_Input$NewPassword);
-var _mdgriffith$stylish_elephants$Element_Input$Username = {ctor: 'Username'};
-var _mdgriffith$stylish_elephants$Element_Input$username = _mdgriffith$stylish_elephants$Element_Input$textHelper(_mdgriffith$stylish_elephants$Element_Input$Username);
-var _mdgriffith$stylish_elephants$Element_Input$Plain = {ctor: 'Plain'};
-var _mdgriffith$stylish_elephants$Element_Input$text = _mdgriffith$stylish_elephants$Element_Input$textHelper(_mdgriffith$stylish_elephants$Element_Input$Plain);
-var _mdgriffith$stylish_elephants$Element_Input$NotSpellChecked = {ctor: 'NotSpellChecked'};
-var _mdgriffith$stylish_elephants$Element_Input$multiline = _mdgriffith$stylish_elephants$Element_Input$multilineHelper(_mdgriffith$stylish_elephants$Element_Input$NotSpellChecked);
-var _mdgriffith$stylish_elephants$Element_Input$SpellChecked = {ctor: 'SpellChecked'};
-var _mdgriffith$stylish_elephants$Element_Input$spellcheckedMultiline = _mdgriffith$stylish_elephants$Element_Input$multilineHelper(_mdgriffith$stylish_elephants$Element_Input$SpellChecked);
-var _mdgriffith$stylish_elephants$Element_Input$Option = F3(
-	function (a, b, c) {
-		return {ctor: 'Option', _0: a, _1: b, _2: c};
-	});
-var _mdgriffith$stylish_elephants$Element_Input$option = F2(
-	function (value, text) {
-		return A3(_mdgriffith$stylish_elephants$Element_Input$Option, value, _mdgriffith$stylish_elephants$Element_Input$defaultRadioIcon, text);
-	});
-var _mdgriffith$stylish_elephants$Element_Input$Selected = {ctor: 'Selected'};
-var _mdgriffith$stylish_elephants$Element_Input$Focused = {ctor: 'Focused'};
-var _mdgriffith$stylish_elephants$Element_Input$Idle = {ctor: 'Idle'};
-var _mdgriffith$stylish_elephants$Element_Input$Menu = F3(
-	function (a, b, c) {
-		return {ctor: 'Menu', _0: a, _1: b, _2: c};
-	});
-var _mdgriffith$stylish_elephants$Element_Input$MenuBelow = {ctor: 'MenuBelow'};
-var _mdgriffith$stylish_elephants$Element_Input$menuBelow = function (attrs) {
-	return A2(
-		_mdgriffith$stylish_elephants$Element_Input$Menu,
-		_mdgriffith$stylish_elephants$Element_Input$MenuBelow,
-		A2(_elm_lang$core$Basics_ops['++'], _mdgriffith$stylish_elephants$Element_Input$defaultTextBoxStyle, attrs));
-};
-var _mdgriffith$stylish_elephants$Element_Input$MenuAbove = {ctor: 'MenuAbove'};
-var _mdgriffith$stylish_elephants$Element_Input$menuAbove = function (attrs) {
-	return A2(
-		_mdgriffith$stylish_elephants$Element_Input$Menu,
-		_mdgriffith$stylish_elephants$Element_Input$MenuAbove,
-		A2(_elm_lang$core$Basics_ops['++'], _mdgriffith$stylish_elephants$Element_Input$defaultTextBoxStyle, attrs));
-};
-var _mdgriffith$stylish_elephants$Element_Input$AfterFound = {ctor: 'AfterFound'};
-var _mdgriffith$stylish_elephants$Element_Input$BeforeFound = {ctor: 'BeforeFound'};
-var _mdgriffith$stylish_elephants$Element_Input$NotFound = {ctor: 'NotFound'};
-var _mdgriffith$stylish_elephants$Element_Input$radioHelper = F3(
-	function (orientation, attrs, input) {
-		var track = F2(
-			function (option, _p62) {
-				var _p63 = _p62;
-				var _p69 = _p63._1;
-				var _p68 = _p63._2;
-				var _p67 = _p63._0;
-				var _p64 = option;
-				var _p66 = _p64._0;
-				var _p65 = _p67;
-				switch (_p65.ctor) {
-					case 'NotFound':
-						return _elm_lang$core$Native_Utils.eq(
-							_elm_lang$core$Maybe$Just(_p66),
-							input.selected) ? {ctor: '_Tuple3', _0: _mdgriffith$stylish_elephants$Element_Input$BeforeFound, _1: _p69, _2: _p68} : {ctor: '_Tuple3', _0: _p67, _1: _p66, _2: _p68};
-					case 'BeforeFound':
-						return {ctor: '_Tuple3', _0: _mdgriffith$stylish_elephants$Element_Input$AfterFound, _1: _p69, _2: _p66};
-					default:
-						return {ctor: '_Tuple3', _0: _p67, _1: _p69, _2: _p68};
-				}
-			});
-		var prevNext = function () {
-			var _p70 = input.options;
-			if (_p70.ctor === '[]') {
-				return _elm_lang$core$Maybe$Nothing;
-			} else {
-				var _p75 = _p70._0._0;
-				return function (_p71) {
-					var _p72 = _p71;
-					var _p74 = _p72._1;
-					var _p73 = _p72._0;
-					switch (_p73.ctor) {
-						case 'NotFound':
-							return _elm_lang$core$Maybe$Just(
-								{ctor: '_Tuple2', _0: _p74, _1: _p75});
-						case 'BeforeFound':
-							return _elm_lang$core$Maybe$Just(
-								{ctor: '_Tuple2', _0: _p74, _1: _p75});
-						default:
-							return _elm_lang$core$Maybe$Just(
-								{ctor: '_Tuple2', _0: _p74, _1: _p72._2});
-					}
-				}(
-					A3(
-						_elm_lang$core$List$foldl,
-						track,
-						{ctor: '_Tuple3', _0: _mdgriffith$stylish_elephants$Element_Input$NotFound, _1: _p75, _2: _p75},
-						input.options));
-			}
-		}();
-		var toggleSelected = function () {
-			var _p76 = input.selected;
-			if (_p76.ctor === 'Nothing') {
-				return _elm_lang$core$Maybe$Nothing;
-			} else {
-				return _elm_lang$core$Maybe$Nothing;
-			}
-		}();
-		var spacing = A2(
-			_mdgriffith$stylish_elephants$Internal_Model$getSpacingAttribute,
-			attrs,
-			{ctor: '_Tuple2', _0: 5, _1: 5});
-		var renderOption = function (_p77) {
-			var _p78 = _p77;
-			var _p82 = _p78._0;
-			var status = _elm_lang$core$Native_Utils.eq(
-				_elm_lang$core$Maybe$Just(_p82),
-				input.selected) ? _mdgriffith$stylish_elephants$Element_Input$Selected : _mdgriffith$stylish_elephants$Element_Input$Idle;
-			return A2(
-				_mdgriffith$stylish_elephants$Element$row,
-				{
-					ctor: '::',
-					_0: spacing,
-					_1: {
-						ctor: '::',
-						_0: _mdgriffith$stylish_elephants$Element$pointer,
-						_1: {
-							ctor: '::',
-							_0: function () {
-								var _p79 = input.onChange;
-								if (_p79.ctor === 'Nothing') {
-									return _mdgriffith$stylish_elephants$Internal_Model$NoAttribute;
-								} else {
-									return _mdgriffith$stylish_elephants$Element_Events$onClick(
-										_p79._0(_p82));
-								}
-							}(),
-							_1: {
-								ctor: '::',
-								_0: function () {
-									var _p80 = status;
-									if (_p80.ctor === 'Selected') {
-										return _mdgriffith$stylish_elephants$Internal_Model$class('focusable');
-									} else {
-										return _mdgriffith$stylish_elephants$Internal_Model$NoAttribute;
-									}
-								}(),
-								_1: {
-									ctor: '::',
-									_0: function () {
-										var _p81 = status;
-										if (_p81.ctor === 'Selected') {
-											return _mdgriffith$stylish_elephants$Internal_Model$Attr(
-												A2(_elm_lang$html$Html_Attributes$attribute, 'aria-checked', 'true'));
-										} else {
-											return _mdgriffith$stylish_elephants$Internal_Model$Attr(
-												A2(_elm_lang$html$Html_Attributes$attribute, 'aria-checked', 'false'));
-										}
-									}(),
-									_1: {
-										ctor: '::',
-										_0: _mdgriffith$stylish_elephants$Internal_Model$Attr(
-											A2(_elm_lang$html$Html_Attributes$attribute, 'role', 'radio')),
-										_1: {ctor: '[]'}
-									}
-								}
-							}
-						}
-					}
-				},
-				{
-					ctor: '::',
-					_0: _p78._1(status),
-					_1: {
+						_0: _elm_lang$html$Html_Attributes$class('container'),
+						_1: {ctor: '[]'}
+					},
+					{
 						ctor: '::',
 						_0: A2(
-							_mdgriffith$stylish_elephants$Element$el,
+							_elm_lang$html$Html$a,
 							{
 								ctor: '::',
-								_0: _mdgriffith$stylish_elephants$Element$width(_mdgriffith$stylish_elephants$Element$fill),
+								_0: _elm_lang$html$Html_Attributes$class('navbar-brand'),
 								_1: {
 									ctor: '::',
-									_0: _mdgriffith$stylish_elephants$Internal_Model$class('unfocusable'),
+									_0: _lucamug$elm_unbreakable_json$Route$href(_lucamug$elm_unbreakable_json$Route$Home),
 									_1: {ctor: '[]'}
 								}
 							},
-							_p78._2),
-						_1: {ctor: '[]'}
-					}
-				});
-		};
-		var optionArea = function () {
-			var _p83 = orientation;
-			if (_p83.ctor === 'Row') {
-				return A2(
-					_mdgriffith$stylish_elephants$Element_Input$row,
-					attrs,
-					A2(_elm_lang$core$List$map, renderOption, input.options));
-			} else {
-				return A2(
-					_mdgriffith$stylish_elephants$Element_Input$column,
-					attrs,
-					A2(_elm_lang$core$List$map, renderOption, input.options));
-			}
-		}();
-		return A4(
-			_mdgriffith$stylish_elephants$Element_Input$positionLabels,
-			function () {
-				var _p84 = input.onChange;
-				if (_p84.ctor === 'Nothing') {
-					return {
-						ctor: '::',
-						_0: _mdgriffith$stylish_elephants$Element$alignLeft,
-						_1: {ctor: '[]'}
-					};
-				} else {
-					var _p89 = _p84._0;
-					return A2(
-						_elm_lang$core$List$filterMap,
-						_elm_lang$core$Basics$identity,
-						{
-							ctor: '::',
-							_0: _elm_lang$core$Maybe$Just(_mdgriffith$stylish_elephants$Element$alignLeft),
-							_1: {
+							{
 								ctor: '::',
-								_0: _elm_lang$core$Maybe$Just(
-									_mdgriffith$stylish_elephants$Element_Input$tabindex(0)),
-								_1: {
-									ctor: '::',
-									_0: _elm_lang$core$Maybe$Just(
-										_mdgriffith$stylish_elephants$Internal_Model$Attr(
-											A2(_elm_lang$html$Html_Attributes$attribute, 'role', 'radiogroup'))),
-									_1: {
-										ctor: '::',
-										_0: function () {
-											var _p85 = prevNext;
-											if (_p85.ctor === 'Nothing') {
-												return _elm_lang$core$Maybe$Nothing;
-											} else {
-												var _p88 = _p85._0._0;
-												var _p87 = _p85._0._1;
-												return _elm_lang$core$Maybe$Just(
-													_mdgriffith$stylish_elephants$Element_Input$onKeyLookup(
-														function (code) {
-															if (_elm_lang$core$Native_Utils.eq(code, _mdgriffith$stylish_elephants$Element_Input$leftArrow)) {
-																return _elm_lang$core$Maybe$Just(
-																	_p89(_p88));
-															} else {
-																if (_elm_lang$core$Native_Utils.eq(code, _mdgriffith$stylish_elephants$Element_Input$upArrow)) {
-																	return _elm_lang$core$Maybe$Just(
-																		_p89(_p88));
-																} else {
-																	if (_elm_lang$core$Native_Utils.eq(code, _mdgriffith$stylish_elephants$Element_Input$rightArrow)) {
-																		return _elm_lang$core$Maybe$Just(
-																			_p89(_p87));
-																	} else {
-																		if (_elm_lang$core$Native_Utils.eq(code, _mdgriffith$stylish_elephants$Element_Input$downArrow)) {
-																			return _elm_lang$core$Maybe$Just(
-																				_p89(_p87));
-																		} else {
-																			if (_elm_lang$core$Native_Utils.eq(code, _mdgriffith$stylish_elephants$Element_Input$space)) {
-																				var _p86 = input.selected;
-																				if (_p86.ctor === 'Nothing') {
-																					return _elm_lang$core$Maybe$Just(
-																						_p89(_p88));
-																				} else {
-																					return _elm_lang$core$Maybe$Nothing;
-																				}
-																			} else {
-																				return _elm_lang$core$Maybe$Nothing;
-																			}
-																		}
-																	}
-																}
-															}
-														}));
-											}
-										}(),
-										_1: {ctor: '[]'}
-									}
-								}
-							}
-						});
-				}
-			}(),
-			input.label,
-			input.notice,
-			optionArea);
-	});
-var _mdgriffith$stylish_elephants$Element_Input$select = F2(
-	function (attrs, input) {
-		var track = F2(
-			function (option, _p90) {
-				var _p91 = _p90;
-				var _p98 = _p91._2;
-				var _p97 = _p91._1;
-				var _p96 = _p91._3;
-				var _p95 = _p91._0;
-				var _p92 = option;
-				var _p94 = _p92._0;
-				var _p93 = _p95;
-				switch (_p93.ctor) {
-					case 'NotFound':
-						return _elm_lang$core$Native_Utils.eq(
-							_elm_lang$core$Maybe$Just(_p94),
-							input.selected) ? {
-							ctor: '_Tuple4',
-							_0: _mdgriffith$stylish_elephants$Element_Input$BeforeFound,
-							_1: _p97,
-							_2: _elm_lang$core$Maybe$Just(option),
-							_3: _p96
-						} : {ctor: '_Tuple4', _0: _p95, _1: _p94, _2: _p98, _3: _p96};
-					case 'BeforeFound':
-						return {ctor: '_Tuple4', _0: _mdgriffith$stylish_elephants$Element_Input$AfterFound, _1: _p97, _2: _p98, _3: _p94};
-					default:
-						return {ctor: '_Tuple4', _0: _p95, _1: _p97, _2: _p98, _3: _p96};
-				}
-			});
-		var prevNext = function () {
-			var _p99 = input.menu;
-			var _p107 = _p99._2;
-			var _p100 = _p107;
-			if (_p100.ctor === '[]') {
-				return _elm_lang$core$Maybe$Nothing;
-			} else {
-				var _p106 = _p100._0._0;
-				return function (_p101) {
-					var _p102 = _p101;
-					var _p105 = _p102._2;
-					var _p104 = _p102._1;
-					var _p103 = _p102._0;
-					switch (_p103.ctor) {
-						case 'NotFound':
-							return _elm_lang$core$Maybe$Just(
-								{ctor: '_Tuple3', _0: _p104, _1: _p105, _2: _p106});
-						case 'BeforeFound':
-							return _elm_lang$core$Maybe$Just(
-								{ctor: '_Tuple3', _0: _p104, _1: _p105, _2: _p106});
-						default:
-							return _elm_lang$core$Maybe$Just(
-								{ctor: '_Tuple3', _0: _p104, _1: _p105, _2: _p102._3});
-					}
-				}(
-					A3(
-						_elm_lang$core$List$foldl,
-						track,
-						{ctor: '_Tuple4', _0: _mdgriffith$stylish_elephants$Element_Input$NotFound, _1: _p106, _2: _elm_lang$core$Maybe$Nothing, _3: _p106},
-						_p107));
-			}
-		}();
-		var toggleSelected = function () {
-			var _p108 = input.selected;
-			if (_p108.ctor === 'Nothing') {
-				return _elm_lang$core$Maybe$Nothing;
-			} else {
-				return _elm_lang$core$Maybe$Nothing;
-			}
-		}();
-		var renderSelectedOption = function (_p109) {
-			var _p110 = _p109;
-			var status = _elm_lang$core$Native_Utils.eq(
-				_elm_lang$core$Maybe$Just(_p110._0),
-				input.selected) ? _mdgriffith$stylish_elephants$Element_Input$Selected : _mdgriffith$stylish_elephants$Element_Input$Idle;
-			return A2(
-				_mdgriffith$stylish_elephants$Element$el,
-				{
-					ctor: '::',
-					_0: _mdgriffith$stylish_elephants$Element$width(_mdgriffith$stylish_elephants$Element$fill),
-					_1: {
-						ctor: '::',
-						_0: _mdgriffith$stylish_elephants$Element$pointer,
-						_1: {ctor: '[]'}
-					}
-				},
-				_p110._2);
-		};
-		var renderOption = function (_p111) {
-			var _p112 = _p111;
-			var _p116 = _p112._0;
-			var status = _elm_lang$core$Native_Utils.eq(
-				_elm_lang$core$Maybe$Just(_p116),
-				input.selected) ? _mdgriffith$stylish_elephants$Element_Input$Selected : _mdgriffith$stylish_elephants$Element_Input$Idle;
-			return A2(
-				_mdgriffith$stylish_elephants$Element$el,
-				{
-					ctor: '::',
-					_0: _mdgriffith$stylish_elephants$Element$width(_mdgriffith$stylish_elephants$Element$fill),
-					_1: {
-						ctor: '::',
-						_0: _mdgriffith$stylish_elephants$Element$pointer,
+								_0: _elm_lang$html$Html$text('conduit'),
+								_1: {ctor: '[]'}
+							}),
 						_1: {
 							ctor: '::',
-							_0: function () {
-								var _p113 = input.onChange;
-								if (_p113.ctor === 'Nothing') {
-									return _mdgriffith$stylish_elephants$Internal_Model$NoAttribute;
-								} else {
-									return _mdgriffith$stylish_elephants$Element_Events$onClick(
-										_p113._0(_p116));
-								}
-							}(),
-							_1: {
-								ctor: '::',
-								_0: function () {
-									var _p114 = status;
-									if (_p114.ctor === 'Selected') {
-										return _mdgriffith$stylish_elephants$Internal_Model$class('focusable');
-									} else {
-										return _mdgriffith$stylish_elephants$Internal_Model$NoAttribute;
-									}
-								}(),
-								_1: {
+							_0: A2(
+								_elm_lang$html$Html$ul,
+								{
 									ctor: '::',
-									_0: function () {
-										var _p115 = status;
-										if (_p115.ctor === 'Selected') {
-											return _mdgriffith$stylish_elephants$Internal_Model$Attr(
-												A2(_elm_lang$html$Html_Attributes$attribute, 'aria-checked', 'true'));
-										} else {
-											return _mdgriffith$stylish_elephants$Internal_Model$Attr(
-												A2(_elm_lang$html$Html_Attributes$attribute, 'aria-checked', 'false'));
-										}
-									}(),
+									_0: _elm_lang$html$Html_Attributes$class('nav navbar-nav pull-xs-right'),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: A3(_elm_lang$html$Html_Lazy$lazy2, _lucamug$elm_unbreakable_json$Util$viewIf, isLoading, _lucamug$elm_unbreakable_json$Views_Spinner$spinner),
 									_1: {
 										ctor: '::',
-										_0: _mdgriffith$stylish_elephants$Internal_Model$Attr(
-											A2(_elm_lang$html$Html_Attributes$attribute, 'role', 'radio')),
-										_1: {ctor: '[]'}
+										_0: A3(
+											_lucamug$elm_unbreakable_json$Views_Page$navbarLink,
+											_elm_lang$core$Native_Utils.eq(page, _lucamug$elm_unbreakable_json$Views_Page$Home),
+											_lucamug$elm_unbreakable_json$Route$Home,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('Home'),
+												_1: {ctor: '[]'}
+											}),
+										_1: A2(_lucamug$elm_unbreakable_json$Views_Page$viewSignIn, page, user)
 									}
-								}
-							}
+								}),
+							_1: {ctor: '[]'}
 						}
-					}
-				},
-				_p112._2);
-		};
-		var box = A2(
-			_mdgriffith$stylish_elephants$Element$el,
+					}),
+				_1: {ctor: '[]'}
+			});
+	});
+var _lucamug$elm_unbreakable_json$Views_Page$frame = F4(
+	function (isLoading, user, page, content) {
+		return A2(
+			_elm_lang$html$Html$div,
 			{
 				ctor: '::',
-				_0: function () {
-					var _p117 = input.menu;
-					var _p120 = _p117._2;
-					var _p119 = _p117._1;
-					var _p118 = _p117._0;
-					if (_p118.ctor === 'MenuAbove') {
-						return A2(
-							_mdgriffith$stylish_elephants$Element$above,
-							true,
-							A2(
-								_mdgriffith$stylish_elephants$Element_Input$column,
-								{
-									ctor: '::',
-									_0: _mdgriffith$stylish_elephants$Internal_Model$class('show-on-focus'),
-									_1: {
-										ctor: '::',
-										_0: _mdgriffith$stylish_elephants$Element_Background$color(_elm_lang$core$Color$white),
-										_1: _p119
-									}
-								},
-								A2(_elm_lang$core$List$map, renderOption, _p120)));
-					} else {
-						return A2(
-							_mdgriffith$stylish_elephants$Element$below,
-							true,
-							A2(
-								_mdgriffith$stylish_elephants$Element_Input$column,
-								{
-									ctor: '::',
-									_0: _mdgriffith$stylish_elephants$Internal_Model$class('show-on-focus'),
-									_1: {
-										ctor: '::',
-										_0: _mdgriffith$stylish_elephants$Element_Background$color(_elm_lang$core$Color$white),
-										_1: _p119
-									}
-								},
-								A2(_elm_lang$core$List$map, renderOption, _p120)));
-					}
-				}(),
+				_0: _elm_lang$html$Html_Attributes$class('page-frame'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A3(_lucamug$elm_unbreakable_json$Views_Page$viewHeader, page, user, isLoading),
 				_1: {
 					ctor: '::',
-					_0: _mdgriffith$stylish_elephants$Element_Border$width(1),
+					_0: content,
 					_1: {
 						ctor: '::',
-						_0: _mdgriffith$stylish_elephants$Element_Border$color(_elm_lang$core$Color$lightGrey),
+						_0: _lucamug$elm_unbreakable_json$Views_Page$viewFooter,
+						_1: {ctor: '[]'}
+					}
+				}
+			});
+	});
+var _lucamug$elm_unbreakable_json$Views_Page$Other = {ctor: 'Other'};
+
+var _mgold$elm_date_format$Date_Local$brazilian = {
+	date: {
+		months: {jan: 'Janeiro', feb: 'Fevereiro', mar: 'Março', apr: 'Abril', may: 'Maio', jun: 'Junho', jul: 'Julho', aug: 'Agosto', sep: 'Setembro', oct: 'Outubro', nov: 'Novembro', dec: 'Dezembro'},
+		monthsAbbrev: {jan: 'Jan', feb: 'Fev', mar: 'Mar', apr: 'Abr', may: 'Mai', jun: 'Jun', jul: 'Jul', aug: 'Ago', sep: 'Set', oct: 'Out', nov: 'Nov', dec: 'Dez'},
+		wdays: {mon: 'Segunda-feira', tue: 'Terça-feira', wed: 'Quarta-feira', thu: 'Quinta-feira', fri: 'Sexta-feira', sat: 'Sábado', sun: 'Domingo'},
+		wdaysAbbrev: {mon: 'Seg', tue: 'Ter', wed: 'Qua', thu: 'Qui', fri: 'Sex', sat: 'Sáb', sun: 'Dom'},
+		defaultFormat: _elm_lang$core$Maybe$Just('%e de %B de %Y')
+	},
+	time: {
+		am: 'am',
+		pm: 'pm',
+		defaultFormat: _elm_lang$core$Maybe$Just('%k:%M')
+	},
+	timeZones: _elm_lang$core$Maybe$Nothing,
+	defaultFormat: _elm_lang$core$Maybe$Nothing
+};
+var _mgold$elm_date_format$Date_Local$french = {
+	date: {
+		months: {jan: 'Janvier', feb: 'Février', mar: 'Mars', apr: 'Avril', may: 'Mai', jun: 'Juin', jul: 'Juillet', aug: 'Août', sep: 'Septembre', oct: 'Octobre', nov: 'Novembre', dec: 'Décembre'},
+		monthsAbbrev: {jan: 'Jan', feb: 'Fév', mar: 'Mar', apr: 'Avr', may: 'Mai', jun: 'Jui', jul: 'Jul', aug: 'Aoû', sep: 'Sep', oct: 'Oct', nov: 'Nov', dec: 'Déc'},
+		wdays: {mon: 'Lundi', tue: 'Mardi', wed: 'Mercredi', thu: 'Jeudi', fri: 'Vendredi', sat: 'Samedi', sun: 'Dimanche'},
+		wdaysAbbrev: {mon: 'Lun', tue: 'Mar', wed: 'Mer', thu: 'Jeu', fri: 'Ven', sat: 'Sam', sun: 'Dim'},
+		defaultFormat: _elm_lang$core$Maybe$Nothing
+	},
+	time: {am: 'am', pm: 'pm', defaultFormat: _elm_lang$core$Maybe$Nothing},
+	timeZones: _elm_lang$core$Maybe$Nothing,
+	defaultFormat: _elm_lang$core$Maybe$Nothing
+};
+var _mgold$elm_date_format$Date_Local$international = {
+	date: {
+		months: {jan: 'January', feb: 'February', mar: 'March', apr: 'April', may: 'May', jun: 'June', jul: 'July', aug: 'August', sep: 'September', oct: 'October', nov: 'November', dec: 'December'},
+		monthsAbbrev: {jan: 'Jan', feb: 'Feb', mar: 'Mar', apr: 'Apr', may: 'May', jun: 'Jun', jul: 'Jul', aug: 'Aug', sep: 'Sep', oct: 'Oct', nov: 'Nov', dec: 'Dec'},
+		wdays: {mon: 'Monday', tue: 'Tuesday', wed: 'Wednesday', thu: 'Thursday', fri: 'Friday', sat: 'Saturday', sun: 'Sunday'},
+		wdaysAbbrev: {mon: 'Mon', tue: 'Tue', wed: 'Wed', thu: 'Thu', fri: 'Fri', sat: 'Sat', sun: 'Sun'},
+		defaultFormat: _elm_lang$core$Maybe$Nothing
+	},
+	time: {am: 'am', pm: 'pm', defaultFormat: _elm_lang$core$Maybe$Nothing},
+	timeZones: _elm_lang$core$Maybe$Nothing,
+	defaultFormat: _elm_lang$core$Maybe$Nothing
+};
+var _mgold$elm_date_format$Date_Local$Local = F4(
+	function (a, b, c, d) {
+		return {date: a, time: b, timeZones: c, defaultFormat: d};
+	});
+var _mgold$elm_date_format$Date_Local$Months = function (a) {
+	return function (b) {
+		return function (c) {
+			return function (d) {
+				return function (e) {
+					return function (f) {
+						return function (g) {
+							return function (h) {
+								return function (i) {
+									return function (j) {
+										return function (k) {
+											return function (l) {
+												return {jan: a, feb: b, mar: c, apr: d, may: e, jun: f, jul: g, aug: h, sep: i, oct: j, nov: k, dec: l};
+											};
+										};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
+var _mgold$elm_date_format$Date_Local$WeekDays = F7(
+	function (a, b, c, d, e, f, g) {
+		return {mon: a, tue: b, wed: c, thu: d, fri: e, sat: f, sun: g};
+	});
+
+var _mgold$elm_date_format$Date_Format$padWith = function (padding) {
+	var padder = function () {
+		var _p0 = padding;
+		switch (_p0.ctor) {
+			case 'NoPadding':
+				return _elm_lang$core$Basics$identity;
+			case 'Zero':
+				return A2(
+					_elm_lang$core$String$padLeft,
+					2,
+					_elm_lang$core$Native_Utils.chr('0'));
+			case 'ZeroThreeDigits':
+				return A2(
+					_elm_lang$core$String$padLeft,
+					3,
+					_elm_lang$core$Native_Utils.chr('0'));
+			default:
+				return A2(
+					_elm_lang$core$String$padLeft,
+					2,
+					_elm_lang$core$Native_Utils.chr(' '));
+		}
+	}();
+	return function (_p1) {
+		return padder(
+			_elm_lang$core$Basics$toString(_p1));
+	};
+};
+var _mgold$elm_date_format$Date_Format$zero2twelve = function (n) {
+	return _elm_lang$core$Native_Utils.eq(n, 0) ? 12 : n;
+};
+var _mgold$elm_date_format$Date_Format$mod12 = function (h) {
+	return A2(_elm_lang$core$Basics_ops['%'], h, 12);
+};
+var _mgold$elm_date_format$Date_Format$dayOfWeekToWord = F2(
+	function (loc, dow) {
+		var _p2 = dow;
+		switch (_p2.ctor) {
+			case 'Mon':
+				return loc.mon;
+			case 'Tue':
+				return loc.tue;
+			case 'Wed':
+				return loc.wed;
+			case 'Thu':
+				return loc.thu;
+			case 'Fri':
+				return loc.fri;
+			case 'Sat':
+				return loc.sat;
+			default:
+				return loc.sun;
+		}
+	});
+var _mgold$elm_date_format$Date_Format$monthToWord = F2(
+	function (loc, m) {
+		var _p3 = m;
+		switch (_p3.ctor) {
+			case 'Jan':
+				return loc.jan;
+			case 'Feb':
+				return loc.feb;
+			case 'Mar':
+				return loc.mar;
+			case 'Apr':
+				return loc.apr;
+			case 'May':
+				return loc.may;
+			case 'Jun':
+				return loc.jun;
+			case 'Jul':
+				return loc.jul;
+			case 'Aug':
+				return loc.aug;
+			case 'Sep':
+				return loc.sep;
+			case 'Oct':
+				return loc.oct;
+			case 'Nov':
+				return loc.nov;
+			default:
+				return loc.dec;
+		}
+	});
+var _mgold$elm_date_format$Date_Format$monthToInt = function (m) {
+	var _p4 = m;
+	switch (_p4.ctor) {
+		case 'Jan':
+			return 1;
+		case 'Feb':
+			return 2;
+		case 'Mar':
+			return 3;
+		case 'Apr':
+			return 4;
+		case 'May':
+			return 5;
+		case 'Jun':
+			return 6;
+		case 'Jul':
+			return 7;
+		case 'Aug':
+			return 8;
+		case 'Sep':
+			return 9;
+		case 'Oct':
+			return 10;
+		case 'Nov':
+			return 11;
+		default:
+			return 12;
+	}
+};
+var _mgold$elm_date_format$Date_Format$re = _elm_lang$core$Regex$regex('%(_|-|0)?(%|Y|y|m|B|b|d|e|a|A|H|k|I|l|L|p|P|M|S)');
+var _mgold$elm_date_format$Date_Format$ZeroThreeDigits = {ctor: 'ZeroThreeDigits'};
+var _mgold$elm_date_format$Date_Format$Zero = {ctor: 'Zero'};
+var _mgold$elm_date_format$Date_Format$Space = {ctor: 'Space'};
+var _mgold$elm_date_format$Date_Format$NoPadding = {ctor: 'NoPadding'};
+var _mgold$elm_date_format$Date_Format$formatToken = F3(
+	function (loc, d, m) {
+		var _p5 = function () {
+			var _p6 = m.submatches;
+			_v4_4:
+			do {
+				if (_p6.ctor === '::') {
+					if (_p6._0.ctor === 'Just') {
+						if (((_p6._1.ctor === '::') && (_p6._1._0.ctor === 'Just')) && (_p6._1._1.ctor === '[]')) {
+							switch (_p6._0._0) {
+								case '-':
+									return {
+										ctor: '_Tuple2',
+										_0: _elm_lang$core$Maybe$Just(_mgold$elm_date_format$Date_Format$NoPadding),
+										_1: _p6._1._0._0
+									};
+								case '_':
+									return {
+										ctor: '_Tuple2',
+										_0: _elm_lang$core$Maybe$Just(_mgold$elm_date_format$Date_Format$Space),
+										_1: _p6._1._0._0
+									};
+								case '0':
+									return {
+										ctor: '_Tuple2',
+										_0: _elm_lang$core$Maybe$Just(_mgold$elm_date_format$Date_Format$Zero),
+										_1: _p6._1._0._0
+									};
+								default:
+									break _v4_4;
+							}
+						} else {
+							break _v4_4;
+						}
+					} else {
+						if (((_p6._1.ctor === '::') && (_p6._1._0.ctor === 'Just')) && (_p6._1._1.ctor === '[]')) {
+							return {ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: _p6._1._0._0};
+						} else {
+							break _v4_4;
+						}
+					}
+				} else {
+					break _v4_4;
+				}
+			} while(false);
+			return {ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: ' '};
+		}();
+		var padding = _p5._0;
+		var symbol = _p5._1;
+		var _p7 = symbol;
+		switch (_p7) {
+			case '%':
+				return '%';
+			case 'Y':
+				return _elm_lang$core$Basics$toString(
+					_elm_lang$core$Date$year(d));
+			case 'y':
+				return A2(
+					_elm_lang$core$String$right,
+					2,
+					_elm_lang$core$Basics$toString(
+						_elm_lang$core$Date$year(d)));
+			case 'm':
+				return A2(
+					_mgold$elm_date_format$Date_Format$padWith,
+					A2(_elm_lang$core$Maybe$withDefault, _mgold$elm_date_format$Date_Format$Zero, padding),
+					_mgold$elm_date_format$Date_Format$monthToInt(
+						_elm_lang$core$Date$month(d)));
+			case 'B':
+				return A2(
+					_mgold$elm_date_format$Date_Format$monthToWord,
+					loc.date.months,
+					_elm_lang$core$Date$month(d));
+			case 'b':
+				return A2(
+					_mgold$elm_date_format$Date_Format$monthToWord,
+					loc.date.monthsAbbrev,
+					_elm_lang$core$Date$month(d));
+			case 'd':
+				return A2(
+					_mgold$elm_date_format$Date_Format$padWith,
+					A2(_elm_lang$core$Maybe$withDefault, _mgold$elm_date_format$Date_Format$Zero, padding),
+					_elm_lang$core$Date$day(d));
+			case 'e':
+				return A2(
+					_mgold$elm_date_format$Date_Format$padWith,
+					A2(_elm_lang$core$Maybe$withDefault, _mgold$elm_date_format$Date_Format$Space, padding),
+					_elm_lang$core$Date$day(d));
+			case 'a':
+				return A2(
+					_mgold$elm_date_format$Date_Format$dayOfWeekToWord,
+					loc.date.wdaysAbbrev,
+					_elm_lang$core$Date$dayOfWeek(d));
+			case 'A':
+				return A2(
+					_mgold$elm_date_format$Date_Format$dayOfWeekToWord,
+					loc.date.wdays,
+					_elm_lang$core$Date$dayOfWeek(d));
+			case 'H':
+				return A2(
+					_mgold$elm_date_format$Date_Format$padWith,
+					A2(_elm_lang$core$Maybe$withDefault, _mgold$elm_date_format$Date_Format$Zero, padding),
+					_elm_lang$core$Date$hour(d));
+			case 'k':
+				return A2(
+					_mgold$elm_date_format$Date_Format$padWith,
+					A2(_elm_lang$core$Maybe$withDefault, _mgold$elm_date_format$Date_Format$Space, padding),
+					_elm_lang$core$Date$hour(d));
+			case 'I':
+				return A2(
+					_mgold$elm_date_format$Date_Format$padWith,
+					A2(_elm_lang$core$Maybe$withDefault, _mgold$elm_date_format$Date_Format$Zero, padding),
+					_mgold$elm_date_format$Date_Format$zero2twelve(
+						_mgold$elm_date_format$Date_Format$mod12(
+							_elm_lang$core$Date$hour(d))));
+			case 'l':
+				return A2(
+					_mgold$elm_date_format$Date_Format$padWith,
+					A2(_elm_lang$core$Maybe$withDefault, _mgold$elm_date_format$Date_Format$Space, padding),
+					_mgold$elm_date_format$Date_Format$zero2twelve(
+						_mgold$elm_date_format$Date_Format$mod12(
+							_elm_lang$core$Date$hour(d))));
+			case 'p':
+				return (_elm_lang$core$Native_Utils.cmp(
+					_elm_lang$core$Date$hour(d),
+					12) < 0) ? _elm_lang$core$String$toUpper(loc.time.am) : _elm_lang$core$String$toUpper(loc.time.pm);
+			case 'P':
+				return (_elm_lang$core$Native_Utils.cmp(
+					_elm_lang$core$Date$hour(d),
+					12) < 0) ? loc.time.am : loc.time.pm;
+			case 'M':
+				return A2(
+					_mgold$elm_date_format$Date_Format$padWith,
+					A2(_elm_lang$core$Maybe$withDefault, _mgold$elm_date_format$Date_Format$Zero, padding),
+					_elm_lang$core$Date$minute(d));
+			case 'S':
+				return A2(
+					_mgold$elm_date_format$Date_Format$padWith,
+					A2(_elm_lang$core$Maybe$withDefault, _mgold$elm_date_format$Date_Format$Zero, padding),
+					_elm_lang$core$Date$second(d));
+			case 'L':
+				return A2(
+					_mgold$elm_date_format$Date_Format$padWith,
+					A2(_elm_lang$core$Maybe$withDefault, _mgold$elm_date_format$Date_Format$ZeroThreeDigits, padding),
+					_elm_lang$core$Date$millisecond(d));
+			default:
+				return '';
+		}
+	});
+var _mgold$elm_date_format$Date_Format$localFormat = F3(
+	function (loc, s, d) {
+		return A4(
+			_elm_lang$core$Regex$replace,
+			_elm_lang$core$Regex$All,
+			_mgold$elm_date_format$Date_Format$re,
+			A2(_mgold$elm_date_format$Date_Format$formatToken, loc, d),
+			s);
+	});
+var _mgold$elm_date_format$Date_Format$format = F2(
+	function (s, d) {
+		return A3(_mgold$elm_date_format$Date_Format$localFormat, _mgold$elm_date_format$Date_Local$international, s, d);
+	});
+var _mgold$elm_date_format$Date_Format$formatISO8601 = _mgold$elm_date_format$Date_Format$format('%Y-%m-%dT%H:%M:%SZ');
+
+var _lucamug$elm_unbreakable_json$Views_Author$view = function (username) {
+	return A2(
+		_elm_lang$html$Html$a,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('author'),
+			_1: {
+				ctor: '::',
+				_0: _lucamug$elm_unbreakable_json$Route$href(
+					_lucamug$elm_unbreakable_json$Route$Profile(username)),
+				_1: {ctor: '[]'}
+			}
+		},
+		{
+			ctor: '::',
+			_0: _lucamug$elm_unbreakable_json$Data_User$usernameToHtml(username),
+			_1: {ctor: '[]'}
+		});
+};
+
+var _lucamug$elm_unbreakable_json$Views_Article_Favorite$button = F4(
+	function (toggleFavorite, article, extraAttributes, extraChildren) {
+		var children = A2(
+			_elm_lang$core$Basics_ops['++'],
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$i,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('ion-heart'),
+						_1: {ctor: '[]'}
+					},
+					{ctor: '[]'}),
+				_1: {ctor: '[]'}
+			},
+			extraChildren);
+		var favoriteButtonClass = article.favorited ? 'btn-primary' : 'btn-outline-primary';
+		var attributes = A2(
+			_elm_lang$core$Basics_ops['++'],
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class(
+					A2(_elm_lang$core$Basics_ops['++'], 'btn btn-sm ', favoriteButtonClass)),
+				_1: {
+					ctor: '::',
+					_0: _lucamug$elm_unbreakable_json$Util$onClickStopPropagation(
+						toggleFavorite(article)),
+					_1: {ctor: '[]'}
+				}
+			},
+			extraAttributes);
+		return A2(_elm_lang$html$Html$button, attributes, children);
+	});
+
+var _lucamug$elm_unbreakable_json$Views_Article$formattedTimestamp = function (article) {
+	return A2(_mgold$elm_date_format$Date_Format$format, '%B %e, %Y', article.createdAt);
+};
+var _lucamug$elm_unbreakable_json$Views_Article$view = F2(
+	function (toggleFavorite, article) {
+		var author = article.author;
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('article-preview'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('article-meta'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$a,
+							{
+								ctor: '::',
+								_0: _lucamug$elm_unbreakable_json$Route$href(
+									_lucamug$elm_unbreakable_json$Route$Profile(author.username)),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$img,
+									{
+										ctor: '::',
+										_0: _lucamug$elm_unbreakable_json$Data_UserPhoto$src(author.image),
+										_1: {ctor: '[]'}
+									},
+									{ctor: '[]'}),
+								_1: {ctor: '[]'}
+							}),
 						_1: {
 							ctor: '::',
-							_0: _mdgriffith$stylish_elephants$Element_Border$rounded(5),
+							_0: A2(
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('info'),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _lucamug$elm_unbreakable_json$Views_Author$view(author.username),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$span,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$class('date'),
+												_1: {ctor: '[]'}
+											},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text(
+													_lucamug$elm_unbreakable_json$Views_Article$formattedTimestamp(article)),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}
+								}),
 							_1: {
 								ctor: '::',
-								_0: _mdgriffith$stylish_elephants$Element_Input$defaultTextPadding,
-								_1: {
-									ctor: '::',
-									_0: _mdgriffith$stylish_elephants$Element$width(_mdgriffith$stylish_elephants$Element$fill),
-									_1: {ctor: '::', _0: _mdgriffith$stylish_elephants$Element$pointer, _1: attrs}
-								}
+								_0: A4(
+									_lucamug$elm_unbreakable_json$Views_Article_Favorite$button,
+									toggleFavorite,
+									article,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('pull-xs-right'),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text(
+											A2(
+												_elm_lang$core$Basics_ops['++'],
+												' ',
+												_elm_lang$core$Basics$toString(article.favoritesCount))),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
 							}
 						}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$a,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('preview-link'),
+							_1: {
+								ctor: '::',
+								_0: _lucamug$elm_unbreakable_json$Route$href(
+									_lucamug$elm_unbreakable_json$Route$Article(article.slug)),
+								_1: {ctor: '[]'}
+							}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$h1,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text(article.title),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$p,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text(article.description),
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$span,
+										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('Read more...'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}
+						}),
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+var _lucamug$elm_unbreakable_json$Views_Article$viewTimestamp = function (article) {
+	return A2(
+		_elm_lang$html$Html$span,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('date'),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(
+				_lucamug$elm_unbreakable_json$Views_Article$formattedTimestamp(article)),
+			_1: {ctor: '[]'}
+		});
+};
+
+var _lucamug$elm_unbreakable_json$Views_Errors$styles = _elm_lang$html$Html_Attributes$style(
+	{
+		ctor: '::',
+		_0: A2(_lucamug$elm_unbreakable_json$Util_ops['=>'], 'position', 'fixed'),
+		_1: {
+			ctor: '::',
+			_0: A2(_lucamug$elm_unbreakable_json$Util_ops['=>'], 'top', '0'),
+			_1: {
+				ctor: '::',
+				_0: A2(_lucamug$elm_unbreakable_json$Util_ops['=>'], 'background', 'rgb(250, 250, 250)'),
+				_1: {
+					ctor: '::',
+					_0: A2(_lucamug$elm_unbreakable_json$Util_ops['=>'], 'padding', '20px'),
+					_1: {
+						ctor: '::',
+						_0: A2(_lucamug$elm_unbreakable_json$Util_ops['=>'], 'border', '1px solid'),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		}
+	});
+var _lucamug$elm_unbreakable_json$Views_Errors$view = F2(
+	function (dismissErrors, errors) {
+		return _elm_lang$core$List$isEmpty(errors) ? _elm_lang$html$Html$text('') : A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('error-messages'),
+				_1: {
+					ctor: '::',
+					_0: _lucamug$elm_unbreakable_json$Views_Errors$styles,
+					_1: {ctor: '[]'}
+				}
+			},
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				A2(
+					_elm_lang$core$List$map,
+					function (error) {
+						return A2(
+							_elm_lang$html$Html$p,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(error),
+								_1: {ctor: '[]'}
+							});
+					},
+					errors),
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$button,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Events$onClick(dismissErrors),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('Ok'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}));
+	});
+
+var _lucamug$elm_unbreakable_json$Views_User_Follow$button = F2(
+	function (toggleFollow, _p0) {
+		var _p1 = _p0;
+		var _p3 = _p1.username;
+		var _p2 = _p1.following ? {ctor: '_Tuple2', _0: 'Unfollow', _1: 'btn-secondary'} : {ctor: '_Tuple2', _0: 'Follow', _1: 'btn-outline-secondary'};
+		var prefix = _p2._0;
+		var secondaryClass = _p2._1;
+		var classes = _elm_lang$html$Html_Attributes$class(
+			A2(
+				_elm_lang$core$String$join,
+				' ',
+				{
+					ctor: '::',
+					_0: 'btn',
+					_1: {
+						ctor: '::',
+						_0: 'btn-sm',
+						_1: {
+							ctor: '::',
+							_0: secondaryClass,
+							_1: {
+								ctor: '::',
+								_0: 'action-btn',
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				}));
+		return A2(
+			_elm_lang$html$Html$button,
+			{
+				ctor: '::',
+				_0: classes,
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Events$onClick(
+						toggleFollow(_p3)),
+					_1: {ctor: '[]'}
+				}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$i,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('ion-plus-round'),
+						_1: {ctor: '[]'}
+					},
+					{ctor: '[]'}),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html$text(
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							' ',
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								prefix,
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									' ',
+									_lucamug$elm_unbreakable_json$Data_User$usernameToString(_p3))))),
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+
+var _lucamug$elm_unbreakable_json$Page_Errored$view = F2(
+	function (session, _p0) {
+		var _p1 = _p0;
+		return A2(
+			_elm_lang$html$Html$main_,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$id('content'),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('container'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$tabindex(-1),
+						_1: {ctor: '[]'}
 					}
 				}
 			},
-			function () {
-				var _p121 = prevNext;
-				if (_p121.ctor === 'Nothing') {
-					return _mdgriffith$stylish_elephants$Element$empty;
-				} else {
-					var _p122 = _p121._0._1;
-					if (_p122.ctor === 'Nothing') {
-						var _p123 = input.placeholder;
-						if (_p123.ctor === 'Nothing') {
-							return _mdgriffith$stylish_elephants$Element$text('-');
-						} else {
-							return _p123._0;
-						}
-					} else {
-						return renderSelectedOption(_p122._0);
-					}
-				}
-			}());
-		var spacing = A2(
-			_mdgriffith$stylish_elephants$Internal_Model$getSpacingAttribute,
-			attrs,
-			{ctor: '_Tuple2', _0: 5, _1: 5});
-		return A4(
-			_mdgriffith$stylish_elephants$Element_Input$positionLabels,
-			function () {
-				var _p124 = input.onChange;
-				if (_p124.ctor === 'Nothing') {
-					return {
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$h1,
+					{ctor: '[]'},
+					{
 						ctor: '::',
-						_0: _mdgriffith$stylish_elephants$Element$width(_mdgriffith$stylish_elephants$Element$fill),
-						_1: {
-							ctor: '::',
-							_0: _mdgriffith$stylish_elephants$Element$alignLeft,
-							_1: {ctor: '[]'}
-						}
-					};
-				} else {
-					var _p129 = _p124._0;
-					return A2(
-						_elm_lang$core$List$filterMap,
-						_elm_lang$core$Basics$identity,
+						_0: _elm_lang$html$Html$text('Error Loading Page'),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
 						{
 							ctor: '::',
-							_0: _elm_lang$core$Maybe$Just(_mdgriffith$stylish_elephants$Element$alignLeft),
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$core$Maybe$Just(
-									_mdgriffith$stylish_elephants$Element_Input$tabindex(0)),
-								_1: {
+							_0: _elm_lang$html$Html_Attributes$class('row'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$p,
+								{ctor: '[]'},
+								{
 									ctor: '::',
-									_0: _elm_lang$core$Maybe$Just(
-										_mdgriffith$stylish_elephants$Element$width(_mdgriffith$stylish_elephants$Element$fill)),
+									_0: _elm_lang$html$Html$text(_p1._0.errorMessage),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+var _lucamug$elm_unbreakable_json$Page_Errored$Model = F2(
+	function (a, b) {
+		return {activePage: a, errorMessage: b};
+	});
+var _lucamug$elm_unbreakable_json$Page_Errored$PageLoadError = function (a) {
+	return {ctor: 'PageLoadError', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Page_Errored$pageLoadError = F2(
+	function (activePage, errorMessage) {
+		return _lucamug$elm_unbreakable_json$Page_Errored$PageLoadError(
+			{activePage: activePage, errorMessage: errorMessage});
+	});
+
+var _lucamug$elm_unbreakable_json$Page_Article$editButton = function (article) {
+	return A2(
+		_elm_lang$html$Html$a,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('btn btn-outline-secondary btn-sm'),
+			_1: {
+				ctor: '::',
+				_0: _lucamug$elm_unbreakable_json$Route$href(
+					_lucamug$elm_unbreakable_json$Route$EditArticle(article.slug)),
+				_1: {ctor: '[]'}
+			}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$i,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('ion-edit'),
+					_1: {ctor: '[]'}
+				},
+				{ctor: '[]'}),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(' Edit Article'),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _lucamug$elm_unbreakable_json$Page_Article$withoutComment = function (id) {
+	return _elm_lang$core$List$filter(
+		function (comment) {
+			return !_elm_lang$core$Native_Utils.eq(comment.id, id);
+		});
+};
+var _lucamug$elm_unbreakable_json$Page_Article$formatCommentTimestamp = _mgold$elm_date_format$Date_Format$format('%B %e, %Y');
+var _lucamug$elm_unbreakable_json$Page_Article$Model = F5(
+	function (a, b, c, d, e) {
+		return {errors: a, commentText: b, commentInFlight: c, article: d, comments: e};
+	});
+var _lucamug$elm_unbreakable_json$Page_Article$init = F2(
+	function (session, slug) {
+		var handleLoadError = function (_p0) {
+			return A2(_lucamug$elm_unbreakable_json$Page_Errored$pageLoadError, _lucamug$elm_unbreakable_json$Views_Page$Other, 'Article is currently unavailable.');
+		};
+		var maybeAuthToken = A2(
+			_elm_lang$core$Maybe$map,
+			function (_) {
+				return _.token;
+			},
+			session.user);
+		var loadArticle = _elm_lang$http$Http$toTask(
+			A2(_lucamug$elm_unbreakable_json$Request_Article$get, maybeAuthToken, slug));
+		var loadComments = _elm_lang$http$Http$toTask(
+			A2(_lucamug$elm_unbreakable_json$Request_Article_Comments$list, maybeAuthToken, slug));
+		return A2(
+			_elm_lang$core$Task$mapError,
+			handleLoadError,
+			A3(
+				_elm_lang$core$Task$map2,
+				A3(
+					_lucamug$elm_unbreakable_json$Page_Article$Model,
+					{ctor: '[]'},
+					'',
+					false),
+				loadArticle,
+				loadComments));
+	});
+var _lucamug$elm_unbreakable_json$Page_Article$ArticleDeleted = function (a) {
+	return {ctor: 'ArticleDeleted', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Page_Article$DeleteArticle = {ctor: 'DeleteArticle'};
+var _lucamug$elm_unbreakable_json$Page_Article$deleteButton = function (article) {
+	return A2(
+		_elm_lang$html$Html$button,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('btn btn-outline-danger btn-sm'),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html_Events$onClick(_lucamug$elm_unbreakable_json$Page_Article$DeleteArticle),
+				_1: {ctor: '[]'}
+			}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$i,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('ion-trash-a'),
+					_1: {ctor: '[]'}
+				},
+				{ctor: '[]'}),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(' Delete Article'),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _lucamug$elm_unbreakable_json$Page_Article$CommentPosted = function (a) {
+	return {ctor: 'CommentPosted', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Page_Article$PostComment = {ctor: 'PostComment'};
+var _lucamug$elm_unbreakable_json$Page_Article$CommentDeleted = F2(
+	function (a, b) {
+		return {ctor: 'CommentDeleted', _0: a, _1: b};
+	});
+var _lucamug$elm_unbreakable_json$Page_Article$DeleteComment = function (a) {
+	return {ctor: 'DeleteComment', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Page_Article$viewComment = F2(
+	function (user, comment) {
+		var isAuthor = _elm_lang$core$Native_Utils.eq(
+			A2(
+				_elm_lang$core$Maybe$map,
+				function (_) {
+					return _.username;
+				},
+				user),
+			_elm_lang$core$Maybe$Just(comment.author.username));
+		var author = comment.author;
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('card'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('card-block'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$p,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('card-text'),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(comment.body),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('card-footer'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$a,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('comment-author'),
 									_1: {
 										ctor: '::',
-										_0: _elm_lang$core$Maybe$Just(
-											_mdgriffith$stylish_elephants$Internal_Model$Attr(
-												A2(_elm_lang$html$Html_Attributes$attribute, 'role', 'radiogroup'))),
+										_0: _elm_lang$html$Html_Attributes$href(''),
+										_1: {ctor: '[]'}
+									}
+								},
+								{
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$img,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('comment-author-img'),
+											_1: {
+												ctor: '::',
+												_0: _lucamug$elm_unbreakable_json$Data_UserPhoto$src(author.image),
+												_1: {ctor: '[]'}
+											}
+										},
+										{ctor: '[]'}),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html$text(' '),
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(' '),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$a,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('comment-author'),
+											_1: {
+												ctor: '::',
+												_0: _lucamug$elm_unbreakable_json$Route$href(
+													_lucamug$elm_unbreakable_json$Route$Profile(author.username)),
+												_1: {ctor: '[]'}
+											}
+										},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text(
+												_lucamug$elm_unbreakable_json$Data_User$usernameToString(comment.author.username)),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$span,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$class('date-posted'),
+												_1: {ctor: '[]'}
+											},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text(
+													_lucamug$elm_unbreakable_json$Page_Article$formatCommentTimestamp(comment.createdAt)),
+												_1: {ctor: '[]'}
+											}),
 										_1: {
 											ctor: '::',
-											_0: function () {
-												var _p125 = prevNext;
-												if (_p125.ctor === 'Nothing') {
-													return _elm_lang$core$Maybe$Nothing;
-												} else {
-													var _p128 = _p125._0._0;
-													var _p127 = _p125._0._2;
-													return _elm_lang$core$Maybe$Just(
-														_mdgriffith$stylish_elephants$Element_Input$onKeyLookup(
-															function (code) {
-																if (_elm_lang$core$Native_Utils.eq(code, _mdgriffith$stylish_elephants$Element_Input$leftArrow)) {
-																	return _elm_lang$core$Maybe$Just(
-																		_p129(_p128));
-																} else {
-																	if (_elm_lang$core$Native_Utils.eq(code, _mdgriffith$stylish_elephants$Element_Input$upArrow)) {
-																		return _elm_lang$core$Maybe$Just(
-																			_p129(_p128));
-																	} else {
-																		if (_elm_lang$core$Native_Utils.eq(code, _mdgriffith$stylish_elephants$Element_Input$rightArrow)) {
-																			return _elm_lang$core$Maybe$Just(
-																				_p129(_p127));
-																		} else {
-																			if (_elm_lang$core$Native_Utils.eq(code, _mdgriffith$stylish_elephants$Element_Input$downArrow)) {
-																				return _elm_lang$core$Maybe$Just(
-																					_p129(_p127));
-																			} else {
-																				if (_elm_lang$core$Native_Utils.eq(code, _mdgriffith$stylish_elephants$Element_Input$space)) {
-																					var _p126 = input.selected;
-																					if (_p126.ctor === 'Nothing') {
-																						return _elm_lang$core$Maybe$Just(
-																							_p129(_p128));
-																					} else {
-																						return _elm_lang$core$Maybe$Nothing;
-																					}
-																				} else {
-																					return _elm_lang$core$Maybe$Nothing;
-																				}
-																			}
-																		}
-																	}
-																}
-															}));
-												}
-											}(),
+											_0: A2(
+												_lucamug$elm_unbreakable_json$Util$viewIf,
+												isAuthor,
+												A2(
+													_elm_lang$html$Html$span,
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$class('mod-options'),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$html$Html_Events$onClick(
+																_lucamug$elm_unbreakable_json$Page_Article$DeleteComment(comment.id)),
+															_1: {ctor: '[]'}
+														}
+													},
+													{
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$i,
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html_Attributes$class('ion-trash-a'),
+																_1: {ctor: '[]'}
+															},
+															{ctor: '[]'}),
+														_1: {ctor: '[]'}
+													})),
 											_1: {ctor: '[]'}
 										}
 									}
 								}
 							}
-						});
+						}),
+					_1: {ctor: '[]'}
 				}
-			}(),
-			input.label,
-			input.notice,
-			box);
+			});
 	});
-var _mdgriffith$stylish_elephants$Element_Input$Column = {ctor: 'Column'};
-var _mdgriffith$stylish_elephants$Element_Input$radio = _mdgriffith$stylish_elephants$Element_Input$radioHelper(_mdgriffith$stylish_elephants$Element_Input$Column);
-var _mdgriffith$stylish_elephants$Element_Input$Row = {ctor: 'Row'};
-var _mdgriffith$stylish_elephants$Element_Input$radioRow = _mdgriffith$stylish_elephants$Element_Input$radioHelper(_mdgriffith$stylish_elephants$Element_Input$Row);
-
-var _lucamug$elm_unbreakable_json$Main$logoElm = function (height) {
-	var c = {c1: '#F0AD00', c2: '#7FD13B', c3: '#60B5CC', c4: '#5A6378'};
-	var p = _elm_lang$svg$Svg$path;
-	var d = _elm_lang$svg$Svg_Attributes$d;
-	var f = _elm_lang$svg$Svg_Attributes$fill;
-	return A2(
-		_elm_lang$svg$Svg$svg,
-		{
-			ctor: '::',
-			_0: _elm_lang$svg$Svg_Attributes$version('1'),
-			_1: {
-				ctor: '::',
-				_0: _elm_lang$svg$Svg_Attributes$viewBox('0 0 323 323'),
-				_1: {
-					ctor: '::',
-					_0: _elm_lang$svg$Svg_Attributes$height(
-						_elm_lang$core$Basics$toString(height)),
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$svg$Svg_Attributes$width(
-							_elm_lang$core$Basics$toString(
-								_elm_lang$core$Basics$floor(
-									_elm_lang$core$Basics$toFloat(height) * 1))),
-						_1: {ctor: '[]'}
-					}
-				}
-			}
-		},
-		{
-			ctor: '::',
-			_0: A2(
-				p,
+var _lucamug$elm_unbreakable_json$Page_Article$SetCommentText = function (a) {
+	return {ctor: 'SetCommentText', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Page_Article$viewAddComment = F3(
+	function (postingDisabled, commentText, maybeUser) {
+		var _p1 = maybeUser;
+		if (_p1.ctor === 'Nothing') {
+			return A2(
+				_elm_lang$html$Html$p,
+				{ctor: '[]'},
 				{
 					ctor: '::',
-					_0: f(c.c1),
-					_1: {
-						ctor: '::',
-						_0: d('M162 153l70-70H92zm94 94l67 67V179z'),
-						_1: {ctor: '[]'}
-					}
-				},
-				{ctor: '[]'}),
-			_1: {
-				ctor: '::',
-				_0: A2(
-					p,
-					{
-						ctor: '::',
-						_0: f(c.c2),
-						_1: {
-							ctor: '::',
-							_0: d('M9 0l70 70h153L162 0zm238 85l77 76-77 77-76-77z'),
-							_1: {ctor: '[]'}
-						}
-					},
-					{ctor: '[]'}),
-				_1: {
-					ctor: '::',
 					_0: A2(
-						p,
+						_elm_lang$html$Html$a,
 						{
 							ctor: '::',
-							_0: f(c.c3),
+							_0: _lucamug$elm_unbreakable_json$Route$href(_lucamug$elm_unbreakable_json$Route$Login),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('Sign in'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(' or '),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$a,
+								{
+									ctor: '::',
+									_0: _lucamug$elm_unbreakable_json$Route$href(_lucamug$elm_unbreakable_json$Route$Register),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('sign up'),
+									_1: {ctor: '[]'}
+								}),
 							_1: {
 								ctor: '::',
-								_0: d('M323 144V0H180zm-161 27L9 323h305z'),
+								_0: _elm_lang$html$Html$text(' to add comments on this article.'),
 								_1: {ctor: '[]'}
 							}
-						},
-						{ctor: '[]'}),
-					_1: {
-						ctor: '::',
-						_0: A2(
-							p,
-							{
-								ctor: '::',
-								_0: f(c.c4),
-								_1: {
-									ctor: '::',
-									_0: d('M153 162L0 9v305z'),
-									_1: {ctor: '[]'}
-								}
-							},
-							{ctor: '[]'}),
-						_1: {ctor: '[]'}
+						}
 					}
-				}
-			}
-		});
-};
-var _lucamug$elm_unbreakable_json$Main$logoStrawberry = function (height) {
-	return A2(
-		_elm_lang$svg$Svg$svg,
-		{
-			ctor: '::',
-			_0: _elm_lang$svg$Svg_Attributes$viewBox('0 0 57 57'),
-			_1: {
-				ctor: '::',
-				_0: _elm_lang$svg$Svg_Attributes$height(
-					_elm_lang$core$Basics$toString(height)),
-				_1: {
-					ctor: '::',
-					_0: _elm_lang$svg$Svg_Attributes$width(
-						_elm_lang$core$Basics$toString(
-							_elm_lang$core$Basics$floor(
-								_elm_lang$core$Basics$toFloat(height) * 1))),
-					_1: {ctor: '[]'}
-				}
-			}
-		},
-		{
-			ctor: '::',
-			_0: A2(
-				_elm_lang$svg$Svg$path,
+				});
+		} else {
+			return A2(
+				_elm_lang$html$Html$form,
 				{
 					ctor: '::',
-					_0: _elm_lang$svg$Svg_Attributes$fill('#659c35'),
+					_0: _elm_lang$html$Html_Attributes$class('card comment-form'),
 					_1: {
 						ctor: '::',
-						_0: _elm_lang$svg$Svg_Attributes$d('M29.8 9.4l-2.9.6L24 1.5 29 0z'),
+						_0: _elm_lang$html$Html_Events$onSubmit(_lucamug$elm_unbreakable_json$Page_Article$PostComment),
 						_1: {ctor: '[]'}
 					}
 				},
-				{ctor: '[]'}),
-			_1: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$svg$Svg$path,
-					{
-						ctor: '::',
-						_0: _elm_lang$svg$Svg_Attributes$fill('#88c057'),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$svg$Svg_Attributes$d('M36.1 8.5a8 8 0 0 0 2.4-3.6c-5.5-2-7.2.6-7.2.6 0-1-.9-1.5-2-1.6l.5 5.5-2.9.6-1.8-5.2c-.5.2-.8.5-.8.7 0 0-1.7-2.6-7.2-.6a7.9 7.9 0 0 0 2.4 3.7c-4.4.6-8.4 2-10.5 5.8 10.3 3 13.4-1.9 13.4-1.9.6 6.8 5.8 8.7 6.6 9 .8-.3 6-2.2 6.6-9 0 0 1.2 5 11.4 1.9-2.2-3.7-6.5-5.3-10.9-6z'),
-							_1: {ctor: '[]'}
-						}
-					},
-					{ctor: '[]'}),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$svg$Svg$path,
-						{
-							ctor: '::',
-							_0: _elm_lang$svg$Svg_Attributes$fill('#e22f37'),
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$svg$Svg_Attributes$d('M45.3 15v-.1c-8.7 2-9.7-2.4-9.7-2.4-.6 6.8-5.8 8.7-6.6 9-.8-.3-6-2.2-6.6-9 0 0-2.6 4-10.8 2.5C9.3 17.6 8 21.4 8 27c0 13 12.8 30 20.5 30C36.2 57 49 39.9 49 27c0-5.8-1.3-9.6-3.8-12h.1z'),
-								_1: {ctor: '[]'}
-							}
-						},
-						{ctor: '[]'}),
-					_1: {
-						ctor: '::',
-						_0: A2(
-							_elm_lang$svg$Svg$path,
-							{
-								ctor: '::',
-								_0: _elm_lang$svg$Svg_Attributes$fill('#994530'),
-								_1: {
-									ctor: '::',
-									_0: _elm_lang$svg$Svg_Attributes$d('M17.3 20.7c-.1-.4-.7-.4-.8 0 0 0-1.5 5.3-1.5 5.8a2 2 0 0 0 1.9 1.9c.5 0 1-.2 1.4-.6.3-.3.5-.8.5-1.3s-1.5-5.8-1.5-5.8zm11.8 4c-.1-.4-.7-.4-.8 0 0 0-1.5 5.3-1.5 5.8a2 2 0 0 0 2 1.9c.4 0 1-.2 1.3-.6.3-.3.5-.8.5-1.3s-1.5-5.8-1.5-5.8zm11.2-4c-.1-.4-.7-.4-.8 0 0 0-1.5 5.3-1.5 5.8a2 2 0 0 0 1.9 1.9c.5 0 1-.2 1.4-.6.3-.3.5-.8.5-1.3s-1.5-5.8-1.5-5.8zm-18.2 13c-.1-.4-.7-.4-.8 0 0 0-1.5 5.3-1.5 5.8a2 2 0 0 0 2 2c.4 0 1-.3 1.3-.7.3-.3.5-.8.5-1.3s-1.5-5.8-1.5-5.8zm7 9c-.1-.4-.7-.4-.8 0 0 0-1.5 5.3-1.5 5.8a2 2 0 0 0 2 1.9c.4 0 1-.2 1.3-.6.3-.3.5-.8.5-1.3s-1.5-5.8-1.5-5.8zm7-9c-.1-.4-.7-.4-.8 0 0 0-1.5 5.3-1.5 5.8a2 2 0 0 0 2 1.9c.4 0 1-.2 1.3-.6.3-.3.5-.8.5-1.3s-1.5-5.8-1.5-5.8z'),
-									_1: {ctor: '[]'}
-								}
-							},
-							{ctor: '[]'}),
-						_1: {ctor: '[]'}
-					}
-				}
-			}
-		});
-};
-var _lucamug$elm_unbreakable_json$Main$logoWatermelon = function (height) {
-	return A2(
-		_elm_lang$svg$Svg$svg,
-		{
-			ctor: '::',
-			_0: _elm_lang$svg$Svg_Attributes$viewBox('0 0 50.5 50.5'),
-			_1: {
-				ctor: '::',
-				_0: _elm_lang$svg$Svg_Attributes$height(
-					_elm_lang$core$Basics$toString(height)),
-				_1: {
-					ctor: '::',
-					_0: _elm_lang$svg$Svg_Attributes$width(
-						_elm_lang$core$Basics$toString(
-							_elm_lang$core$Basics$floor(
-								_elm_lang$core$Basics$toFloat(height) * 1))),
-					_1: {ctor: '[]'}
-				}
-			}
-		},
-		{
-			ctor: '::',
-			_0: A2(
-				_elm_lang$svg$Svg$path,
 				{
 					ctor: '::',
-					_0: _elm_lang$svg$Svg_Attributes$fill('#88c057'),
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$svg$Svg_Attributes$d('M18.4 24l1.4 4.5c.2 1.1-.6 2.2-1.7 2.6l-1.1.4-.3 1a4 4 0 0 1-2.7 2.7c-1.2.3-3.7-2.3-4.7-2.1L0 42.4A30 30 0 0 0 42.4 0l-24 24z'),
-						_1: {ctor: '[]'}
-					}
-				},
-				{ctor: '[]'}),
-			_1: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$svg$Svg$path,
-					{
-						ctor: '::',
-						_0: _elm_lang$svg$Svg_Attributes$fill('#e22f37'),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$svg$Svg_Attributes$d('M37 5.3L18.5 24l1.4 4.5c.2 1.1-.6 2.2-1.7 2.6l-1.1.4-.3 1a4 4 0 0 1-2.7 2.7c-1.2.3-3.7-2.3-4.7-2.1l-4 4c8.8 9.5 22.4 8.7 31.5-.3S46.6 14 37 5.3z'),
-							_1: {ctor: '[]'}
-						}
-					},
-					{ctor: '[]'}),
-				_1: {
-					ctor: '::',
 					_0: A2(
-						_elm_lang$svg$Svg$circle,
+						_elm_lang$html$Html$div,
 						{
 							ctor: '::',
-							_0: _elm_lang$svg$Svg_Attributes$cx('4.5'),
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$svg$Svg_Attributes$cy('17'),
-								_1: {
+							_0: _elm_lang$html$Html_Attributes$class('card-block'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$textarea,
+								{
 									ctor: '::',
-									_0: _elm_lang$svg$Svg_Attributes$r('1.5'),
+									_0: _elm_lang$html$Html_Attributes$class('form-control'),
 									_1: {
 										ctor: '::',
-										_0: _elm_lang$svg$Svg_Attributes$fill('#231f20'),
+										_0: _elm_lang$html$Html_Attributes$placeholder('Write a comment...'),
+										_1: {
+											ctor: '::',
+											_0: A2(_elm_lang$html$Html_Attributes$attribute, 'rows', '3'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$value(commentText),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Events$onInput(_lucamug$elm_unbreakable_json$Page_Article$SetCommentText),
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									}
+								},
+								{ctor: '[]'}),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('card-footer'),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$img,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('comment-author-img'),
+										_1: {
+											ctor: '::',
+											_0: _lucamug$elm_unbreakable_json$Data_UserPhoto$src(_p1._0.image),
+											_1: {ctor: '[]'}
+										}
+									},
+									{ctor: '[]'}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$button,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('btn btn-sm btn-primary'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$disabled(postingDisabled),
+												_1: {ctor: '[]'}
+											}
+										},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('Post Comment'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}),
+						_1: {ctor: '[]'}
+					}
+				});
+		}
+	});
+var _lucamug$elm_unbreakable_json$Page_Article$FollowCompleted = function (a) {
+	return {ctor: 'FollowCompleted', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Page_Article$ToggleFollow = {ctor: 'ToggleFollow'};
+var _lucamug$elm_unbreakable_json$Page_Article$followButton = _lucamug$elm_unbreakable_json$Views_User_Follow$button(
+	function (_p2) {
+		return _lucamug$elm_unbreakable_json$Page_Article$ToggleFollow;
+	});
+var _lucamug$elm_unbreakable_json$Page_Article$FavoriteCompleted = function (a) {
+	return {ctor: 'FavoriteCompleted', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Page_Article$update = F3(
+	function (session, msg, model) {
+		var article = model.article;
+		var author = article.author;
+		var _p3 = msg;
+		switch (_p3.ctor) {
+			case 'DismissErrors':
+				return A2(
+					_lucamug$elm_unbreakable_json$Util_ops['=>'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							errors: {ctor: '[]'}
+						}),
+					_elm_lang$core$Platform_Cmd$none);
+			case 'ToggleFavorite':
+				var cmdFromAuth = function (authToken) {
+					return A2(
+						_elm_lang$core$Task$attempt,
+						_lucamug$elm_unbreakable_json$Page_Article$FavoriteCompleted,
+						A2(
+							_elm_lang$core$Task$map,
+							function (newArticle) {
+								return _elm_lang$core$Native_Utils.update(
+									newArticle,
+									{body: article.body});
+							},
+							_elm_lang$http$Http$toTask(
+								A2(_lucamug$elm_unbreakable_json$Request_Article$toggleFavorite, model.article, authToken))));
+				};
+				return A2(
+					_elm_lang$core$Tuple$mapFirst,
+					_lucamug$elm_unbreakable_json$Util$appendErrors(model),
+					A3(_lucamug$elm_unbreakable_json$Data_Session$attempt, 'favorite', cmdFromAuth, session));
+			case 'FavoriteCompleted':
+				if (_p3._0.ctor === 'Ok') {
+					return A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{article: _p3._0._0}),
+						_elm_lang$core$Platform_Cmd$none);
+				} else {
+					return A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						A2(
+							_lucamug$elm_unbreakable_json$Util$appendErrors,
+							model,
+							{
+								ctor: '::',
+								_0: 'There was a server error trying to record your Favorite. Sorry!',
+								_1: {ctor: '[]'}
+							}),
+						_elm_lang$core$Platform_Cmd$none);
+				}
+			case 'ToggleFollow':
+				var cmdFromAuth = function (authToken) {
+					return A2(
+						_elm_lang$http$Http$send,
+						_lucamug$elm_unbreakable_json$Page_Article$FollowCompleted,
+						A3(_lucamug$elm_unbreakable_json$Request_Profile$toggleFollow, author.username, author.following, authToken));
+				};
+				return A2(
+					_elm_lang$core$Tuple$mapFirst,
+					_lucamug$elm_unbreakable_json$Util$appendErrors(model),
+					A3(_lucamug$elm_unbreakable_json$Data_Session$attempt, 'follow', cmdFromAuth, session));
+			case 'FollowCompleted':
+				if (_p3._0.ctor === 'Ok') {
+					var newArticle = _elm_lang$core$Native_Utils.update(
+						article,
+						{
+							author: _elm_lang$core$Native_Utils.update(
+								author,
+								{following: _p3._0._0.following})
+						});
+					return A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{article: newArticle}),
+						_elm_lang$core$Platform_Cmd$none);
+				} else {
+					return A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{
+								errors: {ctor: '::', _0: 'Unable to follow user.', _1: model.errors}
+							}),
+						_elm_lang$core$Platform_Cmd$none);
+				}
+			case 'SetCommentText':
+				return A2(
+					_lucamug$elm_unbreakable_json$Util_ops['=>'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{commentText: _p3._0}),
+					_elm_lang$core$Platform_Cmd$none);
+			case 'PostComment':
+				var comment = model.commentText;
+				if (model.commentInFlight || _elm_lang$core$String$isEmpty(comment)) {
+					return A2(_lucamug$elm_unbreakable_json$Util_ops['=>'], model, _elm_lang$core$Platform_Cmd$none);
+				} else {
+					var cmdFromAuth = function (authToken) {
+						return A2(
+							_elm_lang$http$Http$send,
+							_lucamug$elm_unbreakable_json$Page_Article$CommentPosted,
+							A3(_lucamug$elm_unbreakable_json$Request_Article_Comments$post, model.article.slug, comment, authToken));
+					};
+					return A2(
+						_elm_lang$core$Tuple$mapFirst,
+						_lucamug$elm_unbreakable_json$Util$appendErrors(
+							_elm_lang$core$Native_Utils.update(
+								model,
+								{commentInFlight: true})),
+						A3(_lucamug$elm_unbreakable_json$Data_Session$attempt, 'post a comment', cmdFromAuth, session));
+				}
+			case 'CommentPosted':
+				if (_p3._0.ctor === 'Ok') {
+					return A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{
+								commentInFlight: false,
+								comments: {ctor: '::', _0: _p3._0._0, _1: model.comments},
+								commentText: ''
+							}),
+						_elm_lang$core$Platform_Cmd$none);
+				} else {
+					return A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{
+								errors: A2(
+									_elm_lang$core$Basics_ops['++'],
+									model.errors,
+									{
+										ctor: '::',
+										_0: 'Server error while trying to post comment.',
 										_1: {ctor: '[]'}
+									})
+							}),
+						_elm_lang$core$Platform_Cmd$none);
+				}
+			case 'DeleteComment':
+				var _p4 = _p3._0;
+				var cmdFromAuth = function (authToken) {
+					return A2(
+						_elm_lang$http$Http$send,
+						_lucamug$elm_unbreakable_json$Page_Article$CommentDeleted(_p4),
+						A3(_lucamug$elm_unbreakable_json$Request_Article_Comments$delete, model.article.slug, _p4, authToken));
+				};
+				return A2(
+					_elm_lang$core$Tuple$mapFirst,
+					_lucamug$elm_unbreakable_json$Util$appendErrors(model),
+					A3(_lucamug$elm_unbreakable_json$Data_Session$attempt, 'delete comments', cmdFromAuth, session));
+			case 'CommentDeleted':
+				if (_p3._1.ctor === 'Ok') {
+					return A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{
+								comments: A2(_lucamug$elm_unbreakable_json$Page_Article$withoutComment, _p3._0, model.comments)
+							}),
+						_elm_lang$core$Platform_Cmd$none);
+				} else {
+					return A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{
+								errors: A2(
+									_elm_lang$core$Basics_ops['++'],
+									model.errors,
+									{
+										ctor: '::',
+										_0: 'Server error while trying to delete comment.',
+										_1: {ctor: '[]'}
+									})
+							}),
+						_elm_lang$core$Platform_Cmd$none);
+				}
+			case 'DeleteArticle':
+				var cmdFromAuth = function (authToken) {
+					return A2(
+						_elm_lang$http$Http$send,
+						_lucamug$elm_unbreakable_json$Page_Article$ArticleDeleted,
+						A2(_lucamug$elm_unbreakable_json$Request_Article$delete, model.article.slug, authToken));
+				};
+				return A2(
+					_elm_lang$core$Tuple$mapFirst,
+					_lucamug$elm_unbreakable_json$Util$appendErrors(model),
+					A3(_lucamug$elm_unbreakable_json$Data_Session$attempt, 'delete articles', cmdFromAuth, session));
+			default:
+				if (_p3._0.ctor === 'Ok') {
+					return A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						model,
+						_lucamug$elm_unbreakable_json$Route$modifyUrl(_lucamug$elm_unbreakable_json$Route$Home));
+				} else {
+					return A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{
+								errors: A2(
+									_elm_lang$core$Basics_ops['++'],
+									model.errors,
+									{
+										ctor: '::',
+										_0: 'Server error while trying to delete article.',
+										_1: {ctor: '[]'}
+									})
+							}),
+						_elm_lang$core$Platform_Cmd$none);
+				}
+		}
+	});
+var _lucamug$elm_unbreakable_json$Page_Article$ToggleFavorite = {ctor: 'ToggleFavorite'};
+var _lucamug$elm_unbreakable_json$Page_Article$favoriteButton = function (article) {
+	var favoriteText = A2(
+		_elm_lang$core$Basics_ops['++'],
+		' Favorite Article (',
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			_elm_lang$core$Basics$toString(article.favoritesCount),
+			')'));
+	return A4(
+		_lucamug$elm_unbreakable_json$Views_Article_Favorite$button,
+		function (_p5) {
+			return _lucamug$elm_unbreakable_json$Page_Article$ToggleFavorite;
+		},
+		article,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(favoriteText),
+			_1: {ctor: '[]'}
+		});
+};
+var _lucamug$elm_unbreakable_json$Page_Article$viewButtons = F3(
+	function (article, author, maybeUser) {
+		var isMyArticle = _elm_lang$core$Native_Utils.eq(
+			A2(
+				_elm_lang$core$Maybe$map,
+				function (_) {
+					return _.username;
+				},
+				maybeUser),
+			_elm_lang$core$Maybe$Just(author.username));
+		return isMyArticle ? {
+			ctor: '::',
+			_0: _lucamug$elm_unbreakable_json$Page_Article$editButton(article),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(' '),
+				_1: {
+					ctor: '::',
+					_0: _lucamug$elm_unbreakable_json$Page_Article$deleteButton(article),
+					_1: {ctor: '[]'}
+				}
+			}
+		} : {
+			ctor: '::',
+			_0: _lucamug$elm_unbreakable_json$Page_Article$followButton(author),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(' '),
+				_1: {
+					ctor: '::',
+					_0: _lucamug$elm_unbreakable_json$Page_Article$favoriteButton(article),
+					_1: {ctor: '[]'}
+				}
+			}
+		};
+	});
+var _lucamug$elm_unbreakable_json$Page_Article$DismissErrors = {ctor: 'DismissErrors'};
+var _lucamug$elm_unbreakable_json$Page_Article$viewBanner = F4(
+	function (errors, article, author, maybeUser) {
+		var buttons = A3(_lucamug$elm_unbreakable_json$Page_Article$viewButtons, article, author, maybeUser);
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('banner'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('container'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$h1,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(article.title),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('article-meta'),
+									_1: {ctor: '[]'}
+								},
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									{
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$a,
+											{
+												ctor: '::',
+												_0: _lucamug$elm_unbreakable_json$Route$href(
+													_lucamug$elm_unbreakable_json$Route$Profile(author.username)),
+												_1: {ctor: '[]'}
+											},
+											{
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$img,
+													{
+														ctor: '::',
+														_0: _lucamug$elm_unbreakable_json$Data_UserPhoto$src(author.image),
+														_1: {ctor: '[]'}
+													},
+													{ctor: '[]'}),
+												_1: {ctor: '[]'}
+											}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$div,
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$class('info'),
+													_1: {ctor: '[]'}
+												},
+												{
+													ctor: '::',
+													_0: _lucamug$elm_unbreakable_json$Views_Author$view(author.username),
+													_1: {
+														ctor: '::',
+														_0: _lucamug$elm_unbreakable_json$Views_Article$viewTimestamp(article),
+														_1: {ctor: '[]'}
+													}
+												}),
+											_1: {ctor: '[]'}
+										}
+									},
+									buttons)),
+							_1: {
+								ctor: '::',
+								_0: A2(_lucamug$elm_unbreakable_json$Views_Errors$view, _lucamug$elm_unbreakable_json$Page_Article$DismissErrors, errors),
+								_1: {ctor: '[]'}
+							}
+						}
+					}),
+				_1: {ctor: '[]'}
+			});
+	});
+var _lucamug$elm_unbreakable_json$Page_Article$view = F2(
+	function (session, model) {
+		var postingDisabled = model.commentInFlight;
+		var article = model.article;
+		var author = article.author;
+		var buttons = A3(_lucamug$elm_unbreakable_json$Page_Article$viewButtons, article, author, session.user);
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('article-page'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A4(_lucamug$elm_unbreakable_json$Page_Article$viewBanner, model.errors, article, author, session.user),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('container page'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('row article-content'),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$div,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('col-md-12'),
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: A2(
+												_lucamug$elm_unbreakable_json$Data_Article$bodyToHtml,
+												article.body,
+												{ctor: '[]'}),
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$hr,
+									{ctor: '[]'},
+									{ctor: '[]'}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$div,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('article-actions'),
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$div,
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$class('article-meta'),
+													_1: {ctor: '[]'}
+												},
+												A2(
+													_elm_lang$core$Basics_ops['++'],
+													{
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$a,
+															{
+																ctor: '::',
+																_0: _lucamug$elm_unbreakable_json$Route$href(
+																	_lucamug$elm_unbreakable_json$Route$Profile(author.username)),
+																_1: {ctor: '[]'}
+															},
+															{
+																ctor: '::',
+																_0: A2(
+																	_elm_lang$html$Html$img,
+																	{
+																		ctor: '::',
+																		_0: _lucamug$elm_unbreakable_json$Data_UserPhoto$src(author.image),
+																		_1: {ctor: '[]'}
+																	},
+																	{ctor: '[]'}),
+																_1: {ctor: '[]'}
+															}),
+														_1: {
+															ctor: '::',
+															_0: A2(
+																_elm_lang$html$Html$div,
+																{
+																	ctor: '::',
+																	_0: _elm_lang$html$Html_Attributes$class('info'),
+																	_1: {ctor: '[]'}
+																},
+																{
+																	ctor: '::',
+																	_0: _lucamug$elm_unbreakable_json$Views_Author$view(author.username),
+																	_1: {
+																		ctor: '::',
+																		_0: _lucamug$elm_unbreakable_json$Views_Article$viewTimestamp(article),
+																		_1: {ctor: '[]'}
+																	}
+																}),
+															_1: {ctor: '[]'}
+														}
+													},
+													buttons)),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$div,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$class('row'),
+												_1: {ctor: '[]'}
+											},
+											{
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$div,
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$class('col-xs-12 col-md-8 offset-md-2'),
+														_1: {ctor: '[]'}
+													},
+													{
+														ctor: '::',
+														_0: A3(_lucamug$elm_unbreakable_json$Page_Article$viewAddComment, postingDisabled, model.commentText, session.user),
+														_1: A2(
+															_elm_lang$core$List$map,
+															_lucamug$elm_unbreakable_json$Page_Article$viewComment(session.user),
+															model.comments)
+													}),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}),
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+
+var _lucamug$elm_unbreakable_json$Views_Form$control = F3(
+	function (element, attributes, children) {
+		return A2(
+			_elm_lang$html$Html$fieldset,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('form-group'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					element,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('form-control'),
+						_1: attributes
+					},
+					children),
+				_1: {ctor: '[]'}
+			});
+	});
+var _lucamug$elm_unbreakable_json$Views_Form$viewErrors = function (errors) {
+	return A2(
+		_elm_lang$html$Html$ul,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('error-messages'),
+			_1: {ctor: '[]'}
+		},
+		A2(
+			_elm_lang$core$List$map,
+			function (_p0) {
+				var _p1 = _p0;
+				return A2(
+					_elm_lang$html$Html$li,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(_p1._1),
+						_1: {ctor: '[]'}
+					});
+			},
+			errors));
+};
+var _lucamug$elm_unbreakable_json$Views_Form$textarea = _lucamug$elm_unbreakable_json$Views_Form$control(_elm_lang$html$Html$textarea);
+var _lucamug$elm_unbreakable_json$Views_Form$input = function (attrs) {
+	return A2(
+		_lucamug$elm_unbreakable_json$Views_Form$control,
+		_elm_lang$html$Html$input,
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$type_('text'),
+				_1: {ctor: '[]'}
+			},
+			attrs));
+};
+var _lucamug$elm_unbreakable_json$Views_Form$password = function (attrs) {
+	return A2(
+		_lucamug$elm_unbreakable_json$Views_Form$control,
+		_elm_lang$html$Html$input,
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$type_('password'),
+				_1: {ctor: '[]'}
+			},
+			attrs));
+};
+
+var _rtfeldman$elm_validate$Validate$ifInvalid = F2(
+	function (test, error) {
+		var validator = function (subject) {
+			return test(subject) ? {
+				ctor: '::',
+				_0: error,
+				_1: {ctor: '[]'}
+			} : {ctor: '[]'};
+		};
+		return validator;
+	});
+var _rtfeldman$elm_validate$Validate$isValidEmail = function () {
+	var validEmail = _elm_lang$core$Regex$caseInsensitive(
+		_elm_lang$core$Regex$regex('^[a-zA-Z0-9.!#$%&\'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$'));
+	return _elm_lang$core$Regex$contains(validEmail);
+}();
+var _rtfeldman$elm_validate$Validate$ifInvalidEmail = _rtfeldman$elm_validate$Validate$ifInvalid(
+	function (_p0) {
+		return !_rtfeldman$elm_validate$Validate$isValidEmail(_p0);
+	});
+var _rtfeldman$elm_validate$Validate$isNothing = function (subject) {
+	var _p1 = subject;
+	if (_p1.ctor === 'Just') {
+		return false;
+	} else {
+		return true;
+	}
+};
+var _rtfeldman$elm_validate$Validate$ifNothing = _rtfeldman$elm_validate$Validate$ifInvalid(_rtfeldman$elm_validate$Validate$isNothing);
+var _rtfeldman$elm_validate$Validate$ifEmptySet = _rtfeldman$elm_validate$Validate$ifInvalid(_elm_lang$core$Set$isEmpty);
+var _rtfeldman$elm_validate$Validate$ifEmptyDict = _rtfeldman$elm_validate$Validate$ifInvalid(_elm_lang$core$Dict$isEmpty);
+var _rtfeldman$elm_validate$Validate$ifNotInt = F2(
+	function (error, subject) {
+		var _p2 = _elm_lang$core$String$toInt(subject);
+		if (_p2.ctor === 'Ok') {
+			return {ctor: '[]'};
+		} else {
+			return {
+				ctor: '::',
+				_0: error,
+				_1: {ctor: '[]'}
+			};
+		}
+	});
+var _rtfeldman$elm_validate$Validate$lacksNonWhitespaceChars = _elm_lang$core$Regex$regex('^\\s*$');
+var _rtfeldman$elm_validate$Validate$ifBlank = _rtfeldman$elm_validate$Validate$ifInvalid(
+	_elm_lang$core$Regex$contains(_rtfeldman$elm_validate$Validate$lacksNonWhitespaceChars));
+var _rtfeldman$elm_validate$Validate$any = F2(
+	function (validators, subject) {
+		any:
+		while (true) {
+			var _p3 = validators;
+			if (_p3.ctor === '[]') {
+				return true;
+			} else {
+				var _p4 = _p3._0(subject);
+				if (_p4.ctor === '[]') {
+					var _v4 = _p3._1,
+						_v5 = subject;
+					validators = _v4;
+					subject = _v5;
+					continue any;
+				} else {
+					return false;
+				}
+			}
+		}
+	});
+var _rtfeldman$elm_validate$Validate$eager = F2(
+	function (validators, subject) {
+		eager:
+		while (true) {
+			var _p5 = validators;
+			if (_p5.ctor === '[]') {
+				return _elm_lang$core$Maybe$Nothing;
+			} else {
+				var _p6 = _p5._0(subject);
+				if (_p6.ctor === '[]') {
+					var _v8 = _p5._1,
+						_v9 = subject;
+					validators = _v8;
+					subject = _v9;
+					continue eager;
+				} else {
+					return _elm_lang$core$Maybe$Just(_p6._0);
+				}
+			}
+		}
+	});
+var _rtfeldman$elm_validate$Validate$all = function (validators) {
+	var validator = function (subject) {
+		var accumulateErrors = F2(
+			function (currentValidator, totalErrors) {
+				return A2(
+					_elm_lang$core$Basics_ops['++'],
+					totalErrors,
+					currentValidator(subject));
+			});
+		return A3(
+			_elm_lang$core$List$foldl,
+			accumulateErrors,
+			{ctor: '[]'},
+			validators);
+	};
+	return validator;
+};
+
+var _lucamug$elm_unbreakable_json$Page_Article_Editor$redirectToArticle = function (_p0) {
+	return _lucamug$elm_unbreakable_json$Route$modifyUrl(
+		_lucamug$elm_unbreakable_json$Route$Article(_p0));
+};
+var _lucamug$elm_unbreakable_json$Page_Article_Editor$tagsFromString = function (str) {
+	return A2(
+		_elm_lang$core$List$filter,
+		function (_p1) {
+			return !_elm_lang$core$String$isEmpty(_p1);
+		},
+		A2(
+			_elm_lang$core$List$map,
+			_elm_lang$core$String$trim,
+			A2(_elm_lang$core$String$split, ' ', str)));
+};
+var _lucamug$elm_unbreakable_json$Page_Article_Editor$initEdit = F2(
+	function (session, slug) {
+		var maybeAuthToken = A2(
+			_elm_lang$core$Maybe$map,
+			function (_) {
+				return _.token;
+			},
+			session.user);
+		return A2(
+			_elm_lang$core$Task$map,
+			function (article) {
+				return {
+					errors: {ctor: '[]'},
+					editingArticle: _elm_lang$core$Maybe$Just(slug),
+					title: article.title,
+					body: _lucamug$elm_unbreakable_json$Data_Article$bodyToMarkdownString(article.body),
+					description: article.description,
+					tags: article.tags,
+					unparsedTags: A2(_elm_lang$core$String$join, ' ', article.tags)
+				};
+			},
+			A2(
+				_elm_lang$core$Task$mapError,
+				function (_p2) {
+					return A2(_lucamug$elm_unbreakable_json$Page_Errored$pageLoadError, _lucamug$elm_unbreakable_json$Views_Page$Other, 'Article is currently unavailable.');
+				},
+				_elm_lang$http$Http$toTask(
+					A2(_lucamug$elm_unbreakable_json$Request_Article$get, maybeAuthToken, slug))));
+	});
+var _lucamug$elm_unbreakable_json$Page_Article_Editor$initNew = {
+	errors: {ctor: '[]'},
+	editingArticle: _elm_lang$core$Maybe$Nothing,
+	title: '',
+	body: '',
+	description: '',
+	tags: {ctor: '[]'},
+	unparsedTags: ''
+};
+var _lucamug$elm_unbreakable_json$Page_Article_Editor$Model = F7(
+	function (a, b, c, d, e, f, g) {
+		return {errors: a, editingArticle: b, title: c, body: d, description: e, tags: f, unparsedTags: g};
+	});
+var _lucamug$elm_unbreakable_json$Page_Article_Editor$EditCompleted = function (a) {
+	return {ctor: 'EditCompleted', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Page_Article_Editor$CreateCompleted = function (a) {
+	return {ctor: 'CreateCompleted', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Page_Article_Editor$SetBody = function (a) {
+	return {ctor: 'SetBody', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Page_Article_Editor$SetTags = function (a) {
+	return {ctor: 'SetTags', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Page_Article_Editor$SetDescription = function (a) {
+	return {ctor: 'SetDescription', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Page_Article_Editor$SetTitle = function (a) {
+	return {ctor: 'SetTitle', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Page_Article_Editor$Save = {ctor: 'Save'};
+var _lucamug$elm_unbreakable_json$Page_Article_Editor$viewForm = function (model) {
+	var isEditing = !_elm_lang$core$Native_Utils.eq(model.editingArticle, _elm_lang$core$Maybe$Nothing);
+	var saveButtonText = isEditing ? 'Update Article' : 'Publish Article';
+	return A2(
+		_elm_lang$html$Html$form,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Events$onSubmit(_lucamug$elm_unbreakable_json$Page_Article_Editor$Save),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$fieldset,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: A2(
+						_lucamug$elm_unbreakable_json$Views_Form$input,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('form-control-lg'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$placeholder('Article Title'),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Events$onInput(_lucamug$elm_unbreakable_json$Page_Article_Editor$SetTitle),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$defaultValue(model.title),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$value(model.title),
+											_1: {ctor: '[]'}
+										}
 									}
 								}
 							}
@@ -20650,19 +22888,19 @@ var _lucamug$elm_unbreakable_json$Main$logoWatermelon = function (height) {
 					_1: {
 						ctor: '::',
 						_0: A2(
-							_elm_lang$svg$Svg$circle,
+							_lucamug$elm_unbreakable_json$Views_Form$input,
 							{
 								ctor: '::',
-								_0: _elm_lang$svg$Svg_Attributes$cx('16.5'),
+								_0: _elm_lang$html$Html_Attributes$placeholder('What\'s this article about?'),
 								_1: {
 									ctor: '::',
-									_0: _elm_lang$svg$Svg_Attributes$cy('39'),
+									_0: _elm_lang$html$Html_Events$onInput(_lucamug$elm_unbreakable_json$Page_Article_Editor$SetDescription),
 									_1: {
 										ctor: '::',
-										_0: _elm_lang$svg$Svg_Attributes$r('1.5'),
+										_0: _elm_lang$html$Html_Attributes$defaultValue(model.description),
 										_1: {
 											ctor: '::',
-											_0: _elm_lang$svg$Svg_Attributes$fill('#231f20'),
+											_0: _elm_lang$html$Html_Attributes$value(model.description),
 											_1: {ctor: '[]'}
 										}
 									}
@@ -20672,20 +22910,24 @@ var _lucamug$elm_unbreakable_json$Main$logoWatermelon = function (height) {
 						_1: {
 							ctor: '::',
 							_0: A2(
-								_elm_lang$svg$Svg$circle,
+								_lucamug$elm_unbreakable_json$Views_Form$textarea,
 								{
 									ctor: '::',
-									_0: _elm_lang$svg$Svg_Attributes$cx('26'),
+									_0: _elm_lang$html$Html_Attributes$placeholder('Write your article (in markdown)'),
 									_1: {
 										ctor: '::',
-										_0: _elm_lang$svg$Svg_Attributes$cy('25.6'),
+										_0: A2(_elm_lang$html$Html_Attributes$attribute, 'rows', '8'),
 										_1: {
 											ctor: '::',
-											_0: _elm_lang$svg$Svg_Attributes$r('1.5'),
+											_0: _elm_lang$html$Html_Events$onInput(_lucamug$elm_unbreakable_json$Page_Article_Editor$SetBody),
 											_1: {
 												ctor: '::',
-												_0: _elm_lang$svg$Svg_Attributes$fill('#231f20'),
-												_1: {ctor: '[]'}
+												_0: _elm_lang$html$Html_Attributes$defaultValue(model.body),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$value(model.body),
+													_1: {ctor: '[]'}
+												}
 											}
 										}
 									}
@@ -20694,19 +22936,20 @@ var _lucamug$elm_unbreakable_json$Main$logoWatermelon = function (height) {
 							_1: {
 								ctor: '::',
 								_0: A2(
-									_elm_lang$svg$Svg$circle,
+									_lucamug$elm_unbreakable_json$Views_Form$input,
 									{
 										ctor: '::',
-										_0: _elm_lang$svg$Svg_Attributes$cx('30.9'),
+										_0: _elm_lang$html$Html_Attributes$placeholder('Enter tags'),
 										_1: {
 											ctor: '::',
-											_0: _elm_lang$svg$Svg_Attributes$cy('20.7'),
+											_0: _elm_lang$html$Html_Events$onInput(_lucamug$elm_unbreakable_json$Page_Article_Editor$SetTags),
 											_1: {
 												ctor: '::',
-												_0: _elm_lang$svg$Svg_Attributes$r('1.5'),
+												_0: _elm_lang$html$Html_Attributes$defaultValue(
+													A2(_elm_lang$core$String$join, ' ', model.tags)),
 												_1: {
 													ctor: '::',
-													_0: _elm_lang$svg$Svg_Attributes$fill('#231f20'),
+													_0: _elm_lang$html$Html_Attributes$value(model.unparsedTags),
 													_1: {ctor: '[]'}
 												}
 											}
@@ -20716,19 +22959,2737 @@ var _lucamug$elm_unbreakable_json$Main$logoWatermelon = function (height) {
 								_1: {
 									ctor: '::',
 									_0: A2(
-										_elm_lang$svg$Svg$circle,
+										_elm_lang$html$Html$button,
 										{
 											ctor: '::',
-											_0: _elm_lang$svg$Svg_Attributes$cx('28.1'),
+											_0: _elm_lang$html$Html_Attributes$class('btn btn-lg pull-xs-right btn-primary'),
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text(saveButtonText),
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					}
+				}),
+			_1: {ctor: '[]'}
+		});
+};
+var _lucamug$elm_unbreakable_json$Page_Article_Editor$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('editor-page'),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('container page'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('row'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('col-md-10 offset-md-1 col-xs-12'),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _lucamug$elm_unbreakable_json$Views_Form$viewErrors(model.errors),
+									_1: {
+										ctor: '::',
+										_0: _lucamug$elm_unbreakable_json$Page_Article_Editor$viewForm(model),
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}),
+			_1: {ctor: '[]'}
+		});
+};
+var _lucamug$elm_unbreakable_json$Page_Article_Editor$Body = {ctor: 'Body'};
+var _lucamug$elm_unbreakable_json$Page_Article_Editor$Title = {ctor: 'Title'};
+var _lucamug$elm_unbreakable_json$Page_Article_Editor$validate = _rtfeldman$elm_validate$Validate$all(
+	{
+		ctor: '::',
+		_0: function (_p3) {
+			return A2(
+				_rtfeldman$elm_validate$Validate$ifBlank,
+				A2(_lucamug$elm_unbreakable_json$Util_ops['=>'], _lucamug$elm_unbreakable_json$Page_Article_Editor$Title, 'title can\'t be blank.'),
+				function (_) {
+					return _.title;
+				}(_p3));
+		},
+		_1: {
+			ctor: '::',
+			_0: function (_p4) {
+				return A2(
+					_rtfeldman$elm_validate$Validate$ifBlank,
+					A2(_lucamug$elm_unbreakable_json$Util_ops['=>'], _lucamug$elm_unbreakable_json$Page_Article_Editor$Body, 'body can\'t be blank.'),
+					function (_) {
+						return _.body;
+					}(_p4));
+			},
+			_1: {ctor: '[]'}
+		}
+	});
+var _lucamug$elm_unbreakable_json$Page_Article_Editor$Form = {ctor: 'Form'};
+var _lucamug$elm_unbreakable_json$Page_Article_Editor$update = F3(
+	function (user, msg, model) {
+		var _p5 = msg;
+		switch (_p5.ctor) {
+			case 'Save':
+				var _p6 = _lucamug$elm_unbreakable_json$Page_Article_Editor$validate(model);
+				if (_p6.ctor === '[]') {
+					var _p7 = model.editingArticle;
+					if (_p7.ctor === 'Nothing') {
+						return A2(
+							_lucamug$elm_unbreakable_json$Util$pair,
+							_elm_lang$core$Native_Utils.update(
+								model,
+								{
+									errors: {ctor: '[]'}
+								}),
+							A2(
+								_elm_lang$http$Http$send,
+								_lucamug$elm_unbreakable_json$Page_Article_Editor$CreateCompleted,
+								A2(_lucamug$elm_unbreakable_json$Request_Article$create, model, user.token)));
+					} else {
+						return A2(
+							_lucamug$elm_unbreakable_json$Util$pair,
+							_elm_lang$core$Native_Utils.update(
+								model,
+								{
+									errors: {ctor: '[]'}
+								}),
+							A2(
+								_elm_lang$http$Http$send,
+								_lucamug$elm_unbreakable_json$Page_Article_Editor$EditCompleted,
+								A3(_lucamug$elm_unbreakable_json$Request_Article$update, _p7._0, model, user.token)));
+					}
+				} else {
+					return A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{errors: _p6}),
+						_elm_lang$core$Platform_Cmd$none);
+				}
+			case 'SetTitle':
+				return A2(
+					_lucamug$elm_unbreakable_json$Util_ops['=>'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{title: _p5._0}),
+					_elm_lang$core$Platform_Cmd$none);
+			case 'SetDescription':
+				return A2(
+					_lucamug$elm_unbreakable_json$Util_ops['=>'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{description: _p5._0}),
+					_elm_lang$core$Platform_Cmd$none);
+			case 'SetTags':
+				var _p8 = _p5._0;
+				return A2(
+					_lucamug$elm_unbreakable_json$Util_ops['=>'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							tags: _lucamug$elm_unbreakable_json$Page_Article_Editor$tagsFromString(_p8),
+							unparsedTags: _p8
+						}),
+					_elm_lang$core$Platform_Cmd$none);
+			case 'SetBody':
+				return A2(
+					_lucamug$elm_unbreakable_json$Util_ops['=>'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{body: _p5._0}),
+					_elm_lang$core$Platform_Cmd$none);
+			case 'CreateCompleted':
+				if (_p5._0.ctor === 'Ok') {
+					return A2(
+						_lucamug$elm_unbreakable_json$Util$pair,
+						model,
+						_lucamug$elm_unbreakable_json$Route$modifyUrl(
+							_lucamug$elm_unbreakable_json$Route$Article(_p5._0._0.slug)));
+				} else {
+					return A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{
+								errors: A2(
+									_elm_lang$core$Basics_ops['++'],
+									model.errors,
+									{
+										ctor: '::',
+										_0: A2(_lucamug$elm_unbreakable_json$Util_ops['=>'], _lucamug$elm_unbreakable_json$Page_Article_Editor$Form, 'Server error while attempting to publish article'),
+										_1: {ctor: '[]'}
+									})
+							}),
+						_elm_lang$core$Platform_Cmd$none);
+				}
+			default:
+				if (_p5._0.ctor === 'Ok') {
+					return A2(
+						_lucamug$elm_unbreakable_json$Util$pair,
+						model,
+						_lucamug$elm_unbreakable_json$Route$modifyUrl(
+							_lucamug$elm_unbreakable_json$Route$Article(_p5._0._0.slug)));
+				} else {
+					return A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{
+								errors: A2(
+									_elm_lang$core$Basics_ops['++'],
+									model.errors,
+									{
+										ctor: '::',
+										_0: A2(_lucamug$elm_unbreakable_json$Util_ops['=>'], _lucamug$elm_unbreakable_json$Page_Article_Editor$Form, 'Server error while attempting to save article'),
+										_1: {ctor: '[]'}
+									})
+							}),
+						_elm_lang$core$Platform_Cmd$none);
+				}
+		}
+	});
+
+var _rtfeldman$selectlist$SelectList$toList = function (_p0) {
+	var _p1 = _p0;
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		_p1._0,
+		{ctor: '::', _0: _p1._1, _1: _p1._2});
+};
+var _rtfeldman$selectlist$SelectList$selectHelp = F4(
+	function (isSelectable, beforeList, selectedElem, afterList) {
+		var _p2 = {ctor: '_Tuple2', _0: beforeList, _1: afterList};
+		if (_p2._0.ctor === '[]') {
+			if (_p2._1.ctor === '[]') {
+				return _elm_lang$core$Maybe$Nothing;
+			} else {
+				var _p5 = _p2._1._1;
+				var _p4 = _p2._1._0;
+				if (isSelectable(selectedElem)) {
+					return _elm_lang$core$Maybe$Just(
+						{ctor: '_Tuple3', _0: beforeList, _1: selectedElem, _2: afterList});
+				} else {
+					if (isSelectable(_p4)) {
+						return _elm_lang$core$Maybe$Just(
+							{
+								ctor: '_Tuple3',
+								_0: A2(
+									_elm_lang$core$Basics_ops['++'],
+									beforeList,
+									{
+										ctor: '::',
+										_0: selectedElem,
+										_1: {ctor: '[]'}
+									}),
+								_1: _p4,
+								_2: _p5
+							});
+					} else {
+						var _p3 = A4(
+							_rtfeldman$selectlist$SelectList$selectHelp,
+							isSelectable,
+							{ctor: '[]'},
+							_p4,
+							_p5);
+						if (_p3.ctor === 'Nothing') {
+							return _elm_lang$core$Maybe$Nothing;
+						} else {
+							return _elm_lang$core$Maybe$Just(
+								{
+									ctor: '_Tuple3',
+									_0: {ctor: '::', _0: selectedElem, _1: _p3._0._0},
+									_1: _p3._0._1,
+									_2: _p3._0._2
+								});
+						}
+					}
+				}
+			}
+		} else {
+			var _p8 = _p2._0._1;
+			var _p7 = _p2._0._0;
+			if (isSelectable(_p7)) {
+				return _elm_lang$core$Maybe$Just(
+					{
+						ctor: '_Tuple3',
+						_0: {ctor: '[]'},
+						_1: _p7,
+						_2: A2(
+							_elm_lang$core$Basics_ops['++'],
+							_p8,
+							{ctor: '::', _0: selectedElem, _1: afterList})
+					});
+			} else {
+				var _p6 = A4(_rtfeldman$selectlist$SelectList$selectHelp, isSelectable, _p8, selectedElem, afterList);
+				if (_p6.ctor === 'Nothing') {
+					return _elm_lang$core$Maybe$Nothing;
+				} else {
+					return _elm_lang$core$Maybe$Just(
+						{
+							ctor: '_Tuple3',
+							_0: {ctor: '::', _0: _p7, _1: _p6._0._0},
+							_1: _p6._0._1,
+							_2: _p6._0._2
+						});
+				}
+			}
+		}
+	});
+var _rtfeldman$selectlist$SelectList$selected = function (_p9) {
+	var _p10 = _p9;
+	return _p10._1;
+};
+var _rtfeldman$selectlist$SelectList$after = function (_p11) {
+	var _p12 = _p11;
+	return _p12._2;
+};
+var _rtfeldman$selectlist$SelectList$before = function (_p13) {
+	var _p14 = _p13;
+	return _p14._0;
+};
+var _rtfeldman$selectlist$SelectList$SelectList = F3(
+	function (a, b, c) {
+		return {ctor: 'SelectList', _0: a, _1: b, _2: c};
+	});
+var _rtfeldman$selectlist$SelectList$singleton = function (sel) {
+	return A3(
+		_rtfeldman$selectlist$SelectList$SelectList,
+		{ctor: '[]'},
+		sel,
+		{ctor: '[]'});
+};
+var _rtfeldman$selectlist$SelectList$map = F2(
+	function (transform, _p15) {
+		var _p16 = _p15;
+		return A3(
+			_rtfeldman$selectlist$SelectList$SelectList,
+			A2(_elm_lang$core$List$map, transform, _p16._0),
+			transform(_p16._1),
+			A2(_elm_lang$core$List$map, transform, _p16._2));
+	});
+var _rtfeldman$selectlist$SelectList$fromLists = _rtfeldman$selectlist$SelectList$SelectList;
+var _rtfeldman$selectlist$SelectList$select = F2(
+	function (isSelectable, _p17) {
+		var _p18 = _p17;
+		var _p19 = A4(_rtfeldman$selectlist$SelectList$selectHelp, isSelectable, _p18._0, _p18._1, _p18._2);
+		if (_p19.ctor === 'Nothing') {
+			return _p18;
+		} else {
+			return A3(_rtfeldman$selectlist$SelectList$SelectList, _p19._0._0, _p19._0._1, _p19._0._2);
+		}
+	});
+var _rtfeldman$selectlist$SelectList$append = F2(
+	function (list, _p20) {
+		var _p21 = _p20;
+		return A3(
+			_rtfeldman$selectlist$SelectList$SelectList,
+			_p21._0,
+			_p21._1,
+			A2(_elm_lang$core$Basics_ops['++'], _p21._2, list));
+	});
+var _rtfeldman$selectlist$SelectList$prepend = F2(
+	function (list, _p22) {
+		var _p23 = _p22;
+		return A3(
+			_rtfeldman$selectlist$SelectList$SelectList,
+			A2(_elm_lang$core$Basics_ops['++'], list, _p23._0),
+			_p23._1,
+			_p23._2);
+	});
+var _rtfeldman$selectlist$SelectList$AfterSelected = {ctor: 'AfterSelected'};
+var _rtfeldman$selectlist$SelectList$Selected = {ctor: 'Selected'};
+var _rtfeldman$selectlist$SelectList$BeforeSelected = {ctor: 'BeforeSelected'};
+var _rtfeldman$selectlist$SelectList$mapBy = F2(
+	function (transform, _p24) {
+		var _p25 = _p24;
+		return A3(
+			_rtfeldman$selectlist$SelectList$SelectList,
+			A2(
+				_elm_lang$core$List$map,
+				transform(_rtfeldman$selectlist$SelectList$BeforeSelected),
+				_p25._0),
+			A2(transform, _rtfeldman$selectlist$SelectList$Selected, _p25._1),
+			A2(
+				_elm_lang$core$List$map,
+				transform(_rtfeldman$selectlist$SelectList$AfterSelected),
+				_p25._2));
+	});
+
+var _lucamug$elm_unbreakable_json$Views_Article_Feed$isTagFeed = function (source) {
+	var _p0 = source;
+	if (_p0.ctor === 'TagFeed') {
+		return true;
+	} else {
+		return false;
+	}
+};
+var _lucamug$elm_unbreakable_json$Views_Article_Feed$selectFeedSource = F2(
+	function (source, sources) {
+		var withoutTags = A2(
+			_elm_lang$core$List$filter,
+			function (_p1) {
+				return !_lucamug$elm_unbreakable_json$Views_Article_Feed$isTagFeed(_p1);
+			},
+			_rtfeldman$selectlist$SelectList$toList(sources));
+		var newSources = function () {
+			var _p2 = source;
+			switch (_p2.ctor) {
+				case 'YourFeed':
+					return withoutTags;
+				case 'GlobalFeed':
+					return withoutTags;
+				case 'FavoritedFeed':
+					return withoutTags;
+				case 'AuthorFeed':
+					return withoutTags;
+				default:
+					return A2(
+						_elm_lang$core$Basics_ops['++'],
+						withoutTags,
+						{
+							ctor: '::',
+							_0: source,
+							_1: {ctor: '[]'}
+						});
+			}
+		}();
+		var _p3 = newSources;
+		if (_p3.ctor === '[]') {
+			return sources;
+		} else {
+			return A2(
+				_rtfeldman$selectlist$SelectList$select,
+				F2(
+					function (x, y) {
+						return _elm_lang$core$Native_Utils.eq(x, y);
+					})(source),
+				A3(
+					_rtfeldman$selectlist$SelectList$fromLists,
+					{ctor: '[]'},
+					_p3._0,
+					_p3._1));
+		}
+	});
+var _lucamug$elm_unbreakable_json$Views_Article_Feed$replaceArticle = F2(
+	function (newArticle, oldArticle) {
+		return _elm_lang$core$Native_Utils.eq(newArticle.slug, oldArticle.slug) ? newArticle : oldArticle;
+	});
+var _lucamug$elm_unbreakable_json$Views_Article_Feed$scrollToTop = A2(
+	_elm_lang$core$Task$onError,
+	function (_p4) {
+		return _elm_lang$core$Task$succeed(
+			{ctor: '_Tuple0'});
+	},
+	_elm_lang$dom$Dom_Scroll$toTop(_lucamug$elm_unbreakable_json$Views_Page$bodyId));
+var _lucamug$elm_unbreakable_json$Views_Article_Feed$limit = function (feedSource) {
+	var _p5 = feedSource;
+	switch (_p5.ctor) {
+		case 'YourFeed':
+			return 10;
+		case 'GlobalFeed':
+			return 10;
+		case 'TagFeed':
+			return 10;
+		case 'FavoritedFeed':
+			return 5;
+		default:
+			return 5;
+	}
+};
+var _lucamug$elm_unbreakable_json$Views_Article_Feed$fetch = F3(
+	function (token, page, feedSource) {
+		var articlesPerPage = _lucamug$elm_unbreakable_json$Views_Article_Feed$limit(feedSource);
+		var offset = (page - 1) * articlesPerPage;
+		var defaultListConfig = _lucamug$elm_unbreakable_json$Request_Article$defaultListConfig;
+		var listConfig = _elm_lang$core$Native_Utils.update(
+			defaultListConfig,
+			{offset: offset, limit: articlesPerPage});
+		var task = function () {
+			var _p6 = feedSource;
+			switch (_p6.ctor) {
+				case 'YourFeed':
+					var defaultFeedConfig = _lucamug$elm_unbreakable_json$Request_Article$defaultFeedConfig;
+					var feedConfig = _elm_lang$core$Native_Utils.update(
+						defaultFeedConfig,
+						{offset: offset, limit: articlesPerPage});
+					return A2(
+						_elm_lang$core$Maybe$withDefault,
+						_elm_lang$core$Task$fail(
+							_elm_lang$http$Http$BadUrl('You need to be signed in to view your feed.')),
+						A2(
+							_elm_lang$core$Maybe$map,
+							function (_p7) {
+								return _elm_lang$http$Http$toTask(
+									A2(_lucamug$elm_unbreakable_json$Request_Article$feed, feedConfig, _p7));
+							},
+							token));
+				case 'GlobalFeed':
+					return _elm_lang$http$Http$toTask(
+						A2(_lucamug$elm_unbreakable_json$Request_Article$list, listConfig, token));
+				case 'TagFeed':
+					return _elm_lang$http$Http$toTask(
+						A2(
+							_lucamug$elm_unbreakable_json$Request_Article$list,
+							_elm_lang$core$Native_Utils.update(
+								listConfig,
+								{
+									tag: _elm_lang$core$Maybe$Just(_p6._0)
+								}),
+							token));
+				case 'FavoritedFeed':
+					return _elm_lang$http$Http$toTask(
+						A2(
+							_lucamug$elm_unbreakable_json$Request_Article$list,
+							_elm_lang$core$Native_Utils.update(
+								listConfig,
+								{
+									favorited: _elm_lang$core$Maybe$Just(_p6._0)
+								}),
+							token));
+				default:
+					return _elm_lang$http$Http$toTask(
+						A2(
+							_lucamug$elm_unbreakable_json$Request_Article$list,
+							_elm_lang$core$Native_Utils.update(
+								listConfig,
+								{
+									author: _elm_lang$core$Maybe$Just(_p6._0)
+								}),
+							token));
+			}
+		}();
+		return A2(
+			_elm_lang$core$Task$map,
+			function (feed) {
+				return {ctor: '_Tuple2', _0: page, _1: feed};
+			},
+			task);
+	});
+var _lucamug$elm_unbreakable_json$Views_Article_Feed$sourceName = function (source) {
+	var _p8 = source;
+	switch (_p8.ctor) {
+		case 'YourFeed':
+			return 'Your Feed';
+		case 'GlobalFeed':
+			return 'Global Feed';
+		case 'TagFeed':
+			return A2(
+				_elm_lang$core$Basics_ops['++'],
+				'#',
+				_lucamug$elm_unbreakable_json$Data_Article$tagToString(_p8._0));
+		case 'FavoritedFeed':
+			return 'Favorited Articles';
+		default:
+			return 'My Articles';
+	}
+};
+var _lucamug$elm_unbreakable_json$Views_Article_Feed$InternalModel = F5(
+	function (a, b, c, d, e) {
+		return {errors: a, feed: b, feedSources: c, activePage: d, isLoading: e};
+	});
+var _lucamug$elm_unbreakable_json$Views_Article_Feed$Model = function (a) {
+	return {ctor: 'Model', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Views_Article_Feed$init = F2(
+	function (session, feedSources) {
+		var toModel = function (_p9) {
+			var _p10 = _p9;
+			return _lucamug$elm_unbreakable_json$Views_Article_Feed$Model(
+				{
+					errors: {ctor: '[]'},
+					activePage: _p10._0,
+					feed: _p10._1,
+					feedSources: feedSources,
+					isLoading: false
+				});
+		};
+		var source = _rtfeldman$selectlist$SelectList$selected(feedSources);
+		return A2(
+			_elm_lang$core$Task$map,
+			toModel,
+			A3(
+				_lucamug$elm_unbreakable_json$Views_Article_Feed$fetch,
+				A2(
+					_elm_lang$core$Maybe$map,
+					function (_) {
+						return _.token;
+					},
+					session.user),
+				1,
+				source));
+	});
+var _lucamug$elm_unbreakable_json$Views_Article_Feed$SelectPage = function (a) {
+	return {ctor: 'SelectPage', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Views_Article_Feed$pageLink = F2(
+	function (page, isActive) {
+		return A2(
+			_elm_lang$html$Html$li,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$classList(
+					{
+						ctor: '::',
+						_0: A2(_lucamug$elm_unbreakable_json$Util_ops['=>'], 'page-item', true),
+						_1: {
+							ctor: '::',
+							_0: A2(_lucamug$elm_unbreakable_json$Util_ops['=>'], 'active', isActive),
+							_1: {ctor: '[]'}
+						}
+					}),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$a,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('page-link'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$href('javascript:void(0);'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Events$onClick(
+									_lucamug$elm_unbreakable_json$Views_Article_Feed$SelectPage(page)),
+								_1: {ctor: '[]'}
+							}
+						}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(
+							_elm_lang$core$Basics$toString(page)),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			});
+	});
+var _lucamug$elm_unbreakable_json$Views_Article_Feed$pagination = F3(
+	function (activePage, feed, feedSource) {
+		var articlesPerPage = _lucamug$elm_unbreakable_json$Views_Article_Feed$limit(feedSource);
+		var totalPages = _elm_lang$core$Basics$ceiling(
+			_elm_lang$core$Basics$toFloat(feed.articlesCount) / _elm_lang$core$Basics$toFloat(articlesPerPage));
+		return (_elm_lang$core$Native_Utils.cmp(totalPages, 1) > 0) ? A2(
+			_elm_lang$html$Html$ul,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('pagination'),
+				_1: {ctor: '[]'}
+			},
+			A2(
+				_elm_lang$core$List$map,
+				function (page) {
+					return A2(
+						_lucamug$elm_unbreakable_json$Views_Article_Feed$pageLink,
+						page,
+						_elm_lang$core$Native_Utils.eq(page, activePage));
+				},
+				A2(_elm_lang$core$List$range, 1, totalPages))) : _elm_lang$html$Html$text('');
+	});
+var _lucamug$elm_unbreakable_json$Views_Article_Feed$FavoriteCompleted = function (a) {
+	return {ctor: 'FavoriteCompleted', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Views_Article_Feed$ToggleFavorite = function (a) {
+	return {ctor: 'ToggleFavorite', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Views_Article_Feed$viewArticles = function (_p11) {
+	var _p12 = _p11;
+	var _p13 = _p12._0.feed;
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		A2(
+			_elm_lang$core$List$map,
+			_lucamug$elm_unbreakable_json$Views_Article$view(_lucamug$elm_unbreakable_json$Views_Article_Feed$ToggleFavorite),
+			_p13.articles),
+		{
+			ctor: '::',
+			_0: A3(
+				_lucamug$elm_unbreakable_json$Views_Article_Feed$pagination,
+				_p12._0.activePage,
+				_p13,
+				_rtfeldman$selectlist$SelectList$selected(_p12._0.feedSources)),
+			_1: {ctor: '[]'}
+		});
+};
+var _lucamug$elm_unbreakable_json$Views_Article_Feed$FeedLoadCompleted = F2(
+	function (a, b) {
+		return {ctor: 'FeedLoadCompleted', _0: a, _1: b};
+	});
+var _lucamug$elm_unbreakable_json$Views_Article_Feed$updateInternal = F3(
+	function (session, msg, model) {
+		var _p14 = msg;
+		switch (_p14.ctor) {
+			case 'DismissErrors':
+				return A2(
+					_lucamug$elm_unbreakable_json$Util_ops['=>'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							errors: {ctor: '[]'}
+						}),
+					_elm_lang$core$Platform_Cmd$none);
+			case 'SelectFeedSource':
+				var _p15 = _p14._0;
+				return A2(
+					_lucamug$elm_unbreakable_json$Util$pair,
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{isLoading: true}),
+					A2(
+						_elm_lang$core$Task$attempt,
+						_lucamug$elm_unbreakable_json$Views_Article_Feed$FeedLoadCompleted(_p15),
+						A3(
+							_lucamug$elm_unbreakable_json$Views_Article_Feed$fetch,
+							A2(
+								_elm_lang$core$Maybe$map,
+								function (_) {
+									return _.token;
+								},
+								session.user),
+							1,
+							_p15)));
+			case 'FeedLoadCompleted':
+				if (_p14._1.ctor === 'Ok') {
+					return A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{
+								feed: _p14._1._0._1,
+								feedSources: A2(_lucamug$elm_unbreakable_json$Views_Article_Feed$selectFeedSource, _p14._0, model.feedSources),
+								activePage: _p14._1._0._0,
+								isLoading: false
+							}),
+						_elm_lang$core$Platform_Cmd$none);
+				} else {
+					return A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{
+								errors: A2(
+									_elm_lang$core$Basics_ops['++'],
+									model.errors,
+									{
+										ctor: '::',
+										_0: 'Server error while trying to load feed',
+										_1: {ctor: '[]'}
+									}),
+								isLoading: false
+							}),
+						_elm_lang$core$Platform_Cmd$none);
+				}
+			case 'ToggleFavorite':
+				var _p16 = session.user;
+				if (_p16.ctor === 'Nothing') {
+					return A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{
+								errors: A2(
+									_elm_lang$core$Basics_ops['++'],
+									model.errors,
+									{
+										ctor: '::',
+										_0: 'You are currently signed out. You must sign in to favorite articles.',
+										_1: {ctor: '[]'}
+									})
+							}),
+						_elm_lang$core$Platform_Cmd$none);
+				} else {
+					return A2(
+						_lucamug$elm_unbreakable_json$Util$pair,
+						model,
+						A2(
+							_elm_lang$http$Http$send,
+							_lucamug$elm_unbreakable_json$Views_Article_Feed$FavoriteCompleted,
+							A2(_lucamug$elm_unbreakable_json$Request_Article$toggleFavorite, _p14._0, _p16._0.token)));
+				}
+			case 'FavoriteCompleted':
+				if (_p14._0.ctor === 'Ok') {
+					var feed = model.feed;
+					var newFeed = _elm_lang$core$Native_Utils.update(
+						feed,
+						{
+							articles: A2(
+								_elm_lang$core$List$map,
+								_lucamug$elm_unbreakable_json$Views_Article_Feed$replaceArticle(_p14._0._0),
+								feed.articles)
+						});
+					return A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{feed: newFeed}),
+						_elm_lang$core$Platform_Cmd$none);
+				} else {
+					return A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{
+								errors: A2(
+									_elm_lang$core$Basics_ops['++'],
+									model.errors,
+									{
+										ctor: '::',
+										_0: 'Server error while trying to favorite article.',
+										_1: {ctor: '[]'}
+									})
+							}),
+						_elm_lang$core$Platform_Cmd$none);
+				}
+			default:
+				var source = _rtfeldman$selectlist$SelectList$selected(model.feedSources);
+				return A2(
+					_lucamug$elm_unbreakable_json$Util$pair,
+					model,
+					A2(
+						_elm_lang$core$Task$attempt,
+						_lucamug$elm_unbreakable_json$Views_Article_Feed$FeedLoadCompleted(source),
+						A2(
+							_elm_lang$core$Task$andThen,
+							function (feed) {
+								return A2(
+									_elm_lang$core$Task$map,
+									function (_p17) {
+										return feed;
+									},
+									_lucamug$elm_unbreakable_json$Views_Article_Feed$scrollToTop);
+							},
+							A3(
+								_lucamug$elm_unbreakable_json$Views_Article_Feed$fetch,
+								A2(
+									_elm_lang$core$Maybe$map,
+									function (_) {
+										return _.token;
+									},
+									session.user),
+								_p14._0,
+								source))));
+		}
+	});
+var _lucamug$elm_unbreakable_json$Views_Article_Feed$update = F3(
+	function (session, msg, _p18) {
+		var _p19 = _p18;
+		return A2(
+			_elm_lang$core$Tuple$mapFirst,
+			_lucamug$elm_unbreakable_json$Views_Article_Feed$Model,
+			A3(_lucamug$elm_unbreakable_json$Views_Article_Feed$updateInternal, session, msg, _p19._0));
+	});
+var _lucamug$elm_unbreakable_json$Views_Article_Feed$SelectFeedSource = function (a) {
+	return {ctor: 'SelectFeedSource', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Views_Article_Feed$viewFeedSource = F2(
+	function (position, source) {
+		return A2(
+			_elm_lang$html$Html$li,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('nav-item'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$a,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$classList(
+							{
+								ctor: '::',
+								_0: A2(_lucamug$elm_unbreakable_json$Util_ops['=>'], 'nav-link', true),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_lucamug$elm_unbreakable_json$Util_ops['=>'],
+										'active',
+										_elm_lang$core$Native_Utils.eq(position, _rtfeldman$selectlist$SelectList$Selected)),
+									_1: {ctor: '[]'}
+								}
+							}),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$href('javascript:void(0);'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Events$onClick(
+									_lucamug$elm_unbreakable_json$Views_Article_Feed$SelectFeedSource(source)),
+								_1: {ctor: '[]'}
+							}
+						}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(
+							_lucamug$elm_unbreakable_json$Views_Article_Feed$sourceName(source)),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			});
+	});
+var _lucamug$elm_unbreakable_json$Views_Article_Feed$DismissErrors = {ctor: 'DismissErrors'};
+var _lucamug$elm_unbreakable_json$Views_Article_Feed$viewFeedSources = function (_p20) {
+	var _p21 = _p20;
+	return A2(
+		_elm_lang$html$Html$ul,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('nav nav-pills outline-active'),
+			_1: {ctor: '[]'}
+		},
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			_rtfeldman$selectlist$SelectList$toList(
+				A2(_rtfeldman$selectlist$SelectList$mapBy, _lucamug$elm_unbreakable_json$Views_Article_Feed$viewFeedSource, _p21._0.feedSources)),
+			{
+				ctor: '::',
+				_0: A2(_lucamug$elm_unbreakable_json$Views_Errors$view, _lucamug$elm_unbreakable_json$Views_Article_Feed$DismissErrors, _p21._0.errors),
+				_1: {
+					ctor: '::',
+					_0: A2(_lucamug$elm_unbreakable_json$Util$viewIf, _p21._0.isLoading, _lucamug$elm_unbreakable_json$Views_Spinner$spinner),
+					_1: {ctor: '[]'}
+				}
+			}));
+};
+var _lucamug$elm_unbreakable_json$Views_Article_Feed$AuthorFeed = function (a) {
+	return {ctor: 'AuthorFeed', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Views_Article_Feed$authorFeed = _lucamug$elm_unbreakable_json$Views_Article_Feed$AuthorFeed;
+var _lucamug$elm_unbreakable_json$Views_Article_Feed$FavoritedFeed = function (a) {
+	return {ctor: 'FavoritedFeed', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Views_Article_Feed$favoritedFeed = _lucamug$elm_unbreakable_json$Views_Article_Feed$FavoritedFeed;
+var _lucamug$elm_unbreakable_json$Views_Article_Feed$TagFeed = function (a) {
+	return {ctor: 'TagFeed', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Views_Article_Feed$tagFeed = _lucamug$elm_unbreakable_json$Views_Article_Feed$TagFeed;
+var _lucamug$elm_unbreakable_json$Views_Article_Feed$selectTag = F2(
+	function (maybeAuthToken, tagName) {
+		var source = _lucamug$elm_unbreakable_json$Views_Article_Feed$tagFeed(tagName);
+		return A2(
+			_elm_lang$core$Task$attempt,
+			_lucamug$elm_unbreakable_json$Views_Article_Feed$FeedLoadCompleted(source),
+			A3(_lucamug$elm_unbreakable_json$Views_Article_Feed$fetch, maybeAuthToken, 1, source));
+	});
+var _lucamug$elm_unbreakable_json$Views_Article_Feed$GlobalFeed = {ctor: 'GlobalFeed'};
+var _lucamug$elm_unbreakable_json$Views_Article_Feed$globalFeed = _lucamug$elm_unbreakable_json$Views_Article_Feed$GlobalFeed;
+var _lucamug$elm_unbreakable_json$Views_Article_Feed$YourFeed = {ctor: 'YourFeed'};
+var _lucamug$elm_unbreakable_json$Views_Article_Feed$yourFeed = _lucamug$elm_unbreakable_json$Views_Article_Feed$YourFeed;
+
+var _lucamug$elm_unbreakable_json$Page_Home$viewBanner = A2(
+	_elm_lang$html$Html$div,
+	{
+		ctor: '::',
+		_0: _elm_lang$html$Html_Attributes$class('banner'),
+		_1: {ctor: '[]'}
+	},
+	{
+		ctor: '::',
+		_0: A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('container'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$h1,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('logo-font'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('conduit'),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$p,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('A place to share your knowledge.'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
+			}),
+		_1: {ctor: '[]'}
+	});
+var _lucamug$elm_unbreakable_json$Page_Home$Model = F2(
+	function (a, b) {
+		return {tags: a, feed: b};
+	});
+var _lucamug$elm_unbreakable_json$Page_Home$init = function (session) {
+	var handleLoadError = function (_p0) {
+		return A2(_lucamug$elm_unbreakable_json$Page_Errored$pageLoadError, _lucamug$elm_unbreakable_json$Views_Page$Home, 'Homepage is currently unavailable.');
+	};
+	var loadTags = _elm_lang$http$Http$toTask(_lucamug$elm_unbreakable_json$Request_Article$tags);
+	var feedSources = _elm_lang$core$Native_Utils.eq(session.user, _elm_lang$core$Maybe$Nothing) ? _rtfeldman$selectlist$SelectList$singleton(_lucamug$elm_unbreakable_json$Views_Article_Feed$globalFeed) : A3(
+		_rtfeldman$selectlist$SelectList$fromLists,
+		{ctor: '[]'},
+		_lucamug$elm_unbreakable_json$Views_Article_Feed$yourFeed,
+		{
+			ctor: '::',
+			_0: _lucamug$elm_unbreakable_json$Views_Article_Feed$globalFeed,
+			_1: {ctor: '[]'}
+		});
+	var loadSources = A2(_lucamug$elm_unbreakable_json$Views_Article_Feed$init, session, feedSources);
+	return A2(
+		_elm_lang$core$Task$mapError,
+		handleLoadError,
+		A3(_elm_lang$core$Task$map2, _lucamug$elm_unbreakable_json$Page_Home$Model, loadTags, loadSources));
+};
+var _lucamug$elm_unbreakable_json$Page_Home$SelectTag = function (a) {
+	return {ctor: 'SelectTag', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Page_Home$viewTag = function (tagName) {
+	return A2(
+		_elm_lang$html$Html$a,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('tag-pill tag-default'),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$href('javascript:void(0)'),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Events$onClick(
+						_lucamug$elm_unbreakable_json$Page_Home$SelectTag(tagName)),
+					_1: {ctor: '[]'}
+				}
+			}
+		},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(
+				_lucamug$elm_unbreakable_json$Data_Article$tagToString(tagName)),
+			_1: {ctor: '[]'}
+		});
+};
+var _lucamug$elm_unbreakable_json$Page_Home$viewTags = function (tags) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('tag-list'),
+			_1: {ctor: '[]'}
+		},
+		A2(_elm_lang$core$List$map, _lucamug$elm_unbreakable_json$Page_Home$viewTag, tags));
+};
+var _lucamug$elm_unbreakable_json$Page_Home$FeedMsg = function (a) {
+	return {ctor: 'FeedMsg', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Page_Home$viewFeed = function (feed) {
+	return {
+		ctor: '::',
+		_0: A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('feed-toggle'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$map,
+					_lucamug$elm_unbreakable_json$Page_Home$FeedMsg,
+					_lucamug$elm_unbreakable_json$Views_Article_Feed$viewFeedSources(feed)),
+				_1: {ctor: '[]'}
+			}),
+		_1: A2(
+			_elm_lang$core$List$map,
+			_elm_lang$html$Html$map(_lucamug$elm_unbreakable_json$Page_Home$FeedMsg),
+			_lucamug$elm_unbreakable_json$Views_Article_Feed$viewArticles(feed))
+	};
+};
+var _lucamug$elm_unbreakable_json$Page_Home$view = F2(
+	function (session, model) {
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('home-page'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: _lucamug$elm_unbreakable_json$Page_Home$viewBanner,
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('container page'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('row'),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$div,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('col-md-9'),
+											_1: {ctor: '[]'}
+										},
+										_lucamug$elm_unbreakable_json$Page_Home$viewFeed(model.feed)),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$div,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$class('col-md-3'),
+												_1: {ctor: '[]'}
+											},
+											{
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$div,
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$class('sidebar'),
+														_1: {ctor: '[]'}
+													},
+													{
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$p,
+															{ctor: '[]'},
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html$text('Popular Tags'),
+																_1: {ctor: '[]'}
+															}),
+														_1: {
+															ctor: '::',
+															_0: _lucamug$elm_unbreakable_json$Page_Home$viewTags(model.tags),
+															_1: {ctor: '[]'}
+														}
+													}),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+var _lucamug$elm_unbreakable_json$Page_Home$update = F3(
+	function (session, msg, model) {
+		var _p1 = msg;
+		if (_p1.ctor === 'FeedMsg') {
+			var _p2 = A3(_lucamug$elm_unbreakable_json$Views_Article_Feed$update, session, _p1._0, model.feed);
+			var newFeed = _p2._0;
+			var subCmd = _p2._1;
+			return A2(
+				_lucamug$elm_unbreakable_json$Util_ops['=>'],
+				_elm_lang$core$Native_Utils.update(
+					model,
+					{feed: newFeed}),
+				A2(_elm_lang$core$Platform_Cmd$map, _lucamug$elm_unbreakable_json$Page_Home$FeedMsg, subCmd));
+		} else {
+			var subCmd = A2(
+				_lucamug$elm_unbreakable_json$Views_Article_Feed$selectTag,
+				A2(
+					_elm_lang$core$Maybe$map,
+					function (_) {
+						return _.token;
+					},
+					session.user),
+				_p1._0);
+			return A2(
+				_lucamug$elm_unbreakable_json$Util_ops['=>'],
+				model,
+				A2(_elm_lang$core$Platform_Cmd$map, _lucamug$elm_unbreakable_json$Page_Home$FeedMsg, subCmd));
+		}
+	});
+
+var _lucamug$elm_unbreakable_json$Ports$storeSession = _elm_lang$core$Native_Platform.outgoingPort(
+	'storeSession',
+	function (v) {
+		return (v.ctor === 'Nothing') ? null : v._0;
+	});
+var _lucamug$elm_unbreakable_json$Ports$onSessionChange = _elm_lang$core$Native_Platform.incomingPort('onSessionChange', _elm_lang$core$Json_Decode$value);
+
+var _lucamug$elm_unbreakable_json$Request_User$edit = F2(
+	function (_p0, maybeToken) {
+		var _p1 = _p0;
+		var expect = _elm_lang$http$Http$expectJson(
+			A2(_elm_lang$core$Json_Decode$field, 'user', _lucamug$elm_unbreakable_json$Data_User$decoder));
+		var updates = A2(
+			_elm_lang$core$List$filterMap,
+			_elm_lang$core$Basics$identity,
+			{
+				ctor: '::',
+				_0: _elm_lang$core$Maybe$Just(
+					A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						'username',
+						_elm_lang$core$Json_Encode$string(_p1.username))),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$core$Maybe$Just(
+						A2(
+							_lucamug$elm_unbreakable_json$Util_ops['=>'],
+							'email',
+							_elm_lang$core$Json_Encode$string(_p1.email))),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$core$Maybe$Just(
+							A2(
+								_lucamug$elm_unbreakable_json$Util_ops['=>'],
+								'bio',
+								_elm_lang$core$Json_Encode$string(_p1.bio))),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$core$Maybe$Just(
+								A2(
+									_lucamug$elm_unbreakable_json$Util_ops['=>'],
+									'image',
+									A2(_elm_community$json_extra$Json_Encode_Extra$maybe, _elm_lang$core$Json_Encode$string, _p1.image))),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$core$Maybe$map,
+									function (pass) {
+										return A2(
+											_lucamug$elm_unbreakable_json$Util_ops['=>'],
+											'password',
+											_elm_lang$core$Json_Encode$string(pass));
+									},
+									_p1.password),
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				}
+			});
+		var body = _elm_lang$http$Http$jsonBody(
+			_elm_lang$core$Json_Encode$object(
+				_elm_lang$core$List$singleton(
+					A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						'user',
+						_elm_lang$core$Json_Encode$object(updates)))));
+		return _lukewestby$elm_http_builder$HttpBuilder$toRequest(
+			A2(
+				_lucamug$elm_unbreakable_json$Data_AuthToken$withAuthorization,
+				maybeToken,
+				A2(
+					_lukewestby$elm_http_builder$HttpBuilder$withBody,
+					body,
+					A2(
+						_lukewestby$elm_http_builder$HttpBuilder$withExpect,
+						expect,
+						_lukewestby$elm_http_builder$HttpBuilder$put(
+							_lucamug$elm_unbreakable_json$Request_Helpers$apiUrl('/user'))))));
+	});
+var _lucamug$elm_unbreakable_json$Request_User$register = function (_p2) {
+	var _p3 = _p2;
+	var user = _elm_lang$core$Json_Encode$object(
+		{
+			ctor: '::',
+			_0: A2(
+				_lucamug$elm_unbreakable_json$Util_ops['=>'],
+				'username',
+				_elm_lang$core$Json_Encode$string(_p3.username)),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_lucamug$elm_unbreakable_json$Util_ops['=>'],
+					'email',
+					_elm_lang$core$Json_Encode$string(_p3.email)),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						'password',
+						_elm_lang$core$Json_Encode$string(_p3.password)),
+					_1: {ctor: '[]'}
+				}
+			}
+		});
+	var body = _elm_lang$http$Http$jsonBody(
+		_elm_lang$core$Json_Encode$object(
+			{
+				ctor: '::',
+				_0: A2(_lucamug$elm_unbreakable_json$Util_ops['=>'], 'user', user),
+				_1: {ctor: '[]'}
+			}));
+	return A3(
+		_elm_lang$http$Http$post,
+		_lucamug$elm_unbreakable_json$Request_Helpers$apiUrl('/users'),
+		body,
+		A2(_elm_lang$core$Json_Decode$field, 'user', _lucamug$elm_unbreakable_json$Data_User$decoder));
+};
+var _lucamug$elm_unbreakable_json$Request_User$login = function (_p4) {
+	var _p5 = _p4;
+	var user = _elm_lang$core$Json_Encode$object(
+		{
+			ctor: '::',
+			_0: A2(
+				_lucamug$elm_unbreakable_json$Util_ops['=>'],
+				'email',
+				_elm_lang$core$Json_Encode$string(_p5.email)),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_lucamug$elm_unbreakable_json$Util_ops['=>'],
+					'password',
+					_elm_lang$core$Json_Encode$string(_p5.password)),
+				_1: {ctor: '[]'}
+			}
+		});
+	var body = _elm_lang$http$Http$jsonBody(
+		_elm_lang$core$Json_Encode$object(
+			{
+				ctor: '::',
+				_0: A2(_lucamug$elm_unbreakable_json$Util_ops['=>'], 'user', user),
+				_1: {ctor: '[]'}
+			}));
+	return A3(
+		_elm_lang$http$Http$post,
+		_lucamug$elm_unbreakable_json$Request_Helpers$apiUrl('/users/login'),
+		body,
+		A2(_elm_lang$core$Json_Decode$field, 'user', _lucamug$elm_unbreakable_json$Data_User$decoder));
+};
+var _lucamug$elm_unbreakable_json$Request_User$storeSession = function (user) {
+	return _lucamug$elm_unbreakable_json$Ports$storeSession(
+		_elm_lang$core$Maybe$Just(
+			A2(
+				_elm_lang$core$Json_Encode$encode,
+				0,
+				_lucamug$elm_unbreakable_json$Data_User$encode(user))));
+};
+
+var _lucamug$elm_unbreakable_json$Page_Login$optionalError = function (fieldName) {
+	var errorToString = function (errorMessage) {
+		return A2(
+			_elm_lang$core$String$join,
+			' ',
+			{
+				ctor: '::',
+				_0: fieldName,
+				_1: {
+					ctor: '::',
+					_0: errorMessage,
+					_1: {ctor: '[]'}
+				}
+			});
+	};
+	return A3(
+		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$optional,
+		fieldName,
+		_elm_lang$core$Json_Decode$list(
+			A2(_elm_lang$core$Json_Decode$map, errorToString, _elm_lang$core$Json_Decode$string)),
+		{ctor: '[]'});
+};
+var _lucamug$elm_unbreakable_json$Page_Login$errorsDecoder = A2(
+	_lucamug$elm_unbreakable_json$Page_Login$optionalError,
+	'password',
+	A2(
+		_lucamug$elm_unbreakable_json$Page_Login$optionalError,
+		'username',
+		A2(
+			_lucamug$elm_unbreakable_json$Page_Login$optionalError,
+			'email',
+			A2(
+				_lucamug$elm_unbreakable_json$Page_Login$optionalError,
+				'email or password',
+				_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(
+					F4(
+						function (emailOrPassword, email, username, password) {
+							return _elm_lang$core$List$concat(
+								{
+									ctor: '::',
+									_0: emailOrPassword,
+									_1: {
+										ctor: '::',
+										_0: email,
+										_1: {
+											ctor: '::',
+											_0: username,
 											_1: {
 												ctor: '::',
-												_0: _elm_lang$svg$Svg_Attributes$cy('37.6'),
+												_0: password,
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								});
+						}))))));
+var _lucamug$elm_unbreakable_json$Page_Login$initialModel = {
+	errors: {ctor: '[]'},
+	email: '',
+	password: ''
+};
+var _lucamug$elm_unbreakable_json$Page_Login$Model = F3(
+	function (a, b, c) {
+		return {errors: a, email: b, password: c};
+	});
+var _lucamug$elm_unbreakable_json$Page_Login$LoginCompleted = function (a) {
+	return {ctor: 'LoginCompleted', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Page_Login$SetPassword = function (a) {
+	return {ctor: 'SetPassword', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Page_Login$SetEmail = function (a) {
+	return {ctor: 'SetEmail', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Page_Login$SubmitForm = {ctor: 'SubmitForm'};
+var _lucamug$elm_unbreakable_json$Page_Login$viewForm = function (model) {
+	return A2(
+		_elm_lang$html$Html$form,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Events$onSubmit(_lucamug$elm_unbreakable_json$Page_Login$SubmitForm),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_lucamug$elm_unbreakable_json$Views_Form$input,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('form-control-lg'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$placeholder('Email'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Events$onInput(_lucamug$elm_unbreakable_json$Page_Login$SetEmail),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$value(model.email),
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				},
+				{ctor: '[]'}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_lucamug$elm_unbreakable_json$Views_Form$password,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('form-control-lg'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$placeholder('Password'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Events$onInput(_lucamug$elm_unbreakable_json$Page_Login$SetPassword),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$value(model.password),
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					},
+					{ctor: '[]'}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$button,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('btn btn-lg btn-primary pull-xs-right'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('Sign in'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
+			}
+		});
+};
+var _lucamug$elm_unbreakable_json$Page_Login$view = F2(
+	function (session, model) {
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('auth-page'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('container page'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('row'),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$div,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('col-md-6 offset-md-3 col-xs-12'),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$h1,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$class('text-xs-center'),
+												_1: {ctor: '[]'}
+											},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('Sign in'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$p,
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$class('text-xs-center'),
+													_1: {ctor: '[]'}
+												},
+												{
+													ctor: '::',
+													_0: A2(
+														_elm_lang$html$Html$a,
+														{
+															ctor: '::',
+															_0: _lucamug$elm_unbreakable_json$Route$href(_lucamug$elm_unbreakable_json$Route$Register),
+															_1: {ctor: '[]'}
+														},
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html$text('Need an account?'),
+															_1: {ctor: '[]'}
+														}),
+													_1: {ctor: '[]'}
+												}),
+											_1: {
+												ctor: '::',
+												_0: _lucamug$elm_unbreakable_json$Views_Form$viewErrors(model.errors),
 												_1: {
 													ctor: '::',
-													_0: _elm_lang$svg$Svg_Attributes$r('1.5'),
+													_0: _lucamug$elm_unbreakable_json$Page_Login$viewForm(model),
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									}),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			});
+	});
+var _lucamug$elm_unbreakable_json$Page_Login$SetUser = function (a) {
+	return {ctor: 'SetUser', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Page_Login$NoOp = {ctor: 'NoOp'};
+var _lucamug$elm_unbreakable_json$Page_Login$Password = {ctor: 'Password'};
+var _lucamug$elm_unbreakable_json$Page_Login$Email = {ctor: 'Email'};
+var _lucamug$elm_unbreakable_json$Page_Login$validate = _rtfeldman$elm_validate$Validate$all(
+	{
+		ctor: '::',
+		_0: function (_p0) {
+			return A2(
+				_rtfeldman$elm_validate$Validate$ifBlank,
+				A2(_lucamug$elm_unbreakable_json$Util_ops['=>'], _lucamug$elm_unbreakable_json$Page_Login$Email, 'email can\'t be blank.'),
+				function (_) {
+					return _.email;
+				}(_p0));
+		},
+		_1: {
+			ctor: '::',
+			_0: function (_p1) {
+				return A2(
+					_rtfeldman$elm_validate$Validate$ifBlank,
+					A2(_lucamug$elm_unbreakable_json$Util_ops['=>'], _lucamug$elm_unbreakable_json$Page_Login$Password, 'password can\'t be blank.'),
+					function (_) {
+						return _.password;
+					}(_p1));
+			},
+			_1: {ctor: '[]'}
+		}
+	});
+var _lucamug$elm_unbreakable_json$Page_Login$Form = {ctor: 'Form'};
+var _lucamug$elm_unbreakable_json$Page_Login$update = F2(
+	function (msg, model) {
+		var _p2 = msg;
+		switch (_p2.ctor) {
+			case 'SubmitForm':
+				var _p3 = _lucamug$elm_unbreakable_json$Page_Login$validate(model);
+				if (_p3.ctor === '[]') {
+					return A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						A2(
+							_lucamug$elm_unbreakable_json$Util_ops['=>'],
+							_elm_lang$core$Native_Utils.update(
+								model,
+								{
+									errors: {ctor: '[]'}
+								}),
+							A2(
+								_elm_lang$http$Http$send,
+								_lucamug$elm_unbreakable_json$Page_Login$LoginCompleted,
+								_lucamug$elm_unbreakable_json$Request_User$login(model))),
+						_lucamug$elm_unbreakable_json$Page_Login$NoOp);
+				} else {
+					return A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						A2(
+							_lucamug$elm_unbreakable_json$Util_ops['=>'],
+							_elm_lang$core$Native_Utils.update(
+								model,
+								{errors: _p3}),
+							_elm_lang$core$Platform_Cmd$none),
+						_lucamug$elm_unbreakable_json$Page_Login$NoOp);
+				}
+			case 'SetEmail':
+				return A2(
+					_lucamug$elm_unbreakable_json$Util_ops['=>'],
+					A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{email: _p2._0}),
+						_elm_lang$core$Platform_Cmd$none),
+					_lucamug$elm_unbreakable_json$Page_Login$NoOp);
+			case 'SetPassword':
+				return A2(
+					_lucamug$elm_unbreakable_json$Util_ops['=>'],
+					A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{password: _p2._0}),
+						_elm_lang$core$Platform_Cmd$none),
+					_lucamug$elm_unbreakable_json$Page_Login$NoOp);
+			default:
+				if (_p2._0.ctor === 'Err') {
+					var errorMessages = function () {
+						var _p4 = _p2._0._0;
+						if (_p4.ctor === 'BadStatus') {
+							return A2(
+								_elm_lang$core$Result$withDefault,
+								{ctor: '[]'},
+								A2(
+									_elm_lang$core$Json_Decode$decodeString,
+									A2(_elm_lang$core$Json_Decode$field, 'errors', _lucamug$elm_unbreakable_json$Page_Login$errorsDecoder),
+									_p4._0.body));
+						} else {
+							return {
+								ctor: '::',
+								_0: 'unable to process registration',
+								_1: {ctor: '[]'}
+							};
+						}
+					}();
+					return A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						A2(
+							_lucamug$elm_unbreakable_json$Util_ops['=>'],
+							_elm_lang$core$Native_Utils.update(
+								model,
+								{
+									errors: A2(
+										_elm_lang$core$List$map,
+										function (errorMessage) {
+											return A2(_lucamug$elm_unbreakable_json$Util_ops['=>'], _lucamug$elm_unbreakable_json$Page_Login$Form, errorMessage);
+										},
+										errorMessages)
+								}),
+							_elm_lang$core$Platform_Cmd$none),
+						_lucamug$elm_unbreakable_json$Page_Login$NoOp);
+				} else {
+					var _p5 = _p2._0._0;
+					return A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						A2(
+							_lucamug$elm_unbreakable_json$Util_ops['=>'],
+							model,
+							_elm_lang$core$Platform_Cmd$batch(
+								{
+									ctor: '::',
+									_0: _lucamug$elm_unbreakable_json$Request_User$storeSession(_p5),
+									_1: {
+										ctor: '::',
+										_0: _lucamug$elm_unbreakable_json$Route$modifyUrl(_lucamug$elm_unbreakable_json$Route$Home),
+										_1: {ctor: '[]'}
+									}
+								})),
+						_lucamug$elm_unbreakable_json$Page_Login$SetUser(_p5));
+				}
+		}
+	});
+
+var _lucamug$elm_unbreakable_json$Views_Assets$src = function (_p0) {
+	var _p1 = _p0;
+	return _elm_lang$html$Html_Attributes$src(_p1._0);
+};
+var _lucamug$elm_unbreakable_json$Views_Assets$Image = function (a) {
+	return {ctor: 'Image', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Views_Assets$error = _lucamug$elm_unbreakable_json$Views_Assets$Image('/assets/images/error.jpg');
+
+var _lucamug$elm_unbreakable_json$Page_NotFound$view = function (session) {
+	return A2(
+		_elm_lang$html$Html$main_,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$id('content'),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('container'),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$tabindex(-1),
+					_1: {ctor: '[]'}
+				}
+			}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$h1,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Not Found'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('row'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$img,
+							{
+								ctor: '::',
+								_0: _lucamug$elm_unbreakable_json$Views_Assets$src(_lucamug$elm_unbreakable_json$Views_Assets$error),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$alt('giant laser walrus wreaking havoc'),
+									_1: {ctor: '[]'}
+								}
+							},
+							{ctor: '[]'}),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+
+var _lucamug$elm_unbreakable_json$Page_Profile$defaultFeedSources = function (username) {
+	return A3(
+		_rtfeldman$selectlist$SelectList$fromLists,
+		{ctor: '[]'},
+		_lucamug$elm_unbreakable_json$Views_Article_Feed$authorFeed(username),
+		{
+			ctor: '::',
+			_0: _lucamug$elm_unbreakable_json$Views_Article_Feed$favoritedFeed(username),
+			_1: {ctor: '[]'}
+		});
+};
+var _lucamug$elm_unbreakable_json$Page_Profile$Model = F3(
+	function (a, b, c) {
+		return {errors: a, profile: b, feed: c};
+	});
+var _lucamug$elm_unbreakable_json$Page_Profile$init = F2(
+	function (session, username) {
+		var handleLoadError = function (_p0) {
+			return A2(
+				_lucamug$elm_unbreakable_json$Page_Errored$pageLoadError,
+				_lucamug$elm_unbreakable_json$Views_Page$Profile(username),
+				'Profile is currently unavailable.');
+		};
+		var loadFeedSources = A2(
+			_lucamug$elm_unbreakable_json$Views_Article_Feed$init,
+			session,
+			_lucamug$elm_unbreakable_json$Page_Profile$defaultFeedSources(username));
+		var maybeAuthToken = A2(
+			_elm_lang$core$Maybe$map,
+			function (_) {
+				return _.token;
+			},
+			session.user);
+		var loadProfile = _elm_lang$http$Http$toTask(
+			A2(_lucamug$elm_unbreakable_json$Request_Profile$get, username, maybeAuthToken));
+		var config = _elm_lang$core$Native_Utils.update(
+			_lucamug$elm_unbreakable_json$Request_Article$defaultListConfig,
+			{
+				limit: 5,
+				author: _elm_lang$core$Maybe$Just(username)
+			});
+		return A2(
+			_elm_lang$core$Task$mapError,
+			handleLoadError,
+			A3(
+				_elm_lang$core$Task$map2,
+				_lucamug$elm_unbreakable_json$Page_Profile$Model(
+					{ctor: '[]'}),
+				loadProfile,
+				loadFeedSources));
+	});
+var _lucamug$elm_unbreakable_json$Page_Profile$FeedMsg = function (a) {
+	return {ctor: 'FeedMsg', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Page_Profile$viewFeed = function (feed) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('col-xs-12 col-md-10 offset-md-1'),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('articles-toggle'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$map,
+						_lucamug$elm_unbreakable_json$Page_Profile$FeedMsg,
+						_lucamug$elm_unbreakable_json$Views_Article_Feed$viewFeedSources(feed)),
+					_1: {ctor: '[]'}
+				}),
+			_1: A2(
+				_elm_lang$core$List$map,
+				_elm_lang$html$Html$map(_lucamug$elm_unbreakable_json$Page_Profile$FeedMsg),
+				_lucamug$elm_unbreakable_json$Views_Article_Feed$viewArticles(feed))
+		});
+};
+var _lucamug$elm_unbreakable_json$Page_Profile$FollowCompleted = function (a) {
+	return {ctor: 'FollowCompleted', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Page_Profile$update = F3(
+	function (session, msg, model) {
+		var profile = model.profile;
+		var _p1 = msg;
+		switch (_p1.ctor) {
+			case 'DismissErrors':
+				return A2(
+					_lucamug$elm_unbreakable_json$Util_ops['=>'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							errors: {ctor: '[]'}
+						}),
+					_elm_lang$core$Platform_Cmd$none);
+			case 'ToggleFollow':
+				var _p2 = session.user;
+				if (_p2.ctor === 'Nothing') {
+					return A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{
+								errors: A2(
+									_elm_lang$core$Basics_ops['++'],
+									model.errors,
+									{
+										ctor: '::',
+										_0: 'You are currently signed out. You must be signed in to follow people.',
+										_1: {ctor: '[]'}
+									})
+							}),
+						_elm_lang$core$Platform_Cmd$none);
+				} else {
+					return A2(
+						_lucamug$elm_unbreakable_json$Util$pair,
+						model,
+						A2(
+							_elm_lang$http$Http$send,
+							_lucamug$elm_unbreakable_json$Page_Profile$FollowCompleted,
+							A3(_lucamug$elm_unbreakable_json$Request_Profile$toggleFollow, profile.username, profile.following, _p2._0.token)));
+				}
+			case 'FollowCompleted':
+				if (_p1._0.ctor === 'Ok') {
+					return A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{profile: _p1._0._0}),
+						_elm_lang$core$Platform_Cmd$none);
+				} else {
+					return A2(_lucamug$elm_unbreakable_json$Util_ops['=>'], model, _elm_lang$core$Platform_Cmd$none);
+				}
+			default:
+				var _p3 = A3(_lucamug$elm_unbreakable_json$Views_Article_Feed$update, session, _p1._0, model.feed);
+				var newFeed = _p3._0;
+				var subCmd = _p3._1;
+				return A2(
+					_lucamug$elm_unbreakable_json$Util_ops['=>'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{feed: newFeed}),
+					A2(_elm_lang$core$Platform_Cmd$map, _lucamug$elm_unbreakable_json$Page_Profile$FeedMsg, subCmd));
+		}
+	});
+var _lucamug$elm_unbreakable_json$Page_Profile$ToggleFollow = {ctor: 'ToggleFollow'};
+var _lucamug$elm_unbreakable_json$Page_Profile$followButton = _lucamug$elm_unbreakable_json$Views_User_Follow$button(
+	function (_p4) {
+		return _lucamug$elm_unbreakable_json$Page_Profile$ToggleFollow;
+	});
+var _lucamug$elm_unbreakable_json$Page_Profile$viewProfileInfo = F2(
+	function (isMyProfile, profile) {
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('col-xs-12 col-md-10 offset-md-1'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$img,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('user-img'),
+						_1: {
+							ctor: '::',
+							_0: _lucamug$elm_unbreakable_json$Data_UserPhoto$src(profile.image),
+							_1: {ctor: '[]'}
+						}
+					},
+					{ctor: '[]'}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$h4,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _lucamug$elm_unbreakable_json$Data_User$usernameToHtml(profile.username),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$p,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(
+									A2(_elm_lang$core$Maybe$withDefault, '', profile.bio)),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_lucamug$elm_unbreakable_json$Util$viewIf,
+								!isMyProfile,
+								_lucamug$elm_unbreakable_json$Page_Profile$followButton(profile)),
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			});
+	});
+var _lucamug$elm_unbreakable_json$Page_Profile$DismissErrors = {ctor: 'DismissErrors'};
+var _lucamug$elm_unbreakable_json$Page_Profile$view = F2(
+	function (session, model) {
+		var profile = model.profile;
+		var isMyProfile = A2(
+			_elm_lang$core$Maybe$withDefault,
+			false,
+			A2(
+				_elm_lang$core$Maybe$map,
+				function (_p5) {
+					var _p6 = _p5;
+					return _elm_lang$core$Native_Utils.eq(_p6.username, profile.username);
+				},
+				session.user));
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('profile-page'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(_lucamug$elm_unbreakable_json$Views_Errors$view, _lucamug$elm_unbreakable_json$Page_Profile$DismissErrors, model.errors),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('user-info'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('container'),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$div,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('row'),
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: A2(_lucamug$elm_unbreakable_json$Page_Profile$viewProfileInfo, isMyProfile, profile),
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('container'),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$div,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('row'),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: _lucamug$elm_unbreakable_json$Page_Profile$viewFeed(model.feed),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}
+				}
+			});
+	});
+
+var _lucamug$elm_unbreakable_json$Page_Register$optionalError = function (fieldName) {
+	var errorToString = function (errorMessage) {
+		return A2(
+			_elm_lang$core$String$join,
+			' ',
+			{
+				ctor: '::',
+				_0: fieldName,
+				_1: {
+					ctor: '::',
+					_0: errorMessage,
+					_1: {ctor: '[]'}
+				}
+			});
+	};
+	return A3(
+		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$optional,
+		fieldName,
+		_elm_lang$core$Json_Decode$list(
+			A2(_elm_lang$core$Json_Decode$map, errorToString, _elm_lang$core$Json_Decode$string)),
+		{ctor: '[]'});
+};
+var _lucamug$elm_unbreakable_json$Page_Register$errorsDecoder = A2(
+	_lucamug$elm_unbreakable_json$Page_Register$optionalError,
+	'password',
+	A2(
+		_lucamug$elm_unbreakable_json$Page_Register$optionalError,
+		'username',
+		A2(
+			_lucamug$elm_unbreakable_json$Page_Register$optionalError,
+			'email',
+			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(
+				F3(
+					function (email, username, password) {
+						return _elm_lang$core$List$concat(
+							{
+								ctor: '::',
+								_0: email,
+								_1: {
+									ctor: '::',
+									_0: username,
+									_1: {
+										ctor: '::',
+										_0: password,
+										_1: {ctor: '[]'}
+									}
+								}
+							});
+					})))));
+var _lucamug$elm_unbreakable_json$Page_Register$initialModel = {
+	errors: {ctor: '[]'},
+	email: '',
+	username: '',
+	password: ''
+};
+var _lucamug$elm_unbreakable_json$Page_Register$Model = F4(
+	function (a, b, c, d) {
+		return {errors: a, email: b, username: c, password: d};
+	});
+var _lucamug$elm_unbreakable_json$Page_Register$RegisterCompleted = function (a) {
+	return {ctor: 'RegisterCompleted', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Page_Register$SetPassword = function (a) {
+	return {ctor: 'SetPassword', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Page_Register$SetUsername = function (a) {
+	return {ctor: 'SetUsername', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Page_Register$SetEmail = function (a) {
+	return {ctor: 'SetEmail', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Page_Register$SubmitForm = {ctor: 'SubmitForm'};
+var _lucamug$elm_unbreakable_json$Page_Register$viewForm = function (model) {
+	return A2(
+		_elm_lang$html$Html$form,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Events$onSubmit(_lucamug$elm_unbreakable_json$Page_Register$SubmitForm),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_lucamug$elm_unbreakable_json$Views_Form$input,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('form-control-lg'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$placeholder('Username'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Events$onInput(_lucamug$elm_unbreakable_json$Page_Register$SetUsername),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$value(model.username),
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				},
+				{ctor: '[]'}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_lucamug$elm_unbreakable_json$Views_Form$input,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('form-control-lg'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$placeholder('Email'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Events$onInput(_lucamug$elm_unbreakable_json$Page_Register$SetEmail),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$value(model.email),
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					},
+					{ctor: '[]'}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_lucamug$elm_unbreakable_json$Views_Form$password,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('form-control-lg'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$placeholder('Password'),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Events$onInput(_lucamug$elm_unbreakable_json$Page_Register$SetPassword),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$value(model.password),
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						},
+						{ctor: '[]'}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$button,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('btn btn-lg btn-primary pull-xs-right'),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('Sign up'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		});
+};
+var _lucamug$elm_unbreakable_json$Page_Register$view = F2(
+	function (session, model) {
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('auth-page'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('container page'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('row'),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$div,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('col-md-6 offset-md-3 col-xs-12'),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$h1,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$class('text-xs-center'),
+												_1: {ctor: '[]'}
+											},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('Sign up'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$p,
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$class('text-xs-center'),
+													_1: {ctor: '[]'}
+												},
+												{
+													ctor: '::',
+													_0: A2(
+														_elm_lang$html$Html$a,
+														{
+															ctor: '::',
+															_0: _lucamug$elm_unbreakable_json$Route$href(_lucamug$elm_unbreakable_json$Route$Login),
+															_1: {ctor: '[]'}
+														},
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html$text('Have an account?'),
+															_1: {ctor: '[]'}
+														}),
+													_1: {ctor: '[]'}
+												}),
+											_1: {
+												ctor: '::',
+												_0: _lucamug$elm_unbreakable_json$Views_Form$viewErrors(model.errors),
+												_1: {
+													ctor: '::',
+													_0: _lucamug$elm_unbreakable_json$Page_Register$viewForm(model),
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									}),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			});
+	});
+var _lucamug$elm_unbreakable_json$Page_Register$SetUser = function (a) {
+	return {ctor: 'SetUser', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Page_Register$NoOp = {ctor: 'NoOp'};
+var _lucamug$elm_unbreakable_json$Page_Register$Password = {ctor: 'Password'};
+var _lucamug$elm_unbreakable_json$Page_Register$Email = {ctor: 'Email'};
+var _lucamug$elm_unbreakable_json$Page_Register$Username = {ctor: 'Username'};
+var _lucamug$elm_unbreakable_json$Page_Register$validate = _rtfeldman$elm_validate$Validate$all(
+	{
+		ctor: '::',
+		_0: function (_p0) {
+			return A2(
+				_rtfeldman$elm_validate$Validate$ifBlank,
+				A2(_lucamug$elm_unbreakable_json$Util_ops['=>'], _lucamug$elm_unbreakable_json$Page_Register$Username, 'username can\'t be blank.'),
+				function (_) {
+					return _.username;
+				}(_p0));
+		},
+		_1: {
+			ctor: '::',
+			_0: function (_p1) {
+				return A2(
+					_rtfeldman$elm_validate$Validate$ifBlank,
+					A2(_lucamug$elm_unbreakable_json$Util_ops['=>'], _lucamug$elm_unbreakable_json$Page_Register$Email, 'email can\'t be blank.'),
+					function (_) {
+						return _.email;
+					}(_p1));
+			},
+			_1: {
+				ctor: '::',
+				_0: function (_p2) {
+					return A2(
+						_rtfeldman$elm_validate$Validate$ifBlank,
+						A2(_lucamug$elm_unbreakable_json$Util_ops['=>'], _lucamug$elm_unbreakable_json$Page_Register$Password, 'password can\'t be blank.'),
+						function (_) {
+							return _.password;
+						}(_p2));
+				},
+				_1: {ctor: '[]'}
+			}
+		}
+	});
+var _lucamug$elm_unbreakable_json$Page_Register$Form = {ctor: 'Form'};
+var _lucamug$elm_unbreakable_json$Page_Register$update = F2(
+	function (msg, model) {
+		var _p3 = msg;
+		switch (_p3.ctor) {
+			case 'SubmitForm':
+				var _p4 = _lucamug$elm_unbreakable_json$Page_Register$validate(model);
+				if (_p4.ctor === '[]') {
+					return A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						A2(
+							_lucamug$elm_unbreakable_json$Util_ops['=>'],
+							_elm_lang$core$Native_Utils.update(
+								model,
+								{
+									errors: {ctor: '[]'}
+								}),
+							A2(
+								_elm_lang$http$Http$send,
+								_lucamug$elm_unbreakable_json$Page_Register$RegisterCompleted,
+								_lucamug$elm_unbreakable_json$Request_User$register(model))),
+						_lucamug$elm_unbreakable_json$Page_Register$NoOp);
+				} else {
+					return A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						A2(
+							_lucamug$elm_unbreakable_json$Util_ops['=>'],
+							_elm_lang$core$Native_Utils.update(
+								model,
+								{errors: _p4}),
+							_elm_lang$core$Platform_Cmd$none),
+						_lucamug$elm_unbreakable_json$Page_Register$NoOp);
+				}
+			case 'SetEmail':
+				return A2(
+					_lucamug$elm_unbreakable_json$Util_ops['=>'],
+					A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{email: _p3._0}),
+						_elm_lang$core$Platform_Cmd$none),
+					_lucamug$elm_unbreakable_json$Page_Register$NoOp);
+			case 'SetUsername':
+				return A2(
+					_lucamug$elm_unbreakable_json$Util_ops['=>'],
+					A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{username: _p3._0}),
+						_elm_lang$core$Platform_Cmd$none),
+					_lucamug$elm_unbreakable_json$Page_Register$NoOp);
+			case 'SetPassword':
+				return A2(
+					_lucamug$elm_unbreakable_json$Util_ops['=>'],
+					A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{password: _p3._0}),
+						_elm_lang$core$Platform_Cmd$none),
+					_lucamug$elm_unbreakable_json$Page_Register$NoOp);
+			default:
+				if (_p3._0.ctor === 'Err') {
+					var errorMessages = function () {
+						var _p5 = _p3._0._0;
+						if (_p5.ctor === 'BadStatus') {
+							return A2(
+								_elm_lang$core$Result$withDefault,
+								{ctor: '[]'},
+								A2(
+									_elm_lang$core$Json_Decode$decodeString,
+									A2(_elm_lang$core$Json_Decode$field, 'errors', _lucamug$elm_unbreakable_json$Page_Register$errorsDecoder),
+									_p5._0.body));
+						} else {
+							return {
+								ctor: '::',
+								_0: 'unable to process registration',
+								_1: {ctor: '[]'}
+							};
+						}
+					}();
+					return A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						A2(
+							_lucamug$elm_unbreakable_json$Util_ops['=>'],
+							_elm_lang$core$Native_Utils.update(
+								model,
+								{
+									errors: A2(
+										_elm_lang$core$List$map,
+										function (errorMessage) {
+											return A2(_lucamug$elm_unbreakable_json$Util_ops['=>'], _lucamug$elm_unbreakable_json$Page_Register$Form, errorMessage);
+										},
+										errorMessages)
+								}),
+							_elm_lang$core$Platform_Cmd$none),
+						_lucamug$elm_unbreakable_json$Page_Register$NoOp);
+				} else {
+					var _p6 = _p3._0._0;
+					return A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						A2(
+							_lucamug$elm_unbreakable_json$Util_ops['=>'],
+							model,
+							_elm_lang$core$Platform_Cmd$batch(
+								{
+									ctor: '::',
+									_0: _lucamug$elm_unbreakable_json$Request_User$storeSession(_p6),
+									_1: {
+										ctor: '::',
+										_0: _lucamug$elm_unbreakable_json$Route$modifyUrl(_lucamug$elm_unbreakable_json$Route$Home),
+										_1: {ctor: '[]'}
+									}
+								})),
+						_lucamug$elm_unbreakable_json$Page_Register$SetUser(_p6));
+				}
+		}
+	});
+
+var _lucamug$elm_unbreakable_json$Page_Settings$optionalError = function (fieldName) {
+	var errorToString = function (errorMessage) {
+		return A2(
+			_elm_lang$core$String$join,
+			' ',
+			{
+				ctor: '::',
+				_0: fieldName,
+				_1: {
+					ctor: '::',
+					_0: errorMessage,
+					_1: {ctor: '[]'}
+				}
+			});
+	};
+	return A3(
+		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$optional,
+		fieldName,
+		_elm_lang$core$Json_Decode$list(
+			A2(_elm_lang$core$Json_Decode$map, errorToString, _elm_lang$core$Json_Decode$string)),
+		{ctor: '[]'});
+};
+var _lucamug$elm_unbreakable_json$Page_Settings$errorsDecoder = A2(
+	_lucamug$elm_unbreakable_json$Page_Settings$optionalError,
+	'password',
+	A2(
+		_lucamug$elm_unbreakable_json$Page_Settings$optionalError,
+		'username',
+		A2(
+			_lucamug$elm_unbreakable_json$Page_Settings$optionalError,
+			'email',
+			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(
+				F3(
+					function (email, username, password) {
+						return _elm_lang$core$List$concat(
+							{
+								ctor: '::',
+								_0: email,
+								_1: {
+									ctor: '::',
+									_0: username,
+									_1: {
+										ctor: '::',
+										_0: password,
+										_1: {ctor: '[]'}
+									}
+								}
+							});
+					})))));
+var _lucamug$elm_unbreakable_json$Page_Settings$init = function (user) {
+	return {
+		errors: {ctor: '[]'},
+		image: _lucamug$elm_unbreakable_json$Data_UserPhoto$toMaybeString(user.image),
+		email: user.email,
+		bio: A2(_elm_lang$core$Maybe$withDefault, '', user.bio),
+		username: _lucamug$elm_unbreakable_json$Data_User$usernameToString(user.username),
+		password: _elm_lang$core$Maybe$Nothing
+	};
+};
+var _lucamug$elm_unbreakable_json$Page_Settings$Model = F6(
+	function (a, b, c, d, e, f) {
+		return {errors: a, image: b, email: c, bio: d, username: e, password: f};
+	});
+var _lucamug$elm_unbreakable_json$Page_Settings$SaveCompleted = function (a) {
+	return {ctor: 'SaveCompleted', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Page_Settings$SetImage = function (a) {
+	return {ctor: 'SetImage', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Page_Settings$SetBio = function (a) {
+	return {ctor: 'SetBio', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Page_Settings$SetPassword = function (a) {
+	return {ctor: 'SetPassword', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Page_Settings$SetUsername = function (a) {
+	return {ctor: 'SetUsername', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Page_Settings$SetEmail = function (a) {
+	return {ctor: 'SetEmail', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Page_Settings$SubmitForm = {ctor: 'SubmitForm'};
+var _lucamug$elm_unbreakable_json$Page_Settings$viewForm = function (model) {
+	return A2(
+		_elm_lang$html$Html$form,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Events$onSubmit(_lucamug$elm_unbreakable_json$Page_Settings$SubmitForm),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$fieldset,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: A2(
+						_lucamug$elm_unbreakable_json$Views_Form$input,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$placeholder('URL of profile picture'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$defaultValue(
+									A2(_elm_lang$core$Maybe$withDefault, '', model.image)),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Events$onInput(_lucamug$elm_unbreakable_json$Page_Settings$SetImage),
+									_1: {ctor: '[]'}
+								}
+							}
+						},
+						{ctor: '[]'}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_lucamug$elm_unbreakable_json$Views_Form$input,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('form-control-lg'),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$placeholder('Username'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$defaultValue(model.username),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Events$onInput(_lucamug$elm_unbreakable_json$Page_Settings$SetUsername),
+											_1: {ctor: '[]'}
+										}
+									}
+								}
+							},
+							{ctor: '[]'}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_lucamug$elm_unbreakable_json$Views_Form$textarea,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('form-control-lg'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$placeholder('Short bio about you'),
+										_1: {
+											ctor: '::',
+											_0: A2(_elm_lang$html$Html_Attributes$attribute, 'rows', '8'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$defaultValue(model.bio),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Events$onInput(_lucamug$elm_unbreakable_json$Page_Settings$SetBio),
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									}
+								},
+								{ctor: '[]'}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_lucamug$elm_unbreakable_json$Views_Form$input,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('form-control-lg'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$placeholder('Email'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$defaultValue(model.email),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Events$onInput(_lucamug$elm_unbreakable_json$Page_Settings$SetEmail),
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									},
+									{ctor: '[]'}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_lucamug$elm_unbreakable_json$Views_Form$password,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('form-control-lg'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$placeholder('Password'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$defaultValue(
+														A2(_elm_lang$core$Maybe$withDefault, '', model.password)),
 													_1: {
 														ctor: '::',
-														_0: _elm_lang$svg$Svg_Attributes$fill('#231f20'),
+														_0: _elm_lang$html$Html_Events$onInput(_lucamug$elm_unbreakable_json$Page_Settings$SetPassword),
 														_1: {ctor: '[]'}
 													}
 												}
@@ -20738,708 +25699,996 @@ var _lucamug$elm_unbreakable_json$Main$logoWatermelon = function (height) {
 									_1: {
 										ctor: '::',
 										_0: A2(
-											_elm_lang$svg$Svg$circle,
+											_elm_lang$html$Html$button,
 											{
 												ctor: '::',
-												_0: _elm_lang$svg$Svg_Attributes$cx('33'),
-												_1: {
-													ctor: '::',
-													_0: _elm_lang$svg$Svg_Attributes$cy('32.7'),
-													_1: {
-														ctor: '::',
-														_0: _elm_lang$svg$Svg_Attributes$r('1.5'),
-														_1: {
-															ctor: '::',
-															_0: _elm_lang$svg$Svg_Attributes$fill('#231f20'),
-															_1: {ctor: '[]'}
-														}
-													}
-												}
+												_0: _elm_lang$html$Html_Attributes$class('btn btn-lg btn-primary pull-xs-right'),
+												_1: {ctor: '[]'}
 											},
-											{ctor: '[]'}),
-										_1: {
-											ctor: '::',
-											_0: A2(
-												_elm_lang$svg$Svg$circle,
-												{
-													ctor: '::',
-													_0: _elm_lang$svg$Svg_Attributes$cx('38'),
-													_1: {
-														ctor: '::',
-														_0: _elm_lang$svg$Svg_Attributes$cy('27.7'),
-														_1: {
-															ctor: '::',
-															_0: _elm_lang$svg$Svg_Attributes$r('1.5'),
-															_1: {
-																ctor: '::',
-																_0: _elm_lang$svg$Svg_Attributes$fill('#231f20'),
-																_1: {ctor: '[]'}
-															}
-														}
-													}
-												},
-												{ctor: '[]'}),
-											_1: {
+											{
 												ctor: '::',
-												_0: A2(
-													_elm_lang$svg$Svg$circle,
-													{
-														ctor: '::',
-														_0: _elm_lang$svg$Svg_Attributes$cx('35.9'),
-														_1: {
-															ctor: '::',
-															_0: _elm_lang$svg$Svg_Attributes$cy('15.7'),
-															_1: {
-																ctor: '::',
-																_0: _elm_lang$svg$Svg_Attributes$r('1.5'),
-																_1: {
-																	ctor: '::',
-																	_0: _elm_lang$svg$Svg_Attributes$fill('#231f20'),
-																	_1: {ctor: '[]'}
-																}
-															}
-														}
-													},
-													{ctor: '[]'}),
-												_1: {
-													ctor: '::',
-													_0: A2(
-														_elm_lang$svg$Svg$circle,
-														{
-															ctor: '::',
-															_0: _elm_lang$svg$Svg_Attributes$cx('22.4'),
-															_1: {
-																ctor: '::',
-																_0: _elm_lang$svg$Svg_Attributes$cy('36.2'),
-																_1: {
-																	ctor: '::',
-																	_0: _elm_lang$svg$Svg_Attributes$r('1.5'),
-																	_1: {
-																		ctor: '::',
-																		_0: _elm_lang$svg$Svg_Attributes$fill('#231f20'),
-																		_1: {ctor: '[]'}
-																	}
-																}
-															}
-														},
-														{ctor: '[]'}),
-													_1: {
-														ctor: '::',
-														_0: A2(
-															_elm_lang$svg$Svg$circle,
-															{
-																ctor: '::',
-																_0: _elm_lang$svg$Svg_Attributes$cx('27.5'),
-																_1: {
-																	ctor: '::',
-																	_0: _elm_lang$svg$Svg_Attributes$cy('31'),
-																	_1: {
-																		ctor: '::',
-																		_0: _elm_lang$svg$Svg_Attributes$r('1.5'),
-																		_1: {
-																			ctor: '::',
-																			_0: _elm_lang$svg$Svg_Attributes$fill('#231f20'),
-																			_1: {ctor: '[]'}
-																		}
-																	}
-																}
-															},
-															{ctor: '[]'}),
-														_1: {
-															ctor: '::',
-															_0: A2(
-																_elm_lang$svg$Svg$circle,
-																{
-																	ctor: '::',
-																	_0: _elm_lang$svg$Svg_Attributes$cx('32.5'),
-																	_1: {
-																		ctor: '::',
-																		_0: _elm_lang$svg$Svg_Attributes$cy('26'),
-																		_1: {
-																			ctor: '::',
-																			_0: _elm_lang$svg$Svg_Attributes$r('1.5'),
-																			_1: {
-																				ctor: '::',
-																				_0: _elm_lang$svg$Svg_Attributes$fill('#231f20'),
-																				_1: {ctor: '[]'}
-																			}
-																		}
-																	}
-																},
-																{ctor: '[]'}),
-															_1: {
-																ctor: '::',
-																_0: A2(
-																	_elm_lang$svg$Svg$circle,
-																	{
-																		ctor: '::',
-																		_0: _elm_lang$svg$Svg_Attributes$cx('7.5'),
-																		_1: {
-																			ctor: '::',
-																			_0: _elm_lang$svg$Svg_Attributes$cy('27'),
-																			_1: {
-																				ctor: '::',
-																				_0: _elm_lang$svg$Svg_Attributes$r('1.5'),
-																				_1: {
-																					ctor: '::',
-																					_0: _elm_lang$svg$Svg_Attributes$fill('#231f20'),
-																					_1: {ctor: '[]'}
-																				}
-																			}
-																		}
-																	},
-																	{ctor: '[]'}),
-																_1: {
-																	ctor: '::',
-																	_0: A2(
-																		_elm_lang$svg$Svg$circle,
-																		{
-																			ctor: '::',
-																			_0: _elm_lang$svg$Svg_Attributes$cx('13.5'),
-																			_1: {
-																				ctor: '::',
-																				_0: _elm_lang$svg$Svg_Attributes$cy('19'),
-																				_1: {
-																					ctor: '::',
-																					_0: _elm_lang$svg$Svg_Attributes$r('1.5'),
-																					_1: {
-																						ctor: '::',
-																						_0: _elm_lang$svg$Svg_Attributes$fill('#231f20'),
-																						_1: {ctor: '[]'}
-																					}
-																				}
-																			}
-																		},
-																		{ctor: '[]'}),
-																	_1: {
-																		ctor: '::',
-																		_0: A2(
-																			_elm_lang$svg$Svg$circle,
-																			{
-																				ctor: '::',
-																				_0: _elm_lang$svg$Svg_Attributes$cx('37.3'),
-																				_1: {
-																					ctor: '::',
-																					_0: _elm_lang$svg$Svg_Attributes$cy('21.4'),
-																					_1: {
-																						ctor: '::',
-																						_0: _elm_lang$svg$Svg_Attributes$r('1.5'),
-																						_1: {
-																							ctor: '::',
-																							_0: _elm_lang$svg$Svg_Attributes$fill('#231f20'),
-																							_1: {ctor: '[]'}
-																						}
-																					}
-																				}
-																			},
-																			{ctor: '[]'}),
-																		_1: {ctor: '[]'}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
+												_0: _elm_lang$html$Html$text('Update Settings'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
 									}
 								}
 							}
 						}
 					}
-				}
-			}
+				}),
+			_1: {ctor: '[]'}
 		});
 };
-var _lucamug$elm_unbreakable_json$Main$viewHeading = function (t) {
-	return A2(
-		_mdgriffith$stylish_elephants$Element$el,
-		{
-			ctor: '::',
-			_0: _mdgriffith$stylish_elephants$Element_Font$size(20),
-			_1: {
+var _lucamug$elm_unbreakable_json$Page_Settings$view = F2(
+	function (session, model) {
+		return A2(
+			_elm_lang$html$Html$div,
+			{
 				ctor: '::',
-				_0: _mdgriffith$stylish_elephants$Element$alignLeft,
-				_1: {
-					ctor: '::',
-					_0: A2(_mdgriffith$stylish_elephants$Element$paddingXY, 0, 10),
-					_1: {ctor: '[]'}
-				}
-			}
-		},
-		_mdgriffith$stylish_elephants$Element$text(t));
-};
-var _lucamug$elm_unbreakable_json$Main$jsonEncoder = function (data) {
-	return _elm_lang$core$Json_Encode$object(
-		{
-			ctor: '::',
-			_0: {
-				ctor: '_Tuple2',
-				_0: 'text',
-				_1: _elm_lang$core$Json_Encode$string(data.text)
+				_0: _elm_lang$html$Html_Attributes$class('settings-page'),
+				_1: {ctor: '[]'}
 			},
-			_1: {
+			{
 				ctor: '::',
-				_0: {
-					ctor: '_Tuple2',
-					_0: 'logo',
-					_1: _elm_lang$core$Json_Encode$string(
-						_elm_lang$core$Basics$toString(data.logo))
-				},
-				_1: {
-					ctor: '::',
-					_0: {
-						ctor: '_Tuple2',
-						_0: 'toggle',
-						_1: _elm_lang$core$Json_Encode$bool(data.toggle)
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('container page'),
+						_1: {ctor: '[]'}
 					},
-					_1: {ctor: '[]'}
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('row'),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$div,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('col-md-6 offset-md-3 col-xs-12'),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$h1,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$class('text-xs-center'),
+												_1: {ctor: '[]'}
+											},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('Your Settings'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {
+											ctor: '::',
+											_0: _lucamug$elm_unbreakable_json$Views_Form$viewErrors(model.errors),
+											_1: {
+												ctor: '::',
+												_0: _lucamug$elm_unbreakable_json$Page_Settings$viewForm(model),
+												_1: {ctor: '[]'}
+											}
+										}
+									}),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			});
+	});
+var _lucamug$elm_unbreakable_json$Page_Settings$SetUser = function (a) {
+	return {ctor: 'SetUser', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Page_Settings$NoOp = {ctor: 'NoOp'};
+var _lucamug$elm_unbreakable_json$Page_Settings$Bio = {ctor: 'Bio'};
+var _lucamug$elm_unbreakable_json$Page_Settings$ImageUrl = {ctor: 'ImageUrl'};
+var _lucamug$elm_unbreakable_json$Page_Settings$Password = {ctor: 'Password'};
+var _lucamug$elm_unbreakable_json$Page_Settings$Email = {ctor: 'Email'};
+var _lucamug$elm_unbreakable_json$Page_Settings$Username = {ctor: 'Username'};
+var _lucamug$elm_unbreakable_json$Page_Settings$validate = _rtfeldman$elm_validate$Validate$all(
+	{
+		ctor: '::',
+		_0: function (_p0) {
+			return A2(
+				_rtfeldman$elm_validate$Validate$ifBlank,
+				A2(_lucamug$elm_unbreakable_json$Util_ops['=>'], _lucamug$elm_unbreakable_json$Page_Settings$Username, 'username can\'t be blank.'),
+				function (_) {
+					return _.username;
+				}(_p0));
+		},
+		_1: {
+			ctor: '::',
+			_0: function (_p1) {
+				return A2(
+					_rtfeldman$elm_validate$Validate$ifBlank,
+					A2(_lucamug$elm_unbreakable_json$Util_ops['=>'], _lucamug$elm_unbreakable_json$Page_Settings$Email, 'email can\'t be blank.'),
+					function (_) {
+						return _.email;
+					}(_p1));
+			},
+			_1: {ctor: '[]'}
+		}
+	});
+var _lucamug$elm_unbreakable_json$Page_Settings$Form = {ctor: 'Form'};
+var _lucamug$elm_unbreakable_json$Page_Settings$update = F3(
+	function (session, msg, model) {
+		var _p2 = msg;
+		switch (_p2.ctor) {
+			case 'SubmitForm':
+				var _p3 = _lucamug$elm_unbreakable_json$Page_Settings$validate(model);
+				if (_p3.ctor === '[]') {
+					return A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						A2(
+							_lucamug$elm_unbreakable_json$Util$pair,
+							_elm_lang$core$Native_Utils.update(
+								model,
+								{
+									errors: {ctor: '[]'}
+								}),
+							A2(
+								_elm_lang$http$Http$send,
+								_lucamug$elm_unbreakable_json$Page_Settings$SaveCompleted,
+								A2(
+									_lucamug$elm_unbreakable_json$Request_User$edit,
+									model,
+									A2(
+										_elm_lang$core$Maybe$map,
+										function (_) {
+											return _.token;
+										},
+										session.user)))),
+						_lucamug$elm_unbreakable_json$Page_Settings$NoOp);
+				} else {
+					return A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						A2(
+							_lucamug$elm_unbreakable_json$Util_ops['=>'],
+							_elm_lang$core$Native_Utils.update(
+								model,
+								{errors: _p3}),
+							_elm_lang$core$Platform_Cmd$none),
+						_lucamug$elm_unbreakable_json$Page_Settings$NoOp);
 				}
-			}
-		});
+			case 'SetEmail':
+				return A2(
+					_lucamug$elm_unbreakable_json$Util_ops['=>'],
+					A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{email: _p2._0}),
+						_elm_lang$core$Platform_Cmd$none),
+					_lucamug$elm_unbreakable_json$Page_Settings$NoOp);
+			case 'SetUsername':
+				return A2(
+					_lucamug$elm_unbreakable_json$Util_ops['=>'],
+					A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{username: _p2._0}),
+						_elm_lang$core$Platform_Cmd$none),
+					_lucamug$elm_unbreakable_json$Page_Settings$NoOp);
+			case 'SetPassword':
+				var _p4 = _p2._0;
+				var password = _elm_lang$core$String$isEmpty(_p4) ? _elm_lang$core$Maybe$Nothing : _elm_lang$core$Maybe$Just(_p4);
+				return A2(
+					_lucamug$elm_unbreakable_json$Util_ops['=>'],
+					A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{password: password}),
+						_elm_lang$core$Platform_Cmd$none),
+					_lucamug$elm_unbreakable_json$Page_Settings$NoOp);
+			case 'SetBio':
+				return A2(
+					_lucamug$elm_unbreakable_json$Util_ops['=>'],
+					A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{bio: _p2._0}),
+						_elm_lang$core$Platform_Cmd$none),
+					_lucamug$elm_unbreakable_json$Page_Settings$NoOp);
+			case 'SetImage':
+				var _p5 = _p2._0;
+				var image = _elm_lang$core$String$isEmpty(_p5) ? _elm_lang$core$Maybe$Nothing : _elm_lang$core$Maybe$Just(_p5);
+				return A2(
+					_lucamug$elm_unbreakable_json$Util_ops['=>'],
+					A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{image: image}),
+						_elm_lang$core$Platform_Cmd$none),
+					_lucamug$elm_unbreakable_json$Page_Settings$NoOp);
+			default:
+				if (_p2._0.ctor === 'Err') {
+					var errorMessages = function () {
+						var _p6 = _p2._0._0;
+						if (_p6.ctor === 'BadStatus') {
+							return A2(
+								_elm_lang$core$Result$withDefault,
+								{ctor: '[]'},
+								A2(
+									_elm_lang$core$Json_Decode$decodeString,
+									A2(_elm_lang$core$Json_Decode$field, 'errors', _lucamug$elm_unbreakable_json$Page_Settings$errorsDecoder),
+									_p6._0.body));
+						} else {
+							return {
+								ctor: '::',
+								_0: 'unable to save changes',
+								_1: {ctor: '[]'}
+							};
+						}
+					}();
+					var errors = A2(
+						_elm_lang$core$List$map,
+						function (errorMessage) {
+							return A2(_lucamug$elm_unbreakable_json$Util_ops['=>'], _lucamug$elm_unbreakable_json$Page_Settings$Form, errorMessage);
+						},
+						errorMessages);
+					return A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						A2(
+							_lucamug$elm_unbreakable_json$Util_ops['=>'],
+							_elm_lang$core$Native_Utils.update(
+								model,
+								{errors: errors}),
+							_elm_lang$core$Platform_Cmd$none),
+						_lucamug$elm_unbreakable_json$Page_Settings$NoOp);
+				} else {
+					var _p7 = _p2._0._0;
+					return A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						A2(
+							_lucamug$elm_unbreakable_json$Util_ops['=>'],
+							model,
+							_elm_lang$core$Platform_Cmd$batch(
+								{
+									ctor: '::',
+									_0: _lucamug$elm_unbreakable_json$Request_User$storeSession(_p7),
+									_1: {
+										ctor: '::',
+										_0: _lucamug$elm_unbreakable_json$Route$modifyUrl(_lucamug$elm_unbreakable_json$Route$Home),
+										_1: {ctor: '[]'}
+									}
+								})),
+						_lucamug$elm_unbreakable_json$Page_Settings$SetUser(_p7));
+				}
+		}
+	});
+
+var _lucamug$elm_unbreakable_json$Main$pageSubscriptions = function (page) {
+	var _p0 = page;
+	switch (_p0.ctor) {
+		case 'Blank':
+			return _elm_lang$core$Platform_Sub$none;
+		case 'Errored':
+			return _elm_lang$core$Platform_Sub$none;
+		case 'NotFound':
+			return _elm_lang$core$Platform_Sub$none;
+		case 'Settings':
+			return _elm_lang$core$Platform_Sub$none;
+		case 'Home':
+			return _elm_lang$core$Platform_Sub$none;
+		case 'Login':
+			return _elm_lang$core$Platform_Sub$none;
+		case 'Register':
+			return _elm_lang$core$Platform_Sub$none;
+		case 'Profile':
+			return _elm_lang$core$Platform_Sub$none;
+		case 'Article':
+			return _elm_lang$core$Platform_Sub$none;
+		default:
+			return _elm_lang$core$Platform_Sub$none;
+	}
 };
-var _lucamug$elm_unbreakable_json$Main$dataToString = function (data) {
+var _lucamug$elm_unbreakable_json$Main$getPage = function (pageState) {
+	var _p1 = pageState;
+	if (_p1.ctor === 'Loaded') {
+		return _p1._0;
+	} else {
+		return _p1._0;
+	}
+};
+var _lucamug$elm_unbreakable_json$Main$sessionChange = _lucamug$elm_unbreakable_json$Ports$onSessionChange(
+	function (_p2) {
+		return _elm_lang$core$Result$toMaybe(
+			A2(_elm_lang$core$Json_Decode$decodeValue, _lucamug$elm_unbreakable_json$Data_User$decoder, _p2));
+	});
+var _lucamug$elm_unbreakable_json$Main$decodeUserFromJson = function (json) {
 	return A2(
-		_elm_lang$core$Json_Encode$encode,
-		4,
-		_lucamug$elm_unbreakable_json$Main$jsonEncoder(data));
+		_elm_lang$core$Maybe$andThen,
+		function (_p3) {
+			return _elm_lang$core$Result$toMaybe(
+				A2(_elm_lang$core$Json_Decode$decodeString, _lucamug$elm_unbreakable_json$Data_User$decoder, _p3));
+		},
+		_elm_lang$core$Result$toMaybe(
+			A2(_elm_lang$core$Json_Decode$decodeValue, _elm_lang$core$Json_Decode$string, json)));
 };
-var _lucamug$elm_unbreakable_json$Main$initCmd = _elm_lang$core$Platform_Cmd$none;
-var _lucamug$elm_unbreakable_json$Main$handleNewJson = F2(
-	function (model, newData) {
+var _lucamug$elm_unbreakable_json$Main$Model = F2(
+	function (a, b) {
+		return {session: a, pageState: b};
+	});
+var _lucamug$elm_unbreakable_json$Main$Editor = F2(
+	function (a, b) {
+		return {ctor: 'Editor', _0: a, _1: b};
+	});
+var _lucamug$elm_unbreakable_json$Main$Article = function (a) {
+	return {ctor: 'Article', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Main$Profile = F2(
+	function (a, b) {
+		return {ctor: 'Profile', _0: a, _1: b};
+	});
+var _lucamug$elm_unbreakable_json$Main$Register = function (a) {
+	return {ctor: 'Register', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Main$Login = function (a) {
+	return {ctor: 'Login', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Main$Settings = function (a) {
+	return {ctor: 'Settings', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Main$Home = function (a) {
+	return {ctor: 'Home', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Main$Errored = function (a) {
+	return {ctor: 'Errored', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Main$NotFound = {ctor: 'NotFound'};
+var _lucamug$elm_unbreakable_json$Main$Blank = {ctor: 'Blank'};
+var _lucamug$elm_unbreakable_json$Main$initialPage = _lucamug$elm_unbreakable_json$Main$Blank;
+var _lucamug$elm_unbreakable_json$Main$TransitioningFrom = function (a) {
+	return {ctor: 'TransitioningFrom', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Main$Loaded = function (a) {
+	return {ctor: 'Loaded', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Main$pageErrored = F3(
+	function (model, activePage, errorMessage) {
+		var error = A2(_lucamug$elm_unbreakable_json$Page_Errored$pageLoadError, activePage, errorMessage);
+		return A2(
+			_lucamug$elm_unbreakable_json$Util_ops['=>'],
+			_elm_lang$core$Native_Utils.update(
+				model,
+				{
+					pageState: _lucamug$elm_unbreakable_json$Main$Loaded(
+						_lucamug$elm_unbreakable_json$Main$Errored(error))
+				}),
+			_elm_lang$core$Platform_Cmd$none);
+	});
+var _lucamug$elm_unbreakable_json$Main$toPage = F6(
+	function (model, toModel, toMsg, subUpdate, subMsg, subModel) {
+		var _p4 = A2(subUpdate, subMsg, subModel);
+		var newModel = _p4._0;
+		var newCmd = _p4._1;
 		return {
 			ctor: '_Tuple2',
 			_0: _elm_lang$core$Native_Utils.update(
 				model,
-				{data: newData, err: _elm_lang$core$Maybe$Nothing}),
-			_1: _elm_lang$core$Platform_Cmd$none
+				{
+					pageState: _lucamug$elm_unbreakable_json$Main$Loaded(
+						toModel(newModel))
+				}),
+			_1: A2(_elm_lang$core$Platform_Cmd$map, toMsg, newCmd)
 		};
 	});
-var _lucamug$elm_unbreakable_json$Main$Data = F3(
-	function (a, b, c) {
-		return {text: a, logo: b, toggle: c};
+var _lucamug$elm_unbreakable_json$Main$EditorMsg = function (a) {
+	return {ctor: 'EditorMsg', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Main$ArticleMsg = function (a) {
+	return {ctor: 'ArticleMsg', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Main$ProfileMsg = function (a) {
+	return {ctor: 'ProfileMsg', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Main$RegisterMsg = function (a) {
+	return {ctor: 'RegisterMsg', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Main$LoginMsg = function (a) {
+	return {ctor: 'LoginMsg', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Main$SetUser = function (a) {
+	return {ctor: 'SetUser', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Main$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$batch(
+		{
+			ctor: '::',
+			_0: _lucamug$elm_unbreakable_json$Main$pageSubscriptions(
+				_lucamug$elm_unbreakable_json$Main$getPage(model.pageState)),
+			_1: {
+				ctor: '::',
+				_0: A2(_elm_lang$core$Platform_Sub$map, _lucamug$elm_unbreakable_json$Main$SetUser, _lucamug$elm_unbreakable_json$Main$sessionChange),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _lucamug$elm_unbreakable_json$Main$SettingsMsg = function (a) {
+	return {ctor: 'SettingsMsg', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Main$HomeMsg = function (a) {
+	return {ctor: 'HomeMsg', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Main$viewPage = F3(
+	function (session, isLoading, page) {
+		var frame = A2(_lucamug$elm_unbreakable_json$Views_Page$frame, isLoading, session.user);
+		var _p5 = page;
+		switch (_p5.ctor) {
+			case 'NotFound':
+				return A2(
+					frame,
+					_lucamug$elm_unbreakable_json$Views_Page$Other,
+					_lucamug$elm_unbreakable_json$Page_NotFound$view(session));
+			case 'Blank':
+				return A2(
+					frame,
+					_lucamug$elm_unbreakable_json$Views_Page$Other,
+					_elm_lang$html$Html$text(''));
+			case 'Errored':
+				return A2(
+					frame,
+					_lucamug$elm_unbreakable_json$Views_Page$Other,
+					A2(_lucamug$elm_unbreakable_json$Page_Errored$view, session, _p5._0));
+			case 'Settings':
+				return A2(
+					_elm_lang$html$Html$map,
+					_lucamug$elm_unbreakable_json$Main$SettingsMsg,
+					A2(
+						frame,
+						_lucamug$elm_unbreakable_json$Views_Page$Other,
+						A2(_lucamug$elm_unbreakable_json$Page_Settings$view, session, _p5._0)));
+			case 'Home':
+				return A2(
+					_elm_lang$html$Html$map,
+					_lucamug$elm_unbreakable_json$Main$HomeMsg,
+					A2(
+						frame,
+						_lucamug$elm_unbreakable_json$Views_Page$Home,
+						A2(_lucamug$elm_unbreakable_json$Page_Home$view, session, _p5._0)));
+			case 'Login':
+				return A2(
+					_elm_lang$html$Html$map,
+					_lucamug$elm_unbreakable_json$Main$LoginMsg,
+					A2(
+						frame,
+						_lucamug$elm_unbreakable_json$Views_Page$Other,
+						A2(_lucamug$elm_unbreakable_json$Page_Login$view, session, _p5._0)));
+			case 'Register':
+				return A2(
+					_elm_lang$html$Html$map,
+					_lucamug$elm_unbreakable_json$Main$RegisterMsg,
+					A2(
+						frame,
+						_lucamug$elm_unbreakable_json$Views_Page$Other,
+						A2(_lucamug$elm_unbreakable_json$Page_Register$view, session, _p5._0)));
+			case 'Profile':
+				return A2(
+					_elm_lang$html$Html$map,
+					_lucamug$elm_unbreakable_json$Main$ProfileMsg,
+					A2(
+						frame,
+						_lucamug$elm_unbreakable_json$Views_Page$Profile(_p5._0),
+						A2(_lucamug$elm_unbreakable_json$Page_Profile$view, session, _p5._1)));
+			case 'Article':
+				return A2(
+					_elm_lang$html$Html$map,
+					_lucamug$elm_unbreakable_json$Main$ArticleMsg,
+					A2(
+						frame,
+						_lucamug$elm_unbreakable_json$Views_Page$Other,
+						A2(_lucamug$elm_unbreakable_json$Page_Article$view, session, _p5._0)));
+			default:
+				var framePage = _elm_lang$core$Native_Utils.eq(_p5._0, _elm_lang$core$Maybe$Nothing) ? _lucamug$elm_unbreakable_json$Views_Page$NewArticle : _lucamug$elm_unbreakable_json$Views_Page$Other;
+				return A2(
+					_elm_lang$html$Html$map,
+					_lucamug$elm_unbreakable_json$Main$EditorMsg,
+					A2(
+						frame,
+						framePage,
+						_lucamug$elm_unbreakable_json$Page_Article_Editor$view(_p5._1)));
+		}
 	});
-var _lucamug$elm_unbreakable_json$Main$Model = F2(
-	function (a, b) {
-		return {data: a, err: b};
-	});
-var _lucamug$elm_unbreakable_json$Main$EditorChangeJson = function (a) {
-	return {ctor: 'EditorChangeJson', _0: a};
-};
-var _lucamug$elm_unbreakable_json$Main$EditorChangeLogo = function (a) {
-	return {ctor: 'EditorChangeLogo', _0: a};
-};
-var _lucamug$elm_unbreakable_json$Main$EditorChangeText = function (a) {
-	return {ctor: 'EditorChangeText', _0: a};
-};
-var _lucamug$elm_unbreakable_json$Main$EditorChangeToggle = function (a) {
-	return {ctor: 'EditorChangeToggle', _0: a};
-};
-var _lucamug$elm_unbreakable_json$Main$Watermelon = {ctor: 'Watermelon'};
-var _lucamug$elm_unbreakable_json$Main$Strawberry = {ctor: 'Strawberry'};
-var _lucamug$elm_unbreakable_json$Main$Elm = {ctor: 'Elm'};
-var _lucamug$elm_unbreakable_json$Main$initModel = {
-	data: {text: 'Hello!', logo: _lucamug$elm_unbreakable_json$Main$Elm, toggle: false},
-	err: _elm_lang$core$Maybe$Nothing
-};
-var _lucamug$elm_unbreakable_json$Main$init = {ctor: '_Tuple2', _0: _lucamug$elm_unbreakable_json$Main$initModel, _1: _lucamug$elm_unbreakable_json$Main$initCmd};
-var _lucamug$elm_unbreakable_json$Main$logoDecoder = function (logoString) {
-	var _p0 = logoString;
-	switch (_p0) {
-		case 'Elm':
-			return _elm_lang$core$Json_Decode$succeed(_lucamug$elm_unbreakable_json$Main$Elm);
-		case 'Strawberry':
-			return _elm_lang$core$Json_Decode$succeed(_lucamug$elm_unbreakable_json$Main$Strawberry);
-		case 'Watermelon':
-			return _elm_lang$core$Json_Decode$succeed(_lucamug$elm_unbreakable_json$Main$Watermelon);
-		default:
-			return _elm_lang$core$Json_Decode$fail(
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					'I don\'t know a logo named \"',
-					A2(_elm_lang$core$Basics_ops['++'], logoString, '\"')));
+var _lucamug$elm_unbreakable_json$Main$view = function (model) {
+	var _p6 = model.pageState;
+	if (_p6.ctor === 'Loaded') {
+		return A3(_lucamug$elm_unbreakable_json$Main$viewPage, model.session, false, _p6._0);
+	} else {
+		return A3(_lucamug$elm_unbreakable_json$Main$viewPage, model.session, true, _p6._0);
 	}
 };
-var _lucamug$elm_unbreakable_json$Main$jsonDecoder = A3(
-	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-	'toggle',
-	_elm_lang$core$Json_Decode$bool,
-	A3(
-		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-		'logo',
-		A2(_elm_lang$core$Json_Decode$andThen, _lucamug$elm_unbreakable_json$Main$logoDecoder, _elm_lang$core$Json_Decode$string),
-		A3(
-			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-			'text',
-			_elm_lang$core$Json_Decode$string,
-			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_lucamug$elm_unbreakable_json$Main$Data))));
-var _lucamug$elm_unbreakable_json$Main$stringToResult = function (string) {
-	return A2(_elm_lang$core$Json_Decode$decodeString, _lucamug$elm_unbreakable_json$Main$jsonDecoder, string);
+var _lucamug$elm_unbreakable_json$Main$EditArticleLoaded = F2(
+	function (a, b) {
+		return {ctor: 'EditArticleLoaded', _0: a, _1: b};
+	});
+var _lucamug$elm_unbreakable_json$Main$ProfileLoaded = F2(
+	function (a, b) {
+		return {ctor: 'ProfileLoaded', _0: a, _1: b};
+	});
+var _lucamug$elm_unbreakable_json$Main$ArticleLoaded = function (a) {
+	return {ctor: 'ArticleLoaded', _0: a};
 };
-var _lucamug$elm_unbreakable_json$Main$stringToData = F2(
-	function (string, oldData) {
-		var _p1 = _lucamug$elm_unbreakable_json$Main$stringToResult(string);
-		if (_p1.ctor === 'Ok') {
-			return {ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: _p1._0};
+var _lucamug$elm_unbreakable_json$Main$HomeLoaded = function (a) {
+	return {ctor: 'HomeLoaded', _0: a};
+};
+var _lucamug$elm_unbreakable_json$Main$setRoute = F2(
+	function (maybeRoute, model) {
+		var errored = _lucamug$elm_unbreakable_json$Main$pageErrored(model);
+		var transition = F2(
+			function (toMsg, task) {
+				return A2(
+					_lucamug$elm_unbreakable_json$Util_ops['=>'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							pageState: _lucamug$elm_unbreakable_json$Main$TransitioningFrom(
+								_lucamug$elm_unbreakable_json$Main$getPage(model.pageState))
+						}),
+					A2(_elm_lang$core$Task$attempt, toMsg, task));
+			});
+		var _p7 = maybeRoute;
+		if (_p7.ctor === 'Nothing') {
+			return A2(
+				_lucamug$elm_unbreakable_json$Util_ops['=>'],
+				_elm_lang$core$Native_Utils.update(
+					model,
+					{
+						pageState: _lucamug$elm_unbreakable_json$Main$Loaded(_lucamug$elm_unbreakable_json$Main$NotFound)
+					}),
+				_elm_lang$core$Platform_Cmd$none);
 		} else {
-			return {
-				ctor: '_Tuple2',
-				_0: _elm_lang$core$Maybe$Just(_p1._0),
-				_1: oldData
-			};
+			switch (_p7._0.ctor) {
+				case 'NewArticle':
+					var _p8 = model.session.user;
+					if (_p8.ctor === 'Just') {
+						return A2(
+							_lucamug$elm_unbreakable_json$Util_ops['=>'],
+							_elm_lang$core$Native_Utils.update(
+								model,
+								{
+									pageState: _lucamug$elm_unbreakable_json$Main$Loaded(
+										A2(_lucamug$elm_unbreakable_json$Main$Editor, _elm_lang$core$Maybe$Nothing, _lucamug$elm_unbreakable_json$Page_Article_Editor$initNew))
+								}),
+							_elm_lang$core$Platform_Cmd$none);
+					} else {
+						return A2(errored, _lucamug$elm_unbreakable_json$Views_Page$NewArticle, 'You must be signed in to post an article.');
+					}
+				case 'EditArticle':
+					var _p10 = _p7._0._0;
+					var _p9 = model.session.user;
+					if (_p9.ctor === 'Just') {
+						return A2(
+							transition,
+							_lucamug$elm_unbreakable_json$Main$EditArticleLoaded(_p10),
+							A2(_lucamug$elm_unbreakable_json$Page_Article_Editor$initEdit, model.session, _p10));
+					} else {
+						return A2(errored, _lucamug$elm_unbreakable_json$Views_Page$Other, 'You must be signed in to edit an article.');
+					}
+				case 'Settings':
+					var _p11 = model.session.user;
+					if (_p11.ctor === 'Just') {
+						return A2(
+							_lucamug$elm_unbreakable_json$Util_ops['=>'],
+							_elm_lang$core$Native_Utils.update(
+								model,
+								{
+									pageState: _lucamug$elm_unbreakable_json$Main$Loaded(
+										_lucamug$elm_unbreakable_json$Main$Settings(
+											_lucamug$elm_unbreakable_json$Page_Settings$init(_p11._0)))
+								}),
+							_elm_lang$core$Platform_Cmd$none);
+					} else {
+						return A2(errored, _lucamug$elm_unbreakable_json$Views_Page$Settings, 'You must be signed in to access your settings.');
+					}
+				case 'Home':
+					return A2(
+						transition,
+						_lucamug$elm_unbreakable_json$Main$HomeLoaded,
+						_lucamug$elm_unbreakable_json$Page_Home$init(model.session));
+				case 'Login':
+					return A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{
+								pageState: _lucamug$elm_unbreakable_json$Main$Loaded(
+									_lucamug$elm_unbreakable_json$Main$Login(_lucamug$elm_unbreakable_json$Page_Login$initialModel))
+							}),
+						_elm_lang$core$Platform_Cmd$none);
+				case 'Logout':
+					var session = model.session;
+					return A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{
+								session: _elm_lang$core$Native_Utils.update(
+									session,
+									{user: _elm_lang$core$Maybe$Nothing})
+							}),
+						_elm_lang$core$Platform_Cmd$batch(
+							{
+								ctor: '::',
+								_0: _lucamug$elm_unbreakable_json$Ports$storeSession(_elm_lang$core$Maybe$Nothing),
+								_1: {
+									ctor: '::',
+									_0: _lucamug$elm_unbreakable_json$Route$modifyUrl(_lucamug$elm_unbreakable_json$Route$Home),
+									_1: {ctor: '[]'}
+								}
+							}));
+				case 'Register':
+					return A2(
+						_lucamug$elm_unbreakable_json$Util_ops['=>'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{
+								pageState: _lucamug$elm_unbreakable_json$Main$Loaded(
+									_lucamug$elm_unbreakable_json$Main$Register(_lucamug$elm_unbreakable_json$Page_Register$initialModel))
+							}),
+						_elm_lang$core$Platform_Cmd$none);
+				case 'Profile':
+					var _p12 = _p7._0._0;
+					return A2(
+						transition,
+						_lucamug$elm_unbreakable_json$Main$ProfileLoaded(_p12),
+						A2(_lucamug$elm_unbreakable_json$Page_Profile$init, model.session, _p12));
+				default:
+					return A2(
+						transition,
+						_lucamug$elm_unbreakable_json$Main$ArticleLoaded,
+						A2(_lucamug$elm_unbreakable_json$Page_Article$init, model.session, _p7._0._0));
+			}
 		}
+	});
+var _lucamug$elm_unbreakable_json$Main$init = F2(
+	function (val, location) {
+		var _p13 = A2(_elm_lang$core$Debug$log, 'init', val);
+		return A2(
+			_lucamug$elm_unbreakable_json$Main$setRoute,
+			_lucamug$elm_unbreakable_json$Route$fromLocation(location),
+			{
+				pageState: _lucamug$elm_unbreakable_json$Main$Loaded(_lucamug$elm_unbreakable_json$Main$initialPage),
+				session: {
+					user: _lucamug$elm_unbreakable_json$Main$decodeUserFromJson(val)
+				}
+			});
+	});
+var _lucamug$elm_unbreakable_json$Main$updatePage = F3(
+	function (page, msg, model) {
+		var _p14 = A2(_elm_lang$core$Debug$log, 'xxx', _lucamug$elm_unbreakable_json$Main$toPage);
+		var errored = _lucamug$elm_unbreakable_json$Main$pageErrored(model);
+		var session = model.session;
+		var _p15 = {ctor: '_Tuple2', _0: msg, _1: page};
+		_v8_18:
+		do {
+			_v8_17:
+			do {
+				switch (_p15._0.ctor) {
+					case 'SetRoute':
+						return A2(_lucamug$elm_unbreakable_json$Main$setRoute, _p15._0._0, model);
+					case 'HomeLoaded':
+						if (_p15._0._0.ctor === 'Ok') {
+							return A2(
+								_lucamug$elm_unbreakable_json$Util_ops['=>'],
+								_elm_lang$core$Native_Utils.update(
+									model,
+									{
+										pageState: _lucamug$elm_unbreakable_json$Main$Loaded(
+											_lucamug$elm_unbreakable_json$Main$Home(_p15._0._0._0))
+									}),
+								_elm_lang$core$Platform_Cmd$none);
+						} else {
+							return A2(
+								_lucamug$elm_unbreakable_json$Util_ops['=>'],
+								_elm_lang$core$Native_Utils.update(
+									model,
+									{
+										pageState: _lucamug$elm_unbreakable_json$Main$Loaded(
+											_lucamug$elm_unbreakable_json$Main$Errored(_p15._0._0._0))
+									}),
+								_elm_lang$core$Platform_Cmd$none);
+						}
+					case 'ProfileLoaded':
+						if (_p15._0._1.ctor === 'Ok') {
+							return A2(
+								_lucamug$elm_unbreakable_json$Util_ops['=>'],
+								_elm_lang$core$Native_Utils.update(
+									model,
+									{
+										pageState: _lucamug$elm_unbreakable_json$Main$Loaded(
+											A2(_lucamug$elm_unbreakable_json$Main$Profile, _p15._0._0, _p15._0._1._0))
+									}),
+								_elm_lang$core$Platform_Cmd$none);
+						} else {
+							return A2(
+								_lucamug$elm_unbreakable_json$Util_ops['=>'],
+								_elm_lang$core$Native_Utils.update(
+									model,
+									{
+										pageState: _lucamug$elm_unbreakable_json$Main$Loaded(
+											_lucamug$elm_unbreakable_json$Main$Errored(_p15._0._1._0))
+									}),
+								_elm_lang$core$Platform_Cmd$none);
+						}
+					case 'ArticleLoaded':
+						if (_p15._0._0.ctor === 'Ok') {
+							return A2(
+								_lucamug$elm_unbreakable_json$Util_ops['=>'],
+								_elm_lang$core$Native_Utils.update(
+									model,
+									{
+										pageState: _lucamug$elm_unbreakable_json$Main$Loaded(
+											_lucamug$elm_unbreakable_json$Main$Article(_p15._0._0._0))
+									}),
+								_elm_lang$core$Platform_Cmd$none);
+						} else {
+							return A2(
+								_lucamug$elm_unbreakable_json$Util_ops['=>'],
+								_elm_lang$core$Native_Utils.update(
+									model,
+									{
+										pageState: _lucamug$elm_unbreakable_json$Main$Loaded(
+											_lucamug$elm_unbreakable_json$Main$Errored(_p15._0._0._0))
+									}),
+								_elm_lang$core$Platform_Cmd$none);
+						}
+					case 'EditArticleLoaded':
+						if (_p15._0._1.ctor === 'Ok') {
+							return A2(
+								_lucamug$elm_unbreakable_json$Util_ops['=>'],
+								_elm_lang$core$Native_Utils.update(
+									model,
+									{
+										pageState: _lucamug$elm_unbreakable_json$Main$Loaded(
+											A2(
+												_lucamug$elm_unbreakable_json$Main$Editor,
+												_elm_lang$core$Maybe$Just(_p15._0._0),
+												_p15._0._1._0))
+									}),
+								_elm_lang$core$Platform_Cmd$none);
+						} else {
+							return A2(
+								_lucamug$elm_unbreakable_json$Util_ops['=>'],
+								_elm_lang$core$Native_Utils.update(
+									model,
+									{
+										pageState: _lucamug$elm_unbreakable_json$Main$Loaded(
+											_lucamug$elm_unbreakable_json$Main$Errored(_p15._0._1._0))
+									}),
+								_elm_lang$core$Platform_Cmd$none);
+						}
+					case 'SetUser':
+						var _p16 = _p15._0._0;
+						var session = model.session;
+						var cmd = ((!_elm_lang$core$Native_Utils.eq(session.user, _elm_lang$core$Maybe$Nothing)) && _elm_lang$core$Native_Utils.eq(_p16, _elm_lang$core$Maybe$Nothing)) ? _lucamug$elm_unbreakable_json$Route$modifyUrl(_lucamug$elm_unbreakable_json$Route$Home) : _elm_lang$core$Platform_Cmd$none;
+						return A2(
+							_lucamug$elm_unbreakable_json$Util_ops['=>'],
+							_elm_lang$core$Native_Utils.update(
+								model,
+								{
+									session: _elm_lang$core$Native_Utils.update(
+										session,
+										{user: _p16})
+								}),
+							cmd);
+					case 'SettingsMsg':
+						switch (_p15._1.ctor) {
+							case 'Settings':
+								var _p17 = A3(_lucamug$elm_unbreakable_json$Page_Settings$update, model.session, _p15._0._0, _p15._1._0);
+								var pageModel = _p17._0._0;
+								var cmd = _p17._0._1;
+								var msgFromPage = _p17._1;
+								var newModel = function () {
+									var _p18 = msgFromPage;
+									if (_p18.ctor === 'NoOp') {
+										return model;
+									} else {
+										var session = model.session;
+										return _elm_lang$core$Native_Utils.update(
+											model,
+											{
+												session: {
+													user: _elm_lang$core$Maybe$Just(_p18._0)
+												}
+											});
+									}
+								}();
+								return A2(
+									_lucamug$elm_unbreakable_json$Util_ops['=>'],
+									_elm_lang$core$Native_Utils.update(
+										newModel,
+										{
+											pageState: _lucamug$elm_unbreakable_json$Main$Loaded(
+												_lucamug$elm_unbreakable_json$Main$Settings(pageModel))
+										}),
+									A2(_elm_lang$core$Platform_Cmd$map, _lucamug$elm_unbreakable_json$Main$SettingsMsg, cmd));
+							case 'NotFound':
+								break _v8_17;
+							default:
+								break _v8_18;
+						}
+					case 'LoginMsg':
+						switch (_p15._1.ctor) {
+							case 'Login':
+								var _p19 = A2(_lucamug$elm_unbreakable_json$Page_Login$update, _p15._0._0, _p15._1._0);
+								var pageModel = _p19._0._0;
+								var cmd = _p19._0._1;
+								var msgFromPage = _p19._1;
+								var newModel = function () {
+									var _p20 = msgFromPage;
+									if (_p20.ctor === 'NoOp') {
+										return model;
+									} else {
+										var session = model.session;
+										return _elm_lang$core$Native_Utils.update(
+											model,
+											{
+												session: {
+													user: _elm_lang$core$Maybe$Just(_p20._0)
+												}
+											});
+									}
+								}();
+								return A2(
+									_lucamug$elm_unbreakable_json$Util_ops['=>'],
+									_elm_lang$core$Native_Utils.update(
+										newModel,
+										{
+											pageState: _lucamug$elm_unbreakable_json$Main$Loaded(
+												_lucamug$elm_unbreakable_json$Main$Login(pageModel))
+										}),
+									A2(_elm_lang$core$Platform_Cmd$map, _lucamug$elm_unbreakable_json$Main$LoginMsg, cmd));
+							case 'NotFound':
+								break _v8_17;
+							default:
+								break _v8_18;
+						}
+					case 'RegisterMsg':
+						switch (_p15._1.ctor) {
+							case 'Register':
+								var _p21 = A2(_lucamug$elm_unbreakable_json$Page_Register$update, _p15._0._0, _p15._1._0);
+								var pageModel = _p21._0._0;
+								var cmd = _p21._0._1;
+								var msgFromPage = _p21._1;
+								var newModel = function () {
+									var _p22 = msgFromPage;
+									if (_p22.ctor === 'NoOp') {
+										return model;
+									} else {
+										var session = model.session;
+										return _elm_lang$core$Native_Utils.update(
+											model,
+											{
+												session: {
+													user: _elm_lang$core$Maybe$Just(_p22._0)
+												}
+											});
+									}
+								}();
+								return A2(
+									_lucamug$elm_unbreakable_json$Util_ops['=>'],
+									_elm_lang$core$Native_Utils.update(
+										newModel,
+										{
+											pageState: _lucamug$elm_unbreakable_json$Main$Loaded(
+												_lucamug$elm_unbreakable_json$Main$Register(pageModel))
+										}),
+									A2(_elm_lang$core$Platform_Cmd$map, _lucamug$elm_unbreakable_json$Main$RegisterMsg, cmd));
+							case 'NotFound':
+								break _v8_17;
+							default:
+								break _v8_18;
+						}
+					case 'HomeMsg':
+						switch (_p15._1.ctor) {
+							case 'Home':
+								return A6(
+									_lucamug$elm_unbreakable_json$Main$toPage,
+									model,
+									_lucamug$elm_unbreakable_json$Main$Home,
+									_lucamug$elm_unbreakable_json$Main$HomeMsg,
+									_lucamug$elm_unbreakable_json$Page_Home$update(session),
+									_p15._0._0,
+									_p15._1._0);
+							case 'NotFound':
+								break _v8_17;
+							default:
+								break _v8_18;
+						}
+					case 'ProfileMsg':
+						switch (_p15._1.ctor) {
+							case 'Profile':
+								return A6(
+									_lucamug$elm_unbreakable_json$Main$toPage,
+									model,
+									_lucamug$elm_unbreakable_json$Main$Profile(_p15._1._0),
+									_lucamug$elm_unbreakable_json$Main$ProfileMsg,
+									_lucamug$elm_unbreakable_json$Page_Profile$update(model.session),
+									_p15._0._0,
+									_p15._1._1);
+							case 'NotFound':
+								break _v8_17;
+							default:
+								break _v8_18;
+						}
+					case 'ArticleMsg':
+						switch (_p15._1.ctor) {
+							case 'Article':
+								return A6(
+									_lucamug$elm_unbreakable_json$Main$toPage,
+									model,
+									_lucamug$elm_unbreakable_json$Main$Article,
+									_lucamug$elm_unbreakable_json$Main$ArticleMsg,
+									_lucamug$elm_unbreakable_json$Page_Article$update(model.session),
+									_p15._0._0,
+									_p15._1._0);
+							case 'NotFound':
+								break _v8_17;
+							default:
+								break _v8_18;
+						}
+					default:
+						switch (_p15._1.ctor) {
+							case 'Editor':
+								var _p24 = _p15._1._0;
+								var _p23 = model.session.user;
+								if (_p23.ctor === 'Nothing') {
+									return _elm_lang$core$Native_Utils.eq(_p24, _elm_lang$core$Maybe$Nothing) ? A2(errored, _lucamug$elm_unbreakable_json$Views_Page$NewArticle, 'You must be signed in to post articles.') : A2(errored, _lucamug$elm_unbreakable_json$Views_Page$Other, 'You must be signed in to edit articles.');
+								} else {
+									return A6(
+										_lucamug$elm_unbreakable_json$Main$toPage,
+										model,
+										_lucamug$elm_unbreakable_json$Main$Editor(_p24),
+										_lucamug$elm_unbreakable_json$Main$EditorMsg,
+										_lucamug$elm_unbreakable_json$Page_Article_Editor$update(_p23._0),
+										_p15._0._0,
+										_p15._1._1);
+								}
+							case 'NotFound':
+								break _v8_17;
+							default:
+								break _v8_18;
+						}
+				}
+			} while(false);
+			return A2(_lucamug$elm_unbreakable_json$Util_ops['=>'], model, _elm_lang$core$Platform_Cmd$none);
+		} while(false);
+		return A2(_lucamug$elm_unbreakable_json$Util_ops['=>'], model, _elm_lang$core$Platform_Cmd$none);
 	});
 var _lucamug$elm_unbreakable_json$Main$update = F2(
 	function (msg, model) {
-		var data = model.data;
-		var _p2 = msg;
-		switch (_p2.ctor) {
-			case 'EditorChangeToggle':
-				var newData = _elm_lang$core$Native_Utils.update(
-					data,
-					{toggle: _p2._0});
-				return A2(_lucamug$elm_unbreakable_json$Main$handleNewJson, model, newData);
-			case 'EditorChangeLogo':
-				var newData = _elm_lang$core$Native_Utils.update(
-					data,
-					{logo: _p2._0});
-				return A2(_lucamug$elm_unbreakable_json$Main$handleNewJson, model, newData);
-			case 'EditorChangeText':
-				var newData = _elm_lang$core$Native_Utils.update(
-					data,
-					{text: _p2._0});
-				return A2(_lucamug$elm_unbreakable_json$Main$handleNewJson, model, newData);
-			default:
-				var _p3 = A2(_lucamug$elm_unbreakable_json$Main$stringToData, _p2._0, model.data);
-				var err = _p3._0;
-				var newData = _p3._1;
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{data: newData, err: err}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-		}
+		var _p25 = A2(_elm_lang$core$Debug$log, 'msg', msg);
+		return A3(
+			_lucamug$elm_unbreakable_json$Main$updatePage,
+			_lucamug$elm_unbreakable_json$Main$getPage(model.pageState),
+			msg,
+			model);
 	});
-var _lucamug$elm_unbreakable_json$Main$viewEditor = function (model) {
-	return A2(
-		_mdgriffith$stylish_elephants$Element$column,
-		{
-			ctor: '::',
-			_0: _mdgriffith$stylish_elephants$Element$spacing(10),
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: A2(
-				_mdgriffith$stylish_elephants$Element$el,
-				{
-					ctor: '::',
-					_0: _mdgriffith$stylish_elephants$Element_Font$size(28),
-					_1: {ctor: '[]'}
-				},
-				_mdgriffith$stylish_elephants$Element$text('Elm - Unbreakable Json')),
-			_1: {
-				ctor: '::',
-				_0: A2(
-					_mdgriffith$stylish_elephants$Element$column,
-					{ctor: '[]'},
-					{
-						ctor: '::',
-						_0: _lucamug$elm_unbreakable_json$Main$viewHeading('Json'),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_mdgriffith$stylish_elephants$Element_Input$spellcheckedMultiline,
-								{
-									ctor: '::',
-									_0: _mdgriffith$stylish_elephants$Element$height(
-										_mdgriffith$stylish_elephants$Element$px(130)),
-									_1: {ctor: '[]'}
-								},
-								{
-									onChange: _elm_lang$core$Maybe$Just(_lucamug$elm_unbreakable_json$Main$EditorChangeJson),
-									text: _lucamug$elm_unbreakable_json$Main$dataToString(model.data),
-									placeholder: _elm_lang$core$Maybe$Nothing,
-									label: A2(
-										_mdgriffith$stylish_elephants$Element_Input$labelAbove,
-										{ctor: '[]'},
-										_mdgriffith$stylish_elephants$Element$text('')),
-									notice: function () {
-										var _p4 = model.err;
-										if (_p4.ctor === 'Nothing') {
-											return _elm_lang$core$Maybe$Nothing;
-										} else {
-											return _elm_lang$core$Maybe$Just(
-												A2(
-													_mdgriffith$stylish_elephants$Element_Input$errorBelow,
-													{
-														ctor: '::',
-														_0: _mdgriffith$stylish_elephants$Element_Font$color(_elm_lang$core$Color$red),
-														_1: {ctor: '[]'}
-													},
-													A2(
-														_mdgriffith$stylish_elephants$Element$paragraph,
-														{ctor: '[]'},
-														{
-															ctor: '::',
-															_0: _mdgriffith$stylish_elephants$Element$text(_p4._0),
-															_1: {ctor: '[]'}
-														})));
-										}
-									}()
-								}),
-							_1: {ctor: '[]'}
-						}
-					}),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_mdgriffith$stylish_elephants$Element_Input$text,
-						{ctor: '[]'},
-						{
-							label: A2(
-								_mdgriffith$stylish_elephants$Element_Input$labelAbove,
-								{ctor: '[]'},
-								_lucamug$elm_unbreakable_json$Main$viewHeading('Text')),
-							onChange: _elm_lang$core$Maybe$Just(_lucamug$elm_unbreakable_json$Main$EditorChangeText),
-							notice: _elm_lang$core$Maybe$Nothing,
-							placeholder: _elm_lang$core$Maybe$Nothing,
-							text: model.data.text
-						}),
-					_1: {
-						ctor: '::',
-						_0: A2(
-							_mdgriffith$stylish_elephants$Element_Input$radio,
-							{ctor: '[]'},
-							{
-								label: A2(
-									_mdgriffith$stylish_elephants$Element_Input$labelAbove,
-									{ctor: '[]'},
-									_lucamug$elm_unbreakable_json$Main$viewHeading('Logo')),
-								onChange: _elm_lang$core$Maybe$Just(_lucamug$elm_unbreakable_json$Main$EditorChangeLogo),
-								notice: _elm_lang$core$Maybe$Nothing,
-								selected: _elm_lang$core$Maybe$Just(model.data.logo),
-								options: {
-									ctor: '::',
-									_0: A2(
-										_mdgriffith$stylish_elephants$Element_Input$option,
-										_lucamug$elm_unbreakable_json$Main$Elm,
-										A2(
-											_mdgriffith$stylish_elephants$Element$row,
-											{
-												ctor: '::',
-												_0: _mdgriffith$stylish_elephants$Element$padding(10),
-												_1: {
-													ctor: '::',
-													_0: _mdgriffith$stylish_elephants$Element$spacing(10),
-													_1: {ctor: '[]'}
-												}
-											},
-											{
-												ctor: '::',
-												_0: A2(
-													_mdgriffith$stylish_elephants$Element$el,
-													{
-														ctor: '::',
-														_0: _mdgriffith$stylish_elephants$Element$alignLeft,
-														_1: {ctor: '[]'}
-													},
-													_mdgriffith$stylish_elephants$Element$html(
-														_lucamug$elm_unbreakable_json$Main$logoElm(22))),
-												_1: {
-													ctor: '::',
-													_0: A2(
-														_mdgriffith$stylish_elephants$Element$el,
-														{
-															ctor: '::',
-															_0: _mdgriffith$stylish_elephants$Element$alignLeft,
-															_1: {ctor: '[]'}
-														},
-														_mdgriffith$stylish_elephants$Element$text('Elm')),
-													_1: {ctor: '[]'}
-												}
-											})),
-									_1: {
-										ctor: '::',
-										_0: A2(
-											_mdgriffith$stylish_elephants$Element_Input$option,
-											_lucamug$elm_unbreakable_json$Main$Watermelon,
-											A2(
-												_mdgriffith$stylish_elephants$Element$row,
-												{
-													ctor: '::',
-													_0: _mdgriffith$stylish_elephants$Element$padding(10),
-													_1: {
-														ctor: '::',
-														_0: _mdgriffith$stylish_elephants$Element$spacing(10),
-														_1: {ctor: '[]'}
-													}
-												},
-												{
-													ctor: '::',
-													_0: A2(
-														_mdgriffith$stylish_elephants$Element$el,
-														{
-															ctor: '::',
-															_0: _mdgriffith$stylish_elephants$Element$alignLeft,
-															_1: {ctor: '[]'}
-														},
-														_mdgriffith$stylish_elephants$Element$html(
-															_lucamug$elm_unbreakable_json$Main$logoWatermelon(22))),
-													_1: {
-														ctor: '::',
-														_0: A2(
-															_mdgriffith$stylish_elephants$Element$el,
-															{
-																ctor: '::',
-																_0: _mdgriffith$stylish_elephants$Element$alignLeft,
-																_1: {ctor: '[]'}
-															},
-															_mdgriffith$stylish_elephants$Element$text('Watermelon')),
-														_1: {ctor: '[]'}
-													}
-												})),
-										_1: {
-											ctor: '::',
-											_0: A2(
-												_mdgriffith$stylish_elephants$Element_Input$option,
-												_lucamug$elm_unbreakable_json$Main$Strawberry,
-												A2(
-													_mdgriffith$stylish_elephants$Element$row,
-													{
-														ctor: '::',
-														_0: _mdgriffith$stylish_elephants$Element$padding(10),
-														_1: {
-															ctor: '::',
-															_0: _mdgriffith$stylish_elephants$Element$spacing(10),
-															_1: {ctor: '[]'}
-														}
-													},
-													{
-														ctor: '::',
-														_0: A2(
-															_mdgriffith$stylish_elephants$Element$el,
-															{
-																ctor: '::',
-																_0: _mdgriffith$stylish_elephants$Element$alignLeft,
-																_1: {ctor: '[]'}
-															},
-															_mdgriffith$stylish_elephants$Element$html(
-																_lucamug$elm_unbreakable_json$Main$logoStrawberry(22))),
-														_1: {
-															ctor: '::',
-															_0: A2(
-																_mdgriffith$stylish_elephants$Element$el,
-																{
-																	ctor: '::',
-																	_0: _mdgriffith$stylish_elephants$Element$alignLeft,
-																	_1: {ctor: '[]'}
-																},
-																_mdgriffith$stylish_elephants$Element$text('Strawberry')),
-															_1: {ctor: '[]'}
-														}
-													})),
-											_1: {ctor: '[]'}
-										}
-									}
-								}
-							}),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_mdgriffith$stylish_elephants$Element$paragraph,
-								{ctor: '[]'},
-								{
-									ctor: '::',
-									_0: A2(
-										_mdgriffith$stylish_elephants$Element_Input$checkbox,
-										{ctor: '[]'},
-										{
-											label: A2(
-												_mdgriffith$stylish_elephants$Element_Input$labelAbove,
-												{ctor: '[]'},
-												_lucamug$elm_unbreakable_json$Main$viewHeading('Toggle')),
-											onChange: _elm_lang$core$Maybe$Just(_lucamug$elm_unbreakable_json$Main$EditorChangeToggle),
-											notice: _elm_lang$core$Maybe$Nothing,
-											checked: model.data.toggle,
-											icon: _elm_lang$core$Maybe$Nothing
-										}),
-									_1: {ctor: '[]'}
-								}),
-							_1: {ctor: '[]'}
-						}
-					}
-				}
-			}
-		});
+var _lucamug$elm_unbreakable_json$Main$SetRoute = function (a) {
+	return {ctor: 'SetRoute', _0: a};
 };
-var _lucamug$elm_unbreakable_json$Main$viewElement = function (model) {
-	return A2(
-		_mdgriffith$stylish_elephants$Element$row,
-		{
-			ctor: '::',
-			_0: _mdgriffith$stylish_elephants$Element$width(
-				_mdgriffith$stylish_elephants$Element$px(320)),
-			_1: {
-				ctor: '::',
-				_0: _mdgriffith$stylish_elephants$Element$alignTop,
-				_1: {
-					ctor: '::',
-					_0: A2(_mdgriffith$stylish_elephants$Element$paddingXY, 0, 20),
-					_1: {ctor: '[]'}
-				}
-			}
-		},
-		{
-			ctor: '::',
-			_0: _lucamug$elm_unbreakable_json$Main$viewEditor(model),
-			_1: {ctor: '[]'}
-		});
-};
-var _lucamug$elm_unbreakable_json$Main$view = function (model) {
-	return A2(
-		_mdgriffith$stylish_elephants$Element$layout,
-		{
-			ctor: '::',
-			_0: _mdgriffith$stylish_elephants$Element_Font$family(
-				{
-					ctor: '::',
-					_0: _mdgriffith$stylish_elephants$Element_Font$typeface('Source Sans Pro'),
-					_1: {
-						ctor: '::',
-						_0: _mdgriffith$stylish_elephants$Element_Font$sansSerif,
-						_1: {ctor: '[]'}
-					}
-				}),
-			_1: {
-				ctor: '::',
-				_0: _mdgriffith$stylish_elephants$Element_Font$size(16),
-				_1: {
-					ctor: '::',
-					_0: _mdgriffith$stylish_elephants$Element_Font$color(
-						A3(_elm_lang$core$Color$rgb, 51, 51, 51)),
-					_1: {
-						ctor: '::',
-						_0: _mdgriffith$stylish_elephants$Element_Background$color(
-							A3(_elm_lang$core$Color$rgb, 255, 255, 255)),
-						_1: {ctor: '[]'}
-					}
-				}
-			}
-		},
-		_lucamug$elm_unbreakable_json$Main$viewElement(model));
-};
-var _lucamug$elm_unbreakable_json$Main$main = _elm_lang$html$Html$program(
-	{
-		init: _lucamug$elm_unbreakable_json$Main$init,
-		view: _lucamug$elm_unbreakable_json$Main$view,
-		update: _lucamug$elm_unbreakable_json$Main$update,
-		subscriptions: function (_p5) {
-			return _elm_lang$core$Platform_Sub$none;
-		}
-	})();
+var _lucamug$elm_unbreakable_json$Main$main = A2(
+	_elm_lang$navigation$Navigation$programWithFlags,
+	function (_p26) {
+		return _lucamug$elm_unbreakable_json$Main$SetRoute(
+			_lucamug$elm_unbreakable_json$Route$fromLocation(_p26));
+	},
+	{init: _lucamug$elm_unbreakable_json$Main$init, view: _lucamug$elm_unbreakable_json$Main$view, update: _lucamug$elm_unbreakable_json$Main$update, subscriptions: _lucamug$elm_unbreakable_json$Main$subscriptions})(_elm_lang$core$Json_Decode$value);
 
 var _lucamug$elm_unbreakable_json$DeviceEmulator$style = function (style) {
 	return _mdgriffith$stylish_elephants$Element$attribute(
@@ -21479,10 +26728,12 @@ var _lucamug$elm_unbreakable_json$DeviceEmulator$ModelDeviceEmulator = F3(
 	function (a, b, c) {
 		return {deviceType: a, windowSize: b, fullscreen: c};
 	});
+var _lucamug$elm_unbreakable_json$DeviceEmulator$UrlChange = function (a) {
+	return {ctor: 'UrlChange', _0: a};
+};
 var _lucamug$elm_unbreakable_json$DeviceEmulator$WindowSize = function (a) {
 	return {ctor: 'WindowSize', _0: a};
 };
-var _lucamug$elm_unbreakable_json$DeviceEmulator$initCmd = A2(_elm_lang$core$Task$perform, _lucamug$elm_unbreakable_json$DeviceEmulator$WindowSize, _elm_lang$window$Window$size);
 var _lucamug$elm_unbreakable_json$DeviceEmulator$subscriptions = function (model) {
 	return _elm_lang$window$Window$resizes(_lucamug$elm_unbreakable_json$DeviceEmulator$WindowSize);
 };
@@ -21497,6 +26748,8 @@ var _lucamug$elm_unbreakable_json$DeviceEmulator$update = F2(
 	function (msg, model) {
 		var _p1 = msg;
 		switch (_p1.ctor) {
+			case 'UrlChange':
+				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 			case 'MsgMain':
 				var _p2 = A2(_lucamug$elm_unbreakable_json$Main$update, _p1._0, model.modelMain);
 				var newMain = _p2._0;
@@ -21553,10 +26806,11 @@ var _lucamug$elm_unbreakable_json$DeviceEmulator$viewDevice = function (model) {
 	var deviceBorderSide = 10;
 	var deviceBorderBottom = 110;
 	var deviceBorderTop = 80;
-	var content = A2(
-		_mdgriffith$stylish_elephants$Element$map,
-		_lucamug$elm_unbreakable_json$DeviceEmulator$MsgMain,
-		_lucamug$elm_unbreakable_json$Main$viewElement(model.modelMain));
+	var content = _mdgriffith$stylish_elephants$Element$html(
+		A2(
+			_elm_lang$html$Html$map,
+			_lucamug$elm_unbreakable_json$DeviceEmulator$MsgMain,
+			_lucamug$elm_unbreakable_json$Main$view(model.modelMain)));
 	return A2(
 		_mdgriffith$stylish_elephants$Element$column,
 		{
@@ -21750,14 +27004,29 @@ var _lucamug$elm_unbreakable_json$DeviceEmulator$viewDevice = function (model) {
 var _lucamug$elm_unbreakable_json$DeviceEmulator$IPad = {ctor: 'IPad'};
 var _lucamug$elm_unbreakable_json$DeviceEmulator$IPhoneX = {ctor: 'IPhoneX'};
 var _lucamug$elm_unbreakable_json$DeviceEmulator$IPhone7 = {ctor: 'IPhone7'};
-var _lucamug$elm_unbreakable_json$DeviceEmulator$initModel = {
-	modelMain: _lucamug$elm_unbreakable_json$Main$initModel,
-	modelDeviceEmulator: {
-		deviceType: _lucamug$elm_unbreakable_json$DeviceEmulator$IPhone7,
-		windowSize: {width: 0, height: 0},
-		fullscreen: false
-	}
-};
+var _lucamug$elm_unbreakable_json$DeviceEmulator$init = F2(
+	function (flag, location) {
+		var _p4 = A2(_lucamug$elm_unbreakable_json$Main$init, flag, location);
+		var initModel = _p4._0;
+		var initCmd = _p4._1;
+		return {
+			ctor: '_Tuple2',
+			_0: {
+				modelMain: initModel,
+				modelDeviceEmulator: {
+					deviceType: _lucamug$elm_unbreakable_json$DeviceEmulator$IPhone7,
+					windowSize: {width: 0, height: 0},
+					fullscreen: false
+				}
+			},
+			_1: _elm_lang$core$Platform_Cmd$batch(
+				{
+					ctor: '::',
+					_0: A2(_elm_lang$core$Task$perform, _lucamug$elm_unbreakable_json$DeviceEmulator$WindowSize, _elm_lang$window$Window$size),
+					_1: {ctor: '[]'}
+				})
+		};
+	});
 var _lucamug$elm_unbreakable_json$DeviceEmulator$IPhone5 = {ctor: 'IPhone5'};
 var _lucamug$elm_unbreakable_json$DeviceEmulator$viewDeviceMenu = {
 	ctor: '::',
@@ -21825,9 +27094,9 @@ var _lucamug$elm_unbreakable_json$DeviceEmulator$viewDeviceMenu = {
 	}
 };
 var _lucamug$elm_unbreakable_json$DeviceEmulator$viewMenuStickyRight = function (model) {
-	var _p4 = _lucamug$elm_unbreakable_json$DeviceEmulator$windowSize(model);
-	var windowWidth = _p4._0;
-	var windowHeight = _p4._1;
+	var _p5 = _lucamug$elm_unbreakable_json$DeviceEmulator$windowSize(model);
+	var windowWidth = _p5._0;
+	var windowHeight = _p5._1;
 	var menuItems = A2(
 		_elm_lang$core$Basics_ops['++'],
 		_lucamug$elm_unbreakable_json$DeviceEmulator$viewDeviceMenu,
@@ -21925,9 +27194,9 @@ var _lucamug$elm_unbreakable_json$DeviceEmulator$viewMenuStickyRight = function 
 			menuItems));
 };
 var _lucamug$elm_unbreakable_json$DeviceEmulator$view = function (model) {
-	var _p5 = _lucamug$elm_unbreakable_json$DeviceEmulator$windowSize(model);
-	var windowWidth = _p5._0;
-	var windowHeight = _p5._1;
+	var _p6 = _lucamug$elm_unbreakable_json$DeviceEmulator$windowSize(model);
+	var windowWidth = _p6._0;
+	var windowHeight = _p6._1;
 	return A2(
 		_mdgriffith$stylish_elephants$Element$layout,
 		{
@@ -21952,10 +27221,11 @@ var _lucamug$elm_unbreakable_json$DeviceEmulator$view = function (model) {
 			},
 			{
 				ctor: '::',
-				_0: (_elm_lang$core$Native_Utils.cmp(model.modelDeviceEmulator.windowSize.width, 0) > 0) ? (model.modelDeviceEmulator.fullscreen ? A2(
-					_mdgriffith$stylish_elephants$Element$map,
-					_lucamug$elm_unbreakable_json$DeviceEmulator$MsgMain,
-					_lucamug$elm_unbreakable_json$Main$viewElement(model.modelMain)) : _lucamug$elm_unbreakable_json$DeviceEmulator$viewDevice(model)) : A2(
+				_0: (_elm_lang$core$Native_Utils.cmp(model.modelDeviceEmulator.windowSize.width, 0) > 0) ? (model.modelDeviceEmulator.fullscreen ? _mdgriffith$stylish_elephants$Element$html(
+					A2(
+						_elm_lang$html$Html$map,
+						_lucamug$elm_unbreakable_json$DeviceEmulator$MsgMain,
+						_lucamug$elm_unbreakable_json$Main$view(model.modelMain))) : _lucamug$elm_unbreakable_json$DeviceEmulator$viewDevice(model)) : A2(
 					_mdgriffith$stylish_elephants$Element$el,
 					{
 						ctor: '::',
@@ -21966,13 +27236,10 @@ var _lucamug$elm_unbreakable_json$DeviceEmulator$view = function (model) {
 				_1: {ctor: '[]'}
 			}));
 };
-var _lucamug$elm_unbreakable_json$DeviceEmulator$main = _elm_lang$html$Html$program(
-	{
-		init: {ctor: '_Tuple2', _0: _lucamug$elm_unbreakable_json$DeviceEmulator$initModel, _1: _lucamug$elm_unbreakable_json$DeviceEmulator$initCmd},
-		view: _lucamug$elm_unbreakable_json$DeviceEmulator$view,
-		update: _lucamug$elm_unbreakable_json$DeviceEmulator$update,
-		subscriptions: _lucamug$elm_unbreakable_json$DeviceEmulator$subscriptions
-	})();
+var _lucamug$elm_unbreakable_json$DeviceEmulator$main = A2(
+	_elm_lang$navigation$Navigation$programWithFlags,
+	_lucamug$elm_unbreakable_json$DeviceEmulator$UrlChange,
+	{init: _lucamug$elm_unbreakable_json$DeviceEmulator$init, view: _lucamug$elm_unbreakable_json$DeviceEmulator$view, update: _lucamug$elm_unbreakable_json$DeviceEmulator$update, subscriptions: _lucamug$elm_unbreakable_json$DeviceEmulator$subscriptions})(_elm_lang$core$Json_Decode$value);
 
 var Elm = {};
 Elm['DeviceEmulator'] = Elm['DeviceEmulator'] || {};
