@@ -1,12 +1,12 @@
-# Elm Unbreakable Json
+# Elm Responsive Emulator
 
 ## Demo
 
-* http://guupa.com/elm-unbreakable-json/
+* http://guupa.com/elm-responsive-emulator/
 
 ## Post
 
-* 
+*
 
 ## Usage
 

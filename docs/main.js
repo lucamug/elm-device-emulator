@@ -6003,6 +6003,418 @@ var _elm_lang$core$Color$Linear = F3(
 	});
 var _elm_lang$core$Color$linear = _elm_lang$core$Color$Linear;
 
+var _elm_lang$core$Task$onError = _elm_lang$core$Native_Scheduler.onError;
+var _elm_lang$core$Task$andThen = _elm_lang$core$Native_Scheduler.andThen;
+var _elm_lang$core$Task$spawnCmd = F2(
+	function (router, _p0) {
+		var _p1 = _p0;
+		return _elm_lang$core$Native_Scheduler.spawn(
+			A2(
+				_elm_lang$core$Task$andThen,
+				_elm_lang$core$Platform$sendToApp(router),
+				_p1._0));
+	});
+var _elm_lang$core$Task$fail = _elm_lang$core$Native_Scheduler.fail;
+var _elm_lang$core$Task$mapError = F2(
+	function (convert, task) {
+		return A2(
+			_elm_lang$core$Task$onError,
+			function (_p2) {
+				return _elm_lang$core$Task$fail(
+					convert(_p2));
+			},
+			task);
+	});
+var _elm_lang$core$Task$succeed = _elm_lang$core$Native_Scheduler.succeed;
+var _elm_lang$core$Task$map = F2(
+	function (func, taskA) {
+		return A2(
+			_elm_lang$core$Task$andThen,
+			function (a) {
+				return _elm_lang$core$Task$succeed(
+					func(a));
+			},
+			taskA);
+	});
+var _elm_lang$core$Task$map2 = F3(
+	function (func, taskA, taskB) {
+		return A2(
+			_elm_lang$core$Task$andThen,
+			function (a) {
+				return A2(
+					_elm_lang$core$Task$andThen,
+					function (b) {
+						return _elm_lang$core$Task$succeed(
+							A2(func, a, b));
+					},
+					taskB);
+			},
+			taskA);
+	});
+var _elm_lang$core$Task$map3 = F4(
+	function (func, taskA, taskB, taskC) {
+		return A2(
+			_elm_lang$core$Task$andThen,
+			function (a) {
+				return A2(
+					_elm_lang$core$Task$andThen,
+					function (b) {
+						return A2(
+							_elm_lang$core$Task$andThen,
+							function (c) {
+								return _elm_lang$core$Task$succeed(
+									A3(func, a, b, c));
+							},
+							taskC);
+					},
+					taskB);
+			},
+			taskA);
+	});
+var _elm_lang$core$Task$map4 = F5(
+	function (func, taskA, taskB, taskC, taskD) {
+		return A2(
+			_elm_lang$core$Task$andThen,
+			function (a) {
+				return A2(
+					_elm_lang$core$Task$andThen,
+					function (b) {
+						return A2(
+							_elm_lang$core$Task$andThen,
+							function (c) {
+								return A2(
+									_elm_lang$core$Task$andThen,
+									function (d) {
+										return _elm_lang$core$Task$succeed(
+											A4(func, a, b, c, d));
+									},
+									taskD);
+							},
+							taskC);
+					},
+					taskB);
+			},
+			taskA);
+	});
+var _elm_lang$core$Task$map5 = F6(
+	function (func, taskA, taskB, taskC, taskD, taskE) {
+		return A2(
+			_elm_lang$core$Task$andThen,
+			function (a) {
+				return A2(
+					_elm_lang$core$Task$andThen,
+					function (b) {
+						return A2(
+							_elm_lang$core$Task$andThen,
+							function (c) {
+								return A2(
+									_elm_lang$core$Task$andThen,
+									function (d) {
+										return A2(
+											_elm_lang$core$Task$andThen,
+											function (e) {
+												return _elm_lang$core$Task$succeed(
+													A5(func, a, b, c, d, e));
+											},
+											taskE);
+									},
+									taskD);
+							},
+							taskC);
+					},
+					taskB);
+			},
+			taskA);
+	});
+var _elm_lang$core$Task$sequence = function (tasks) {
+	var _p3 = tasks;
+	if (_p3.ctor === '[]') {
+		return _elm_lang$core$Task$succeed(
+			{ctor: '[]'});
+	} else {
+		return A3(
+			_elm_lang$core$Task$map2,
+			F2(
+				function (x, y) {
+					return {ctor: '::', _0: x, _1: y};
+				}),
+			_p3._0,
+			_elm_lang$core$Task$sequence(_p3._1));
+	}
+};
+var _elm_lang$core$Task$onEffects = F3(
+	function (router, commands, state) {
+		return A2(
+			_elm_lang$core$Task$map,
+			function (_p4) {
+				return {ctor: '_Tuple0'};
+			},
+			_elm_lang$core$Task$sequence(
+				A2(
+					_elm_lang$core$List$map,
+					_elm_lang$core$Task$spawnCmd(router),
+					commands)));
+	});
+var _elm_lang$core$Task$init = _elm_lang$core$Task$succeed(
+	{ctor: '_Tuple0'});
+var _elm_lang$core$Task$onSelfMsg = F3(
+	function (_p7, _p6, _p5) {
+		return _elm_lang$core$Task$succeed(
+			{ctor: '_Tuple0'});
+	});
+var _elm_lang$core$Task$command = _elm_lang$core$Native_Platform.leaf('Task');
+var _elm_lang$core$Task$Perform = function (a) {
+	return {ctor: 'Perform', _0: a};
+};
+var _elm_lang$core$Task$perform = F2(
+	function (toMessage, task) {
+		return _elm_lang$core$Task$command(
+			_elm_lang$core$Task$Perform(
+				A2(_elm_lang$core$Task$map, toMessage, task)));
+	});
+var _elm_lang$core$Task$attempt = F2(
+	function (resultToMessage, task) {
+		return _elm_lang$core$Task$command(
+			_elm_lang$core$Task$Perform(
+				A2(
+					_elm_lang$core$Task$onError,
+					function (_p8) {
+						return _elm_lang$core$Task$succeed(
+							resultToMessage(
+								_elm_lang$core$Result$Err(_p8)));
+					},
+					A2(
+						_elm_lang$core$Task$andThen,
+						function (_p9) {
+							return _elm_lang$core$Task$succeed(
+								resultToMessage(
+									_elm_lang$core$Result$Ok(_p9)));
+						},
+						task))));
+	});
+var _elm_lang$core$Task$cmdMap = F2(
+	function (tagger, _p10) {
+		var _p11 = _p10;
+		return _elm_lang$core$Task$Perform(
+			A2(_elm_lang$core$Task$map, tagger, _p11._0));
+	});
+_elm_lang$core$Native_Platform.effectManagers['Task'] = {pkg: 'elm-lang/core', init: _elm_lang$core$Task$init, onEffects: _elm_lang$core$Task$onEffects, onSelfMsg: _elm_lang$core$Task$onSelfMsg, tag: 'cmd', cmdMap: _elm_lang$core$Task$cmdMap};
+
+//import Native.Scheduler //
+
+var _elm_lang$core$Native_Time = function() {
+
+var now = _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
+{
+	callback(_elm_lang$core$Native_Scheduler.succeed(Date.now()));
+});
+
+function setInterval_(interval, task)
+{
+	return _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
+	{
+		var id = setInterval(function() {
+			_elm_lang$core$Native_Scheduler.rawSpawn(task);
+		}, interval);
+
+		return function() { clearInterval(id); };
+	});
+}
+
+return {
+	now: now,
+	setInterval_: F2(setInterval_)
+};
+
+}();
+var _elm_lang$core$Time$setInterval = _elm_lang$core$Native_Time.setInterval_;
+var _elm_lang$core$Time$spawnHelp = F3(
+	function (router, intervals, processes) {
+		var _p0 = intervals;
+		if (_p0.ctor === '[]') {
+			return _elm_lang$core$Task$succeed(processes);
+		} else {
+			var _p1 = _p0._0;
+			var spawnRest = function (id) {
+				return A3(
+					_elm_lang$core$Time$spawnHelp,
+					router,
+					_p0._1,
+					A3(_elm_lang$core$Dict$insert, _p1, id, processes));
+			};
+			var spawnTimer = _elm_lang$core$Native_Scheduler.spawn(
+				A2(
+					_elm_lang$core$Time$setInterval,
+					_p1,
+					A2(_elm_lang$core$Platform$sendToSelf, router, _p1)));
+			return A2(_elm_lang$core$Task$andThen, spawnRest, spawnTimer);
+		}
+	});
+var _elm_lang$core$Time$addMySub = F2(
+	function (_p2, state) {
+		var _p3 = _p2;
+		var _p6 = _p3._1;
+		var _p5 = _p3._0;
+		var _p4 = A2(_elm_lang$core$Dict$get, _p5, state);
+		if (_p4.ctor === 'Nothing') {
+			return A3(
+				_elm_lang$core$Dict$insert,
+				_p5,
+				{
+					ctor: '::',
+					_0: _p6,
+					_1: {ctor: '[]'}
+				},
+				state);
+		} else {
+			return A3(
+				_elm_lang$core$Dict$insert,
+				_p5,
+				{ctor: '::', _0: _p6, _1: _p4._0},
+				state);
+		}
+	});
+var _elm_lang$core$Time$inMilliseconds = function (t) {
+	return t;
+};
+var _elm_lang$core$Time$millisecond = 1;
+var _elm_lang$core$Time$second = 1000 * _elm_lang$core$Time$millisecond;
+var _elm_lang$core$Time$minute = 60 * _elm_lang$core$Time$second;
+var _elm_lang$core$Time$hour = 60 * _elm_lang$core$Time$minute;
+var _elm_lang$core$Time$inHours = function (t) {
+	return t / _elm_lang$core$Time$hour;
+};
+var _elm_lang$core$Time$inMinutes = function (t) {
+	return t / _elm_lang$core$Time$minute;
+};
+var _elm_lang$core$Time$inSeconds = function (t) {
+	return t / _elm_lang$core$Time$second;
+};
+var _elm_lang$core$Time$now = _elm_lang$core$Native_Time.now;
+var _elm_lang$core$Time$onSelfMsg = F3(
+	function (router, interval, state) {
+		var _p7 = A2(_elm_lang$core$Dict$get, interval, state.taggers);
+		if (_p7.ctor === 'Nothing') {
+			return _elm_lang$core$Task$succeed(state);
+		} else {
+			var tellTaggers = function (time) {
+				return _elm_lang$core$Task$sequence(
+					A2(
+						_elm_lang$core$List$map,
+						function (tagger) {
+							return A2(
+								_elm_lang$core$Platform$sendToApp,
+								router,
+								tagger(time));
+						},
+						_p7._0));
+			};
+			return A2(
+				_elm_lang$core$Task$andThen,
+				function (_p8) {
+					return _elm_lang$core$Task$succeed(state);
+				},
+				A2(_elm_lang$core$Task$andThen, tellTaggers, _elm_lang$core$Time$now));
+		}
+	});
+var _elm_lang$core$Time$subscription = _elm_lang$core$Native_Platform.leaf('Time');
+var _elm_lang$core$Time$State = F2(
+	function (a, b) {
+		return {taggers: a, processes: b};
+	});
+var _elm_lang$core$Time$init = _elm_lang$core$Task$succeed(
+	A2(_elm_lang$core$Time$State, _elm_lang$core$Dict$empty, _elm_lang$core$Dict$empty));
+var _elm_lang$core$Time$onEffects = F3(
+	function (router, subs, _p9) {
+		var _p10 = _p9;
+		var rightStep = F3(
+			function (_p12, id, _p11) {
+				var _p13 = _p11;
+				return {
+					ctor: '_Tuple3',
+					_0: _p13._0,
+					_1: _p13._1,
+					_2: A2(
+						_elm_lang$core$Task$andThen,
+						function (_p14) {
+							return _p13._2;
+						},
+						_elm_lang$core$Native_Scheduler.kill(id))
+				};
+			});
+		var bothStep = F4(
+			function (interval, taggers, id, _p15) {
+				var _p16 = _p15;
+				return {
+					ctor: '_Tuple3',
+					_0: _p16._0,
+					_1: A3(_elm_lang$core$Dict$insert, interval, id, _p16._1),
+					_2: _p16._2
+				};
+			});
+		var leftStep = F3(
+			function (interval, taggers, _p17) {
+				var _p18 = _p17;
+				return {
+					ctor: '_Tuple3',
+					_0: {ctor: '::', _0: interval, _1: _p18._0},
+					_1: _p18._1,
+					_2: _p18._2
+				};
+			});
+		var newTaggers = A3(_elm_lang$core$List$foldl, _elm_lang$core$Time$addMySub, _elm_lang$core$Dict$empty, subs);
+		var _p19 = A6(
+			_elm_lang$core$Dict$merge,
+			leftStep,
+			bothStep,
+			rightStep,
+			newTaggers,
+			_p10.processes,
+			{
+				ctor: '_Tuple3',
+				_0: {ctor: '[]'},
+				_1: _elm_lang$core$Dict$empty,
+				_2: _elm_lang$core$Task$succeed(
+					{ctor: '_Tuple0'})
+			});
+		var spawnList = _p19._0;
+		var existingDict = _p19._1;
+		var killTask = _p19._2;
+		return A2(
+			_elm_lang$core$Task$andThen,
+			function (newProcesses) {
+				return _elm_lang$core$Task$succeed(
+					A2(_elm_lang$core$Time$State, newTaggers, newProcesses));
+			},
+			A2(
+				_elm_lang$core$Task$andThen,
+				function (_p20) {
+					return A3(_elm_lang$core$Time$spawnHelp, router, spawnList, existingDict);
+				},
+				killTask));
+	});
+var _elm_lang$core$Time$Every = F2(
+	function (a, b) {
+		return {ctor: 'Every', _0: a, _1: b};
+	});
+var _elm_lang$core$Time$every = F2(
+	function (interval, tagger) {
+		return _elm_lang$core$Time$subscription(
+			A2(_elm_lang$core$Time$Every, interval, tagger));
+	});
+var _elm_lang$core$Time$subMap = F2(
+	function (f, _p21) {
+		var _p22 = _p21;
+		return A2(
+			_elm_lang$core$Time$Every,
+			_p22._0,
+			function (_p23) {
+				return f(
+					_p22._1(_p23));
+			});
+	});
+_elm_lang$core$Native_Platform.effectManagers['Time'] = {pkg: 'elm-lang/core', init: _elm_lang$core$Time$init, onEffects: _elm_lang$core$Time$onEffects, onSelfMsg: _elm_lang$core$Time$onSelfMsg, tag: 'sub', subMap: _elm_lang$core$Time$subMap};
+
 //import Maybe, Native.List //
 
 var _elm_lang$core$Native_Regex = function() {
@@ -6122,6 +6534,10 @@ return {
 };
 
 }();
+
+var _elm_lang$core$Process$kill = _elm_lang$core$Native_Scheduler.kill;
+var _elm_lang$core$Process$sleep = _elm_lang$core$Native_Scheduler.sleep;
+var _elm_lang$core$Process$spawn = _elm_lang$core$Native_Scheduler.spawn;
 
 var _elm_lang$core$Regex$split = _elm_lang$core$Native_Regex.split;
 var _elm_lang$core$Regex$replace = _elm_lang$core$Native_Regex.replace;
@@ -6270,6 +6686,192 @@ var _elm_lang$core$Set$partition = F2(
 			_1: _elm_lang$core$Set$Set_elm_builtin(p2)
 		};
 	});
+
+var _elm_lang$dom$Native_Dom = function() {
+
+var fakeNode = {
+	addEventListener: function() {},
+	removeEventListener: function() {}
+};
+
+var onDocument = on(typeof document !== 'undefined' ? document : fakeNode);
+var onWindow = on(typeof window !== 'undefined' ? window : fakeNode);
+
+function on(node)
+{
+	return function(eventName, decoder, toTask)
+	{
+		return _elm_lang$core$Native_Scheduler.nativeBinding(function(callback) {
+
+			function performTask(event)
+			{
+				var result = A2(_elm_lang$core$Json_Decode$decodeValue, decoder, event);
+				if (result.ctor === 'Ok')
+				{
+					_elm_lang$core$Native_Scheduler.rawSpawn(toTask(result._0));
+				}
+			}
+
+			node.addEventListener(eventName, performTask);
+
+			return function()
+			{
+				node.removeEventListener(eventName, performTask);
+			};
+		});
+	};
+}
+
+var rAF = typeof requestAnimationFrame !== 'undefined'
+	? requestAnimationFrame
+	: function(callback) { callback(); };
+
+function withNode(id, doStuff)
+{
+	return _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
+	{
+		rAF(function()
+		{
+			var node = document.getElementById(id);
+			if (node === null)
+			{
+				callback(_elm_lang$core$Native_Scheduler.fail({ ctor: 'NotFound', _0: id }));
+				return;
+			}
+			callback(_elm_lang$core$Native_Scheduler.succeed(doStuff(node)));
+		});
+	});
+}
+
+
+// FOCUS
+
+function focus(id)
+{
+	return withNode(id, function(node) {
+		node.focus();
+		return _elm_lang$core$Native_Utils.Tuple0;
+	});
+}
+
+function blur(id)
+{
+	return withNode(id, function(node) {
+		node.blur();
+		return _elm_lang$core$Native_Utils.Tuple0;
+	});
+}
+
+
+// SCROLLING
+
+function getScrollTop(id)
+{
+	return withNode(id, function(node) {
+		return node.scrollTop;
+	});
+}
+
+function setScrollTop(id, desiredScrollTop)
+{
+	return withNode(id, function(node) {
+		node.scrollTop = desiredScrollTop;
+		return _elm_lang$core$Native_Utils.Tuple0;
+	});
+}
+
+function toBottom(id)
+{
+	return withNode(id, function(node) {
+		node.scrollTop = node.scrollHeight;
+		return _elm_lang$core$Native_Utils.Tuple0;
+	});
+}
+
+function getScrollLeft(id)
+{
+	return withNode(id, function(node) {
+		return node.scrollLeft;
+	});
+}
+
+function setScrollLeft(id, desiredScrollLeft)
+{
+	return withNode(id, function(node) {
+		node.scrollLeft = desiredScrollLeft;
+		return _elm_lang$core$Native_Utils.Tuple0;
+	});
+}
+
+function toRight(id)
+{
+	return withNode(id, function(node) {
+		node.scrollLeft = node.scrollWidth;
+		return _elm_lang$core$Native_Utils.Tuple0;
+	});
+}
+
+
+// SIZE
+
+function width(options, id)
+{
+	return withNode(id, function(node) {
+		switch (options.ctor)
+		{
+			case 'Content':
+				return node.scrollWidth;
+			case 'VisibleContent':
+				return node.clientWidth;
+			case 'VisibleContentWithBorders':
+				return node.offsetWidth;
+			case 'VisibleContentWithBordersAndMargins':
+				var rect = node.getBoundingClientRect();
+				return rect.right - rect.left;
+		}
+	});
+}
+
+function height(options, id)
+{
+	return withNode(id, function(node) {
+		switch (options.ctor)
+		{
+			case 'Content':
+				return node.scrollHeight;
+			case 'VisibleContent':
+				return node.clientHeight;
+			case 'VisibleContentWithBorders':
+				return node.offsetHeight;
+			case 'VisibleContentWithBordersAndMargins':
+				var rect = node.getBoundingClientRect();
+				return rect.bottom - rect.top;
+		}
+	});
+}
+
+return {
+	onDocument: F3(onDocument),
+	onWindow: F3(onWindow),
+
+	focus: focus,
+	blur: blur,
+
+	getScrollTop: getScrollTop,
+	setScrollTop: F2(setScrollTop),
+	getScrollLeft: getScrollLeft,
+	setScrollLeft: F2(setScrollLeft),
+	toBottom: toBottom,
+	toRight: toRight,
+
+	height: F2(height),
+	width: F2(width)
+};
+
+}();
+
+var _elm_lang$dom$Dom_LowLevel$onWindow = _elm_lang$dom$Native_Dom.onWindow;
+var _elm_lang$dom$Dom_LowLevel$onDocument = _elm_lang$dom$Native_Dom.onDocument;
 
 var _elm_lang$virtual_dom$VirtualDom_Debug$wrap;
 var _elm_lang$virtual_dom$VirtualDom_Debug$wrapWithFlags;
@@ -9114,6 +9716,128 @@ var _elm_lang$svg$Svg_Attributes$additive = _elm_lang$virtual_dom$VirtualDom$att
 var _elm_lang$svg$Svg_Attributes$accumulate = _elm_lang$virtual_dom$VirtualDom$attribute('accumulate');
 var _elm_lang$svg$Svg_Attributes$accelerate = _elm_lang$virtual_dom$VirtualDom$attribute('accelerate');
 var _elm_lang$svg$Svg_Attributes$accentHeight = _elm_lang$virtual_dom$VirtualDom$attribute('accent-height');
+
+var _elm_lang$window$Native_Window = function()
+{
+
+var size = _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)	{
+	callback(_elm_lang$core$Native_Scheduler.succeed({
+		width: window.innerWidth,
+		height: window.innerHeight
+	}));
+});
+
+return {
+	size: size
+};
+
+}();
+var _elm_lang$window$Window_ops = _elm_lang$window$Window_ops || {};
+_elm_lang$window$Window_ops['&>'] = F2(
+	function (task1, task2) {
+		return A2(
+			_elm_lang$core$Task$andThen,
+			function (_p0) {
+				return task2;
+			},
+			task1);
+	});
+var _elm_lang$window$Window$onSelfMsg = F3(
+	function (router, dimensions, state) {
+		var _p1 = state;
+		if (_p1.ctor === 'Nothing') {
+			return _elm_lang$core$Task$succeed(state);
+		} else {
+			var send = function (_p2) {
+				var _p3 = _p2;
+				return A2(
+					_elm_lang$core$Platform$sendToApp,
+					router,
+					_p3._0(dimensions));
+			};
+			return A2(
+				_elm_lang$window$Window_ops['&>'],
+				_elm_lang$core$Task$sequence(
+					A2(_elm_lang$core$List$map, send, _p1._0.subs)),
+				_elm_lang$core$Task$succeed(state));
+		}
+	});
+var _elm_lang$window$Window$init = _elm_lang$core$Task$succeed(_elm_lang$core$Maybe$Nothing);
+var _elm_lang$window$Window$size = _elm_lang$window$Native_Window.size;
+var _elm_lang$window$Window$width = A2(
+	_elm_lang$core$Task$map,
+	function (_) {
+		return _.width;
+	},
+	_elm_lang$window$Window$size);
+var _elm_lang$window$Window$height = A2(
+	_elm_lang$core$Task$map,
+	function (_) {
+		return _.height;
+	},
+	_elm_lang$window$Window$size);
+var _elm_lang$window$Window$onEffects = F3(
+	function (router, newSubs, oldState) {
+		var _p4 = {ctor: '_Tuple2', _0: oldState, _1: newSubs};
+		if (_p4._0.ctor === 'Nothing') {
+			if (_p4._1.ctor === '[]') {
+				return _elm_lang$core$Task$succeed(_elm_lang$core$Maybe$Nothing);
+			} else {
+				return A2(
+					_elm_lang$core$Task$andThen,
+					function (pid) {
+						return _elm_lang$core$Task$succeed(
+							_elm_lang$core$Maybe$Just(
+								{subs: newSubs, pid: pid}));
+					},
+					_elm_lang$core$Process$spawn(
+						A3(
+							_elm_lang$dom$Dom_LowLevel$onWindow,
+							'resize',
+							_elm_lang$core$Json_Decode$succeed(
+								{ctor: '_Tuple0'}),
+							function (_p5) {
+								return A2(
+									_elm_lang$core$Task$andThen,
+									_elm_lang$core$Platform$sendToSelf(router),
+									_elm_lang$window$Window$size);
+							})));
+			}
+		} else {
+			if (_p4._1.ctor === '[]') {
+				return A2(
+					_elm_lang$window$Window_ops['&>'],
+					_elm_lang$core$Process$kill(_p4._0._0.pid),
+					_elm_lang$core$Task$succeed(_elm_lang$core$Maybe$Nothing));
+			} else {
+				return _elm_lang$core$Task$succeed(
+					_elm_lang$core$Maybe$Just(
+						{subs: newSubs, pid: _p4._0._0.pid}));
+			}
+		}
+	});
+var _elm_lang$window$Window$subscription = _elm_lang$core$Native_Platform.leaf('Window');
+var _elm_lang$window$Window$Size = F2(
+	function (a, b) {
+		return {width: a, height: b};
+	});
+var _elm_lang$window$Window$MySub = function (a) {
+	return {ctor: 'MySub', _0: a};
+};
+var _elm_lang$window$Window$resizes = function (tagger) {
+	return _elm_lang$window$Window$subscription(
+		_elm_lang$window$Window$MySub(tagger));
+};
+var _elm_lang$window$Window$subMap = F2(
+	function (func, _p6) {
+		var _p7 = _p6;
+		return _elm_lang$window$Window$MySub(
+			function (_p8) {
+				return func(
+					_p7._0(_p8));
+			});
+	});
+_elm_lang$core$Native_Platform.effectManagers['Window'] = {pkg: 'elm-lang/window', init: _elm_lang$window$Window$init, onEffects: _elm_lang$window$Window$onEffects, onSelfMsg: _elm_lang$window$Window$onSelfMsg, tag: 'sub', subMap: _elm_lang$window$Window$subMap};
 
 var _mdgriffith$stylish_elephants$Internal_Style$class = function (cls) {
 	var _p0 = cls;
@@ -20227,36 +20951,7 @@ var _lucamug$elm_unbreakable_json$Main$logoWatermelon = function (height) {
 			}
 		});
 };
-var _lucamug$elm_unbreakable_json$Main$jsonEncoder = function (conf) {
-	return _elm_lang$core$Json_Encode$object(
-		{
-			ctor: '::',
-			_0: {
-				ctor: '_Tuple2',
-				_0: 'text',
-				_1: _elm_lang$core$Json_Encode$string(conf.text)
-			},
-			_1: {
-				ctor: '::',
-				_0: {
-					ctor: '_Tuple2',
-					_0: 'logo',
-					_1: _elm_lang$core$Json_Encode$string(
-						_elm_lang$core$Basics$toString(conf.logo))
-				},
-				_1: {
-					ctor: '::',
-					_0: {
-						ctor: '_Tuple2',
-						_0: 'toggle',
-						_1: _elm_lang$core$Json_Encode$bool(conf.toggle)
-					},
-					_1: {ctor: '[]'}
-				}
-			}
-		});
-};
-var _lucamug$elm_unbreakable_json$Main$header = function (t) {
+var _lucamug$elm_unbreakable_json$Main$viewHeading = function (t) {
 	return A2(
 		_mdgriffith$stylish_elephants$Element$el,
 		{
@@ -20274,26 +20969,59 @@ var _lucamug$elm_unbreakable_json$Main$header = function (t) {
 		},
 		_mdgriffith$stylish_elephants$Element$text(t));
 };
-var _lucamug$elm_unbreakable_json$Main$subscriptions = function (model) {
-	return _elm_lang$core$Platform_Sub$none;
+var _lucamug$elm_unbreakable_json$Main$jsonEncoder = function (data) {
+	return _elm_lang$core$Json_Encode$object(
+		{
+			ctor: '::',
+			_0: {
+				ctor: '_Tuple2',
+				_0: 'text',
+				_1: _elm_lang$core$Json_Encode$string(data.text)
+			},
+			_1: {
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple2',
+					_0: 'logo',
+					_1: _elm_lang$core$Json_Encode$string(
+						_elm_lang$core$Basics$toString(data.logo))
+				},
+				_1: {
+					ctor: '::',
+					_0: {
+						ctor: '_Tuple2',
+						_0: 'toggle',
+						_1: _elm_lang$core$Json_Encode$bool(data.toggle)
+					},
+					_1: {ctor: '[]'}
+				}
+			}
+		});
 };
+var _lucamug$elm_unbreakable_json$Main$dataToString = function (data) {
+	return A2(
+		_elm_lang$core$Json_Encode$encode,
+		4,
+		_lucamug$elm_unbreakable_json$Main$jsonEncoder(data));
+};
+var _lucamug$elm_unbreakable_json$Main$initCmd = _elm_lang$core$Platform_Cmd$none;
 var _lucamug$elm_unbreakable_json$Main$handleNewJson = F2(
-	function (model, newJson) {
+	function (model, newData) {
 		return {
 			ctor: '_Tuple2',
 			_0: _elm_lang$core$Native_Utils.update(
 				model,
-				{json: newJson, err: ''}),
+				{data: newData, err: _elm_lang$core$Maybe$Nothing}),
 			_1: _elm_lang$core$Platform_Cmd$none
 		};
 	});
 var _lucamug$elm_unbreakable_json$Main$Data = F3(
 	function (a, b, c) {
-		return {logo: a, text: b, toggle: c};
+		return {text: a, logo: b, toggle: c};
 	});
 var _lucamug$elm_unbreakable_json$Main$Model = F2(
 	function (a, b) {
-		return {json: a, err: b};
+		return {data: a, err: b};
 	});
 var _lucamug$elm_unbreakable_json$Main$EditorChangeJson = function (a) {
 	return {ctor: 'EditorChangeJson', _0: a};
@@ -20311,14 +21039,10 @@ var _lucamug$elm_unbreakable_json$Main$Watermelon = {ctor: 'Watermelon'};
 var _lucamug$elm_unbreakable_json$Main$Strawberry = {ctor: 'Strawberry'};
 var _lucamug$elm_unbreakable_json$Main$Elm = {ctor: 'Elm'};
 var _lucamug$elm_unbreakable_json$Main$initModel = {
-	json: {toggle: false, logo: _lucamug$elm_unbreakable_json$Main$Elm, text: 'Hello!'},
-	err: ''
+	data: {text: 'Hello!', logo: _lucamug$elm_unbreakable_json$Main$Elm, toggle: false},
+	err: _elm_lang$core$Maybe$Nothing
 };
-var _lucamug$elm_unbreakable_json$Main$init = function () {
-	var cmd = _elm_lang$core$Platform_Cmd$none;
-	var model = _lucamug$elm_unbreakable_json$Main$initModel;
-	return {ctor: '_Tuple2', _0: model, _1: cmd};
-}();
+var _lucamug$elm_unbreakable_json$Main$init = {ctor: '_Tuple2', _0: _lucamug$elm_unbreakable_json$Main$initModel, _1: _lucamug$elm_unbreakable_json$Main$initCmd};
 var _lucamug$elm_unbreakable_json$Main$logoDecoder = function (logoString) {
 	var _p0 = logoString;
 	switch (_p0) {
@@ -20330,7 +21054,10 @@ var _lucamug$elm_unbreakable_json$Main$logoDecoder = function (logoString) {
 			return _elm_lang$core$Json_Decode$succeed(_lucamug$elm_unbreakable_json$Main$Watermelon);
 		default:
 			return _elm_lang$core$Json_Decode$fail(
-				A2(_elm_lang$core$Basics_ops['++'], 'I don\'t know a logo named ', logoString));
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					'I don\'t know a logo named \"',
+					A2(_elm_lang$core$Basics_ops['++'], logoString, '\"')));
 	}
 };
 var _lucamug$elm_unbreakable_json$Main$jsonDecoder = A3(
@@ -20339,62 +21066,63 @@ var _lucamug$elm_unbreakable_json$Main$jsonDecoder = A3(
 	_elm_lang$core$Json_Decode$bool,
 	A3(
 		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-		'text',
-		_elm_lang$core$Json_Decode$string,
+		'logo',
+		A2(_elm_lang$core$Json_Decode$andThen, _lucamug$elm_unbreakable_json$Main$logoDecoder, _elm_lang$core$Json_Decode$string),
 		A3(
 			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-			'logo',
-			A2(_elm_lang$core$Json_Decode$andThen, _lucamug$elm_unbreakable_json$Main$logoDecoder, _elm_lang$core$Json_Decode$string),
+			'text',
+			_elm_lang$core$Json_Decode$string,
 			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_lucamug$elm_unbreakable_json$Main$Data))));
-var _lucamug$elm_unbreakable_json$Main$updateJson = F2(
-	function (newJsonString, oldJson) {
-		var result = A2(_elm_lang$core$Json_Decode$decodeString, _lucamug$elm_unbreakable_json$Main$jsonDecoder, newJsonString);
-		var _p1 = result;
+var _lucamug$elm_unbreakable_json$Main$stringToResult = function (string) {
+	return A2(_elm_lang$core$Json_Decode$decodeString, _lucamug$elm_unbreakable_json$Main$jsonDecoder, string);
+};
+var _lucamug$elm_unbreakable_json$Main$stringToData = F2(
+	function (string, oldData) {
+		var _p1 = _lucamug$elm_unbreakable_json$Main$stringToResult(string);
 		if (_p1.ctor === 'Ok') {
-			return {ctor: '_Tuple2', _0: '', _1: _p1._0};
+			return {ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: _p1._0};
 		} else {
-			return {ctor: '_Tuple2', _0: _p1._0, _1: oldJson};
+			return {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Maybe$Just(_p1._0),
+				_1: oldData
+			};
 		}
 	});
 var _lucamug$elm_unbreakable_json$Main$update = F2(
 	function (msg, model) {
-		var conf = model.json;
+		var data = model.data;
 		var _p2 = msg;
 		switch (_p2.ctor) {
 			case 'EditorChangeToggle':
-				var newJson = _elm_lang$core$Native_Utils.update(
-					conf,
+				var newData = _elm_lang$core$Native_Utils.update(
+					data,
 					{toggle: _p2._0});
-				return A2(_lucamug$elm_unbreakable_json$Main$handleNewJson, model, newJson);
+				return A2(_lucamug$elm_unbreakable_json$Main$handleNewJson, model, newData);
 			case 'EditorChangeLogo':
-				var newJson = _elm_lang$core$Native_Utils.update(
-					conf,
+				var newData = _elm_lang$core$Native_Utils.update(
+					data,
 					{logo: _p2._0});
-				return A2(_lucamug$elm_unbreakable_json$Main$handleNewJson, model, newJson);
+				return A2(_lucamug$elm_unbreakable_json$Main$handleNewJson, model, newData);
 			case 'EditorChangeText':
-				var newJson = _elm_lang$core$Native_Utils.update(
-					conf,
+				var newData = _elm_lang$core$Native_Utils.update(
+					data,
 					{text: _p2._0});
-				return A2(_lucamug$elm_unbreakable_json$Main$handleNewJson, model, newJson);
+				return A2(_lucamug$elm_unbreakable_json$Main$handleNewJson, model, newData);
 			default:
-				var oldJson = model.json;
-				var _p3 = A2(_lucamug$elm_unbreakable_json$Main$updateJson, _p2._0, oldJson);
+				var _p3 = A2(_lucamug$elm_unbreakable_json$Main$stringToData, _p2._0, model.data);
 				var err = _p3._0;
-				var newJson = _p3._1;
+				var newData = _p3._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{json: newJson, err: err}),
+						{data: newData, err: err}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 		}
 	});
 var _lucamug$elm_unbreakable_json$Main$viewEditor = function (model) {
-	var prettyJson = A2(
-		_elm_lang$core$Json_Encode$encode,
-		4,
-		_lucamug$elm_unbreakable_json$Main$jsonEncoder(model.json));
 	return A2(
 		_mdgriffith$stylish_elephants$Element$column,
 		{
@@ -20419,7 +21147,7 @@ var _lucamug$elm_unbreakable_json$Main$viewEditor = function (model) {
 					{ctor: '[]'},
 					{
 						ctor: '::',
-						_0: _lucamug$elm_unbreakable_json$Main$header('Json'),
+						_0: _lucamug$elm_unbreakable_json$Main$viewHeading('Json'),
 						_1: {
 							ctor: '::',
 							_0: A2(
@@ -20432,28 +21160,35 @@ var _lucamug$elm_unbreakable_json$Main$viewEditor = function (model) {
 								},
 								{
 									onChange: _elm_lang$core$Maybe$Just(_lucamug$elm_unbreakable_json$Main$EditorChangeJson),
-									text: prettyJson,
+									text: _lucamug$elm_unbreakable_json$Main$dataToString(model.data),
 									placeholder: _elm_lang$core$Maybe$Nothing,
 									label: A2(
 										_mdgriffith$stylish_elephants$Element_Input$labelAbove,
 										{ctor: '[]'},
 										_mdgriffith$stylish_elephants$Element$text('')),
-									notice: _elm_lang$core$Maybe$Just(
-										A2(
-											_mdgriffith$stylish_elephants$Element_Input$errorBelow,
-											{
-												ctor: '::',
-												_0: _mdgriffith$stylish_elephants$Element_Font$color(_elm_lang$core$Color$red),
-												_1: {ctor: '[]'}
-											},
-											A2(
-												_mdgriffith$stylish_elephants$Element$paragraph,
-												{ctor: '[]'},
-												{
-													ctor: '::',
-													_0: _mdgriffith$stylish_elephants$Element$text(model.err),
-													_1: {ctor: '[]'}
-												})))
+									notice: function () {
+										var _p4 = model.err;
+										if (_p4.ctor === 'Nothing') {
+											return _elm_lang$core$Maybe$Nothing;
+										} else {
+											return _elm_lang$core$Maybe$Just(
+												A2(
+													_mdgriffith$stylish_elephants$Element_Input$errorBelow,
+													{
+														ctor: '::',
+														_0: _mdgriffith$stylish_elephants$Element_Font$color(_elm_lang$core$Color$red),
+														_1: {ctor: '[]'}
+													},
+													A2(
+														_mdgriffith$stylish_elephants$Element$paragraph,
+														{ctor: '[]'},
+														{
+															ctor: '::',
+															_0: _mdgriffith$stylish_elephants$Element$text(_p4._0),
+															_1: {ctor: '[]'}
+														})));
+										}
+									}()
 								}),
 							_1: {ctor: '[]'}
 						}
@@ -20467,11 +21202,11 @@ var _lucamug$elm_unbreakable_json$Main$viewEditor = function (model) {
 							label: A2(
 								_mdgriffith$stylish_elephants$Element_Input$labelAbove,
 								{ctor: '[]'},
-								_lucamug$elm_unbreakable_json$Main$header('Text')),
+								_lucamug$elm_unbreakable_json$Main$viewHeading('Text')),
 							onChange: _elm_lang$core$Maybe$Just(_lucamug$elm_unbreakable_json$Main$EditorChangeText),
 							notice: _elm_lang$core$Maybe$Nothing,
 							placeholder: _elm_lang$core$Maybe$Nothing,
-							text: model.json.text
+							text: model.data.text
 						}),
 					_1: {
 						ctor: '::',
@@ -20482,10 +21217,10 @@ var _lucamug$elm_unbreakable_json$Main$viewEditor = function (model) {
 								label: A2(
 									_mdgriffith$stylish_elephants$Element_Input$labelAbove,
 									{ctor: '[]'},
-									_lucamug$elm_unbreakable_json$Main$header('Logo')),
+									_lucamug$elm_unbreakable_json$Main$viewHeading('Logo')),
 								onChange: _elm_lang$core$Maybe$Just(_lucamug$elm_unbreakable_json$Main$EditorChangeLogo),
 								notice: _elm_lang$core$Maybe$Nothing,
-								selected: _elm_lang$core$Maybe$Just(model.json.logo),
+								selected: _elm_lang$core$Maybe$Just(model.data.logo),
 								options: {
 									ctor: '::',
 									_0: A2(
@@ -20625,10 +21360,10 @@ var _lucamug$elm_unbreakable_json$Main$viewEditor = function (model) {
 											label: A2(
 												_mdgriffith$stylish_elephants$Element_Input$labelAbove,
 												{ctor: '[]'},
-												_lucamug$elm_unbreakable_json$Main$header('Toggle')),
+												_lucamug$elm_unbreakable_json$Main$viewHeading('Toggle')),
 											onChange: _elm_lang$core$Maybe$Just(_lucamug$elm_unbreakable_json$Main$EditorChangeToggle),
 											notice: _elm_lang$core$Maybe$Nothing,
-											checked: model.json.toggle,
+											checked: model.data.toggle,
 											icon: _elm_lang$core$Maybe$Nothing
 										}),
 									_1: {ctor: '[]'}
@@ -20638,6 +21373,29 @@ var _lucamug$elm_unbreakable_json$Main$viewEditor = function (model) {
 					}
 				}
 			}
+		});
+};
+var _lucamug$elm_unbreakable_json$Main$viewElement = function (model) {
+	return A2(
+		_mdgriffith$stylish_elephants$Element$row,
+		{
+			ctor: '::',
+			_0: _mdgriffith$stylish_elephants$Element$width(
+				_mdgriffith$stylish_elephants$Element$px(320)),
+			_1: {
+				ctor: '::',
+				_0: _mdgriffith$stylish_elephants$Element$alignTop,
+				_1: {
+					ctor: '::',
+					_0: A2(_mdgriffith$stylish_elephants$Element$paddingXY, 0, 20),
+					_1: {ctor: '[]'}
+				}
+			}
+		},
+		{
+			ctor: '::',
+			_0: _lucamug$elm_unbreakable_json$Main$viewEditor(model),
+			_1: {ctor: '[]'}
 		});
 };
 var _lucamug$elm_unbreakable_json$Main$view = function (model) {
@@ -20671,35 +21429,555 @@ var _lucamug$elm_unbreakable_json$Main$view = function (model) {
 				}
 			}
 		},
+		_lucamug$elm_unbreakable_json$Main$viewElement(model));
+};
+var _lucamug$elm_unbreakable_json$Main$main = _elm_lang$html$Html$program(
+	{
+		init: _lucamug$elm_unbreakable_json$Main$init,
+		view: _lucamug$elm_unbreakable_json$Main$view,
+		update: _lucamug$elm_unbreakable_json$Main$update,
+		subscriptions: function (_p5) {
+			return _elm_lang$core$Platform_Sub$none;
+		}
+	})();
+
+var _lucamug$elm_unbreakable_json$DeviceEmulator$style = function (style) {
+	return _mdgriffith$stylish_elephants$Element$attribute(
+		_elm_lang$html$Html_Attributes$style(
+			{
+				ctor: '::',
+				_0: style,
+				_1: {ctor: '[]'}
+			}));
+};
+var _lucamug$elm_unbreakable_json$DeviceEmulator$grey1 = A3(_elm_lang$core$Color$rgb, 17, 17, 17);
+var _lucamug$elm_unbreakable_json$DeviceEmulator$gray2 = A3(_elm_lang$core$Color$rgb, 34, 34, 34);
+var _lucamug$elm_unbreakable_json$DeviceEmulator$grey3 = A3(_elm_lang$core$Color$rgb, 51, 51, 51);
+var _lucamug$elm_unbreakable_json$DeviceEmulator$grey5 = A3(_elm_lang$core$Color$rgb, 85, 85, 85);
+var _lucamug$elm_unbreakable_json$DeviceEmulator$grey9 = A3(_elm_lang$core$Color$rgb, 153, 153, 153);
+var _lucamug$elm_unbreakable_json$DeviceEmulator$deviceSize = function (model) {
+	var _p0 = model.modelDeviceEmulator.deviceType;
+	switch (_p0.ctor) {
+		case 'IPhone5':
+			return {ctor: '_Tuple2', _0: 320, _1: 568};
+		case 'IPhone7':
+			return {ctor: '_Tuple2', _0: 375, _1: 667};
+		case 'IPhoneX':
+			return {ctor: '_Tuple2', _0: 375, _1: 812};
+		default:
+			return {ctor: '_Tuple2', _0: 768, _1: 1024};
+	}
+};
+var _lucamug$elm_unbreakable_json$DeviceEmulator$windowSize = function (model) {
+	return model.modelDeviceEmulator.fullscreen ? {ctor: '_Tuple2', _0: model.modelDeviceEmulator.windowSize.width, _1: model.modelDeviceEmulator.windowSize.height} : _lucamug$elm_unbreakable_json$DeviceEmulator$deviceSize(model);
+};
+var _lucamug$elm_unbreakable_json$DeviceEmulator$Model = F2(
+	function (a, b) {
+		return {modelMain: a, modelDeviceEmulator: b};
+	});
+var _lucamug$elm_unbreakable_json$DeviceEmulator$ModelDeviceEmulator = F3(
+	function (a, b, c) {
+		return {deviceType: a, windowSize: b, fullscreen: c};
+	});
+var _lucamug$elm_unbreakable_json$DeviceEmulator$WindowSize = function (a) {
+	return {ctor: 'WindowSize', _0: a};
+};
+var _lucamug$elm_unbreakable_json$DeviceEmulator$initCmd = A2(_elm_lang$core$Task$perform, _lucamug$elm_unbreakable_json$DeviceEmulator$WindowSize, _elm_lang$window$Window$size);
+var _lucamug$elm_unbreakable_json$DeviceEmulator$subscriptions = function (model) {
+	return _elm_lang$window$Window$resizes(_lucamug$elm_unbreakable_json$DeviceEmulator$WindowSize);
+};
+var _lucamug$elm_unbreakable_json$DeviceEmulator$ChangeDevice = function (a) {
+	return {ctor: 'ChangeDevice', _0: a};
+};
+var _lucamug$elm_unbreakable_json$DeviceEmulator$ToggleFullscreen = {ctor: 'ToggleFullscreen'};
+var _lucamug$elm_unbreakable_json$DeviceEmulator$MsgMain = function (a) {
+	return {ctor: 'MsgMain', _0: a};
+};
+var _lucamug$elm_unbreakable_json$DeviceEmulator$update = F2(
+	function (msg, model) {
+		var _p1 = msg;
+		switch (_p1.ctor) {
+			case 'MsgMain':
+				var _p2 = A2(_lucamug$elm_unbreakable_json$Main$update, _p1._0, model.modelMain);
+				var newMain = _p2._0;
+				var newCmd = _p2._1;
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{modelMain: newMain}),
+					_1: A2(_elm_lang$core$Platform_Cmd$map, _lucamug$elm_unbreakable_json$DeviceEmulator$MsgMain, newCmd)
+				};
+			case 'ToggleFullscreen':
+				var oldModel = model.modelDeviceEmulator;
+				var modelDeviceEmulator = _elm_lang$core$Native_Utils.update(
+					oldModel,
+					{fullscreen: !oldModel.fullscreen});
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{modelDeviceEmulator: modelDeviceEmulator}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'ChangeDevice':
+				var oldModel = model.modelDeviceEmulator;
+				var modelDeviceEmulator = _elm_lang$core$Native_Utils.update(
+					oldModel,
+					{deviceType: _p1._0});
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{modelDeviceEmulator: modelDeviceEmulator}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				var oldModel = model.modelDeviceEmulator;
+				var newModel = _elm_lang$core$Native_Utils.update(
+					oldModel,
+					{windowSize: _p1._0});
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{modelDeviceEmulator: newModel}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+		}
+	});
+var _lucamug$elm_unbreakable_json$DeviceEmulator$viewDevice = function (model) {
+	var _p3 = _lucamug$elm_unbreakable_json$DeviceEmulator$deviceSize(model);
+	var deviceWidth = _p3._0;
+	var deviceHeight = _p3._1;
+	var deviceBorderSide = 10;
+	var deviceBorderBottom = 110;
+	var deviceBorderTop = 80;
+	var content = A2(
+		_mdgriffith$stylish_elephants$Element$map,
+		_lucamug$elm_unbreakable_json$DeviceEmulator$MsgMain,
+		_lucamug$elm_unbreakable_json$Main$viewElement(model.modelMain));
+	return A2(
+		_mdgriffith$stylish_elephants$Element$column,
+		{
+			ctor: '::',
+			_0: _mdgriffith$stylish_elephants$Element$height(_mdgriffith$stylish_elephants$Element$shrink),
+			_1: {
+				ctor: '::',
+				_0: _mdgriffith$stylish_elephants$Element$alignTop,
+				_1: {ctor: '[]'}
+			}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_mdgriffith$stylish_elephants$Element$column,
+				{
+					ctor: '::',
+					_0: A2(
+						_mdgriffith$stylish_elephants$Element$above,
+						true,
+						A2(
+							_mdgriffith$stylish_elephants$Element$el,
+							{
+								ctor: '::',
+								_0: _mdgriffith$stylish_elephants$Element_Font$shadow(
+									{
+										offset: {ctor: '_Tuple2', _0: -2, _1: -2},
+										blur: 0,
+										color: _elm_lang$core$Color$black
+									}),
+								_1: {
+									ctor: '::',
+									_0: _mdgriffith$stylish_elephants$Element_Font$shadow(
+										{
+											offset: {ctor: '_Tuple2', _0: 2, _1: 2},
+											blur: 0,
+											color: _lucamug$elm_unbreakable_json$DeviceEmulator$grey3
+										}),
+									_1: {
+										ctor: '::',
+										_0: _mdgriffith$stylish_elephants$Element_Font$color(_lucamug$elm_unbreakable_json$DeviceEmulator$gray2),
+										_1: {
+											ctor: '::',
+											_0: _mdgriffith$stylish_elephants$Element_Font$size(48),
+											_1: {
+												ctor: '::',
+												_0: _mdgriffith$stylish_elephants$Element$moveDown(80),
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								}
+							},
+							_mdgriffith$stylish_elephants$Element$text('● ▬▬▬'))),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_mdgriffith$stylish_elephants$Element$below,
+							true,
+							A2(
+								_mdgriffith$stylish_elephants$Element$el,
+								{
+									ctor: '::',
+									_0: _mdgriffith$stylish_elephants$Element_Font$shadow(
+										{
+											offset: {ctor: '_Tuple2', _0: -2, _1: -2},
+											blur: 0,
+											color: _elm_lang$core$Color$black
+										}),
+									_1: {
+										ctor: '::',
+										_0: _mdgriffith$stylish_elephants$Element_Font$shadow(
+											{
+												offset: {ctor: '_Tuple2', _0: 2, _1: 2},
+												blur: 0,
+												color: _lucamug$elm_unbreakable_json$DeviceEmulator$grey3
+											}),
+										_1: {
+											ctor: '::',
+											_0: _mdgriffith$stylish_elephants$Element_Font$color(_lucamug$elm_unbreakable_json$DeviceEmulator$gray2),
+											_1: {
+												ctor: '::',
+												_0: _mdgriffith$stylish_elephants$Element_Font$size(150),
+												_1: {
+													ctor: '::',
+													_0: _mdgriffith$stylish_elephants$Element$moveUp(180),
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									}
+								},
+								_mdgriffith$stylish_elephants$Element$text('●'))),
+						_1: {ctor: '[]'}
+					}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_mdgriffith$stylish_elephants$Element$column,
+						{
+							ctor: '::',
+							_0: _mdgriffith$stylish_elephants$Element$padding(16),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_mdgriffith$stylish_elephants$Element$el,
+								{
+									ctor: '::',
+									_0: _mdgriffith$stylish_elephants$Element$height(
+										_mdgriffith$stylish_elephants$Element$px(((2 + deviceHeight) + deviceBorderTop) + deviceBorderBottom)),
+									_1: {
+										ctor: '::',
+										_0: _mdgriffith$stylish_elephants$Element$width(
+											_mdgriffith$stylish_elephants$Element$px((2 + deviceWidth) + (deviceBorderSide * 2))),
+										_1: {
+											ctor: '::',
+											_0: _mdgriffith$stylish_elephants$Element_Border$widthEach(
+												{top: deviceBorderTop, right: deviceBorderSide, bottom: deviceBorderBottom, left: deviceBorderSide}),
+											_1: {
+												ctor: '::',
+												_0: _mdgriffith$stylish_elephants$Element_Border$rounded(50),
+												_1: {
+													ctor: '::',
+													_0: _mdgriffith$stylish_elephants$Element_Border$color(_lucamug$elm_unbreakable_json$DeviceEmulator$grey1),
+													_1: {
+														ctor: '::',
+														_0: _lucamug$elm_unbreakable_json$DeviceEmulator$style(
+															{ctor: '_Tuple2', _0: 'box-shadow', _1: 'rgba(10, 10, 10, 0.19) 5px 5px 5px 5px'}),
+														_1: {ctor: '[]'}
+													}
+												}
+											}
+										}
+									}
+								},
+								A2(
+									_mdgriffith$stylish_elephants$Element$el,
+									{
+										ctor: '::',
+										_0: _mdgriffith$stylish_elephants$Element$width(_mdgriffith$stylish_elephants$Element$fill),
+										_1: {
+											ctor: '::',
+											_0: _mdgriffith$stylish_elephants$Element$height(_mdgriffith$stylish_elephants$Element$fill),
+											_1: {
+												ctor: '::',
+												_0: _mdgriffith$stylish_elephants$Element$scrollbars,
+												_1: {
+													ctor: '::',
+													_0: _mdgriffith$stylish_elephants$Element_Border$width(1),
+													_1: {
+														ctor: '::',
+														_0: _mdgriffith$stylish_elephants$Element_Border$color(_elm_lang$core$Color$black),
+														_1: {
+															ctor: '::',
+															_0: _mdgriffith$stylish_elephants$Element_Background$color(_elm_lang$core$Color$white),
+															_1: {
+																ctor: '::',
+																_0: _lucamug$elm_unbreakable_json$DeviceEmulator$style(
+																	{ctor: '_Tuple2', _0: 'justify-content', _1: 'normal'}),
+																_1: {
+																	ctor: '::',
+																	_0: _lucamug$elm_unbreakable_json$DeviceEmulator$style(
+																		{
+																			ctor: '_Tuple2',
+																			_0: 'max-height',
+																			_1: A2(
+																				_elm_lang$core$Basics_ops['++'],
+																				_elm_lang$core$Basics$toString(deviceHeight),
+																				'px')
+																		}),
+																	_1: {ctor: '[]'}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									},
+									content)),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}),
+			_1: {ctor: '[]'}
+		});
+};
+var _lucamug$elm_unbreakable_json$DeviceEmulator$IPad = {ctor: 'IPad'};
+var _lucamug$elm_unbreakable_json$DeviceEmulator$IPhoneX = {ctor: 'IPhoneX'};
+var _lucamug$elm_unbreakable_json$DeviceEmulator$IPhone7 = {ctor: 'IPhone7'};
+var _lucamug$elm_unbreakable_json$DeviceEmulator$initModel = {
+	modelMain: _lucamug$elm_unbreakable_json$Main$initModel,
+	modelDeviceEmulator: {
+		deviceType: _lucamug$elm_unbreakable_json$DeviceEmulator$IPhone7,
+		windowSize: {width: 0, height: 0},
+		fullscreen: false
+	}
+};
+var _lucamug$elm_unbreakable_json$DeviceEmulator$IPhone5 = {ctor: 'IPhone5'};
+var _lucamug$elm_unbreakable_json$DeviceEmulator$viewDeviceMenu = {
+	ctor: '::',
+	_0: A2(
+		_mdgriffith$stylish_elephants$Element$el,
+		{
+			ctor: '::',
+			_0: _mdgriffith$stylish_elephants$Element$pointer,
+			_1: {
+				ctor: '::',
+				_0: _mdgriffith$stylish_elephants$Element_Events$onClick(
+					_lucamug$elm_unbreakable_json$DeviceEmulator$ChangeDevice(_lucamug$elm_unbreakable_json$DeviceEmulator$IPhone5)),
+				_1: {ctor: '[]'}
+			}
+		},
+		_mdgriffith$stylish_elephants$Element$text('iPhone 5')),
+	_1: {
+		ctor: '::',
+		_0: A2(
+			_mdgriffith$stylish_elephants$Element$el,
+			{
+				ctor: '::',
+				_0: _mdgriffith$stylish_elephants$Element$pointer,
+				_1: {
+					ctor: '::',
+					_0: _mdgriffith$stylish_elephants$Element_Events$onClick(
+						_lucamug$elm_unbreakable_json$DeviceEmulator$ChangeDevice(_lucamug$elm_unbreakable_json$DeviceEmulator$IPhone7)),
+					_1: {ctor: '[]'}
+				}
+			},
+			_mdgriffith$stylish_elephants$Element$text('iPhone 7')),
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_mdgriffith$stylish_elephants$Element$el,
+				{
+					ctor: '::',
+					_0: _mdgriffith$stylish_elephants$Element$pointer,
+					_1: {
+						ctor: '::',
+						_0: _mdgriffith$stylish_elephants$Element_Events$onClick(
+							_lucamug$elm_unbreakable_json$DeviceEmulator$ChangeDevice(_lucamug$elm_unbreakable_json$DeviceEmulator$IPhoneX)),
+						_1: {ctor: '[]'}
+					}
+				},
+				_mdgriffith$stylish_elephants$Element$text('iPhone X')),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_mdgriffith$stylish_elephants$Element$el,
+					{
+						ctor: '::',
+						_0: _mdgriffith$stylish_elephants$Element$pointer,
+						_1: {
+							ctor: '::',
+							_0: _mdgriffith$stylish_elephants$Element_Events$onClick(
+								_lucamug$elm_unbreakable_json$DeviceEmulator$ChangeDevice(_lucamug$elm_unbreakable_json$DeviceEmulator$IPad)),
+							_1: {ctor: '[]'}
+						}
+					},
+					_mdgriffith$stylish_elephants$Element$text('iPad')),
+				_1: {ctor: '[]'}
+			}
+		}
+	}
+};
+var _lucamug$elm_unbreakable_json$DeviceEmulator$viewMenuStickyRight = function (model) {
+	var _p4 = _lucamug$elm_unbreakable_json$DeviceEmulator$windowSize(model);
+	var windowWidth = _p4._0;
+	var windowHeight = _p4._1;
+	var menuItems = A2(
+		_elm_lang$core$Basics_ops['++'],
+		_lucamug$elm_unbreakable_json$DeviceEmulator$viewDeviceMenu,
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			{
+				ctor: '::',
+				_0: _mdgriffith$stylish_elephants$Element$text(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_elm_lang$core$Basics$toString(windowWidth),
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							'px ✕ ',
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								_elm_lang$core$Basics$toString(windowHeight),
+								'px')))),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: model.modelDeviceEmulator.fullscreen ? A2(
+					_mdgriffith$stylish_elephants$Element$el,
+					{
+						ctor: '::',
+						_0: _mdgriffith$stylish_elephants$Element_Events$onClick(_lucamug$elm_unbreakable_json$DeviceEmulator$ToggleFullscreen),
+						_1: {ctor: '[]'}
+					},
+					_mdgriffith$stylish_elephants$Element$text('not full screen')) : A2(
+					_mdgriffith$stylish_elephants$Element$el,
+					{
+						ctor: '::',
+						_0: _mdgriffith$stylish_elephants$Element_Events$onClick(_lucamug$elm_unbreakable_json$DeviceEmulator$ToggleFullscreen),
+						_1: {ctor: '[]'}
+					},
+					_mdgriffith$stylish_elephants$Element$text('fullscreen')),
+				_1: {ctor: '[]'}
+			}));
+	return A2(
+		_mdgriffith$stylish_elephants$Element$above,
+		true,
 		A2(
 			_mdgriffith$stylish_elephants$Element$row,
 			{
 				ctor: '::',
-				_0: _mdgriffith$stylish_elephants$Element$width(
-					_mdgriffith$stylish_elephants$Element$px(320)),
+				_0: _lucamug$elm_unbreakable_json$DeviceEmulator$style(
+					{ctor: '_Tuple2', _0: 'opacity', _1: '0.7'}),
 				_1: {
 					ctor: '::',
-					_0: _mdgriffith$stylish_elephants$Element$alignTop,
+					_0: _lucamug$elm_unbreakable_json$DeviceEmulator$style(
+						{ctor: '_Tuple2', _0: 'position', _1: 'fixed'}),
 					_1: {
 						ctor: '::',
-						_0: A2(_mdgriffith$stylish_elephants$Element$paddingXY, 0, 20),
-						_1: {ctor: '[]'}
+						_0: _lucamug$elm_unbreakable_json$DeviceEmulator$style(
+							{ctor: '_Tuple2', _0: 'left', _1: '0'}),
+						_1: {
+							ctor: '::',
+							_0: _lucamug$elm_unbreakable_json$DeviceEmulator$style(
+								{ctor: '_Tuple2', _0: 'bottom', _1: 'auto'}),
+							_1: {
+								ctor: '::',
+								_0: _mdgriffith$stylish_elephants$Element_Background$color(_elm_lang$core$Color$white),
+								_1: {
+									ctor: '::',
+									_0: _mdgriffith$stylish_elephants$Element_Font$size(14),
+									_1: {
+										ctor: '::',
+										_0: _mdgriffith$stylish_elephants$Element_Font$family(
+											{
+												ctor: '::',
+												_0: _mdgriffith$stylish_elephants$Element_Font$sansSerif,
+												_1: {ctor: '[]'}
+											}),
+										_1: {
+											ctor: '::',
+											_0: _mdgriffith$stylish_elephants$Element$pointer,
+											_1: {
+												ctor: '::',
+												_0: _mdgriffith$stylish_elephants$Element$padding(6),
+												_1: {
+													ctor: '::',
+													_0: _mdgriffith$stylish_elephants$Element$spacing(12),
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
 					}
+				}
+			},
+			menuItems));
+};
+var _lucamug$elm_unbreakable_json$DeviceEmulator$view = function (model) {
+	var _p5 = _lucamug$elm_unbreakable_json$DeviceEmulator$windowSize(model);
+	var windowWidth = _p5._0;
+	var windowHeight = _p5._1;
+	return A2(
+		_mdgriffith$stylish_elephants$Element$layout,
+		{
+			ctor: '::',
+			_0: model.modelDeviceEmulator.fullscreen ? _mdgriffith$stylish_elephants$Element_Background$color(_elm_lang$core$Color$white) : _mdgriffith$stylish_elephants$Element_Background$color(_lucamug$elm_unbreakable_json$DeviceEmulator$grey9),
+			_1: {
+				ctor: '::',
+				_0: _lucamug$elm_unbreakable_json$DeviceEmulator$viewMenuStickyRight(model),
+				_1: {ctor: '[]'}
+			}
+		},
+		A2(
+			_mdgriffith$stylish_elephants$Element$row,
+			{
+				ctor: '::',
+				_0: _mdgriffith$stylish_elephants$Element$alignTop,
+				_1: {
+					ctor: '::',
+					_0: _mdgriffith$stylish_elephants$Element$height(_mdgriffith$stylish_elephants$Element$fill),
+					_1: {ctor: '[]'}
 				}
 			},
 			{
 				ctor: '::',
-				_0: _lucamug$elm_unbreakable_json$Main$viewEditor(model),
+				_0: (_elm_lang$core$Native_Utils.cmp(model.modelDeviceEmulator.windowSize.width, 0) > 0) ? (model.modelDeviceEmulator.fullscreen ? A2(
+					_mdgriffith$stylish_elephants$Element$map,
+					_lucamug$elm_unbreakable_json$DeviceEmulator$MsgMain,
+					_lucamug$elm_unbreakable_json$Main$viewElement(model.modelMain)) : _lucamug$elm_unbreakable_json$DeviceEmulator$viewDevice(model)) : A2(
+					_mdgriffith$stylish_elephants$Element$el,
+					{
+						ctor: '::',
+						_0: _mdgriffith$stylish_elephants$Element$centerY,
+						_1: {ctor: '[]'}
+					},
+					_mdgriffith$stylish_elephants$Element$text('windowSize is not set yet')),
 				_1: {ctor: '[]'}
 			}));
 };
-var _lucamug$elm_unbreakable_json$Main$main = _elm_lang$html$Html$program(
-	{init: _lucamug$elm_unbreakable_json$Main$init, view: _lucamug$elm_unbreakable_json$Main$view, update: _lucamug$elm_unbreakable_json$Main$update, subscriptions: _lucamug$elm_unbreakable_json$Main$subscriptions})();
+var _lucamug$elm_unbreakable_json$DeviceEmulator$main = _elm_lang$html$Html$program(
+	{
+		init: {ctor: '_Tuple2', _0: _lucamug$elm_unbreakable_json$DeviceEmulator$initModel, _1: _lucamug$elm_unbreakable_json$DeviceEmulator$initCmd},
+		view: _lucamug$elm_unbreakable_json$DeviceEmulator$view,
+		update: _lucamug$elm_unbreakable_json$DeviceEmulator$update,
+		subscriptions: _lucamug$elm_unbreakable_json$DeviceEmulator$subscriptions
+	})();
 
 var Elm = {};
-Elm['Main'] = Elm['Main'] || {};
-if (typeof _lucamug$elm_unbreakable_json$Main$main !== 'undefined') {
-    _lucamug$elm_unbreakable_json$Main$main(Elm['Main'], 'Main', undefined);
+Elm['DeviceEmulator'] = Elm['DeviceEmulator'] || {};
+if (typeof _lucamug$elm_unbreakable_json$DeviceEmulator$main !== 'undefined') {
+    _lucamug$elm_unbreakable_json$DeviceEmulator$main(Elm['DeviceEmulator'], 'DeviceEmulator', undefined);
 }
 
 if (typeof define === "function" && define['amd'])

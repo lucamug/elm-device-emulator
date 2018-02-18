@@ -1,358 +1,501 @@
-port module Main exposing (main)
+module Main exposing (main)
 
-import Color
-import Element exposing (..)
-import Element.Background as Background
-import Element.Font as Font
-import Element.Input as Input
-import Html
-import Json.Decode
-import Json.Decode.Pipeline
-import Json.Encode
-import Svg
-import Svg.Attributes as SA
-
-
--- TYPES
-
-
-type Msg
-    = EditorChangeToggle Bool
-    | EditorChangeText String
-    | EditorChangeLogo Logo
-    | EditorChangeJson String
-
-
-type Logo
-    = Elm
-    | Strawberry
-    | Watermelon
+import Data.Article exposing (Slug)
+import Data.Session as Session exposing (Session)
+import Data.User as User exposing (User, Username)
+import Html exposing (..)
+import Json.Decode as Decode exposing (Value)
+import Navigation exposing (Location)
+import Page.Article as Article
+import Page.Article.Editor as Editor
+import Page.Errored as Errored exposing (PageLoadError)
+import Page.Home as Home
+import Page.Login as Login
+import Page.NotFound as NotFound
+import Page.Profile as Profile
+import Page.Register as Register
+import Page.Settings as Settings
+import Ports
+import Route exposing (Route)
+import Task
+import Util exposing ((=>))
+import Views.Page as Page exposing (ActivePage)
 
 
-type alias Data =
-    { logo : Logo
-    , text : String
-    , toggle : Bool
-    }
+-- WARNING: this whole file will become unnecessary and go away in Elm 0.19,
+-- so avoid putting things in here unless there is no alternative!
+
+
+type Page
+    = Blank
+    | NotFound
+    | Errored PageLoadError
+    | Home Home.Model
+    | Settings Settings.Model
+    | Login Login.Model
+    | Register Register.Model
+    | Profile Username Profile.Model
+    | Article Article.Model
+    | Editor (Maybe Slug) Editor.Model
+
+
+type PageState
+    = Loaded Page
+    | TransitioningFrom Page
+
+
+
+-- MODEL --
 
 
 type alias Model =
-    { json : Data
-    , err : String
+    { session : Session
+    , pageState : PageState
     }
 
 
+init : Value -> Location -> ( Model, Cmd Msg )
+init val location =
+    let
+        _ =
+            Debug.log "init" val
+    in
+    setRoute (Route.fromLocation location)
+        { pageState = Loaded initialPage
+        , session = { user = decodeUserFromJson val }
+        }
 
--- UPDATE
+
+decodeUserFromJson : Value -> Maybe User
+decodeUserFromJson json =
+    json
+        |> Decode.decodeValue Decode.string
+        |> Result.toMaybe
+        |> Maybe.andThen (Decode.decodeString User.decoder >> Result.toMaybe)
+
+
+initialPage : Page
+initialPage =
+    Blank
+
+
+
+-- VIEW --
+
+
+view : Model -> Html Msg
+view model =
+    case model.pageState of
+        Loaded page ->
+            viewPage model.session False page
+
+        TransitioningFrom page ->
+            viewPage model.session True page
+
+
+viewPage : Session -> Bool -> Page -> Html Msg
+viewPage session isLoading page =
+    let
+        frame =
+            Page.frame isLoading session.user
+    in
+    case page of
+        NotFound ->
+            NotFound.view session
+                |> frame Page.Other
+
+        Blank ->
+            -- This is for the very intiial page load, while we are loading
+            -- data via HTTP. We could also render a spinner here.
+            Html.text ""
+                |> frame Page.Other
+
+        Errored subModel ->
+            Errored.view session subModel
+                |> frame Page.Other
+
+        Settings subModel ->
+            Settings.view session subModel
+                |> frame Page.Other
+                |> Html.map SettingsMsg
+
+        Home subModel ->
+            Home.view session subModel
+                |> frame Page.Home
+                |> Html.map HomeMsg
+
+        Login subModel ->
+            Login.view session subModel
+                |> frame Page.Other
+                |> Html.map LoginMsg
+
+        Register subModel ->
+            Register.view session subModel
+                |> frame Page.Other
+                |> Html.map RegisterMsg
+
+        Profile username subModel ->
+            Profile.view session subModel
+                |> frame (Page.Profile username)
+                |> Html.map ProfileMsg
+
+        Article subModel ->
+            Article.view session subModel
+                |> frame Page.Other
+                |> Html.map ArticleMsg
+
+        Editor maybeSlug subModel ->
+            let
+                framePage =
+                    if maybeSlug == Nothing then
+                        Page.NewArticle
+                    else
+                        Page.Other
+            in
+            Editor.view subModel
+                |> frame framePage
+                |> Html.map EditorMsg
+
+
+
+-- SUBSCRIPTIONS --
+-- Note: we aren't currently doing any page subscriptions, but I thought it would
+-- be a good idea to put this in here as an example. If I were actually
+-- maintaining this in production, I wouldn't bother until I needed this!
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    Sub.batch
+        [ pageSubscriptions (getPage model.pageState)
+        , Sub.map SetUser sessionChange
+        ]
+
+
+sessionChange : Sub (Maybe User)
+sessionChange =
+    Ports.onSessionChange (Decode.decodeValue User.decoder >> Result.toMaybe)
+
+
+getPage : PageState -> Page
+getPage pageState =
+    case pageState of
+        Loaded page ->
+            page
+
+        TransitioningFrom page ->
+            page
+
+
+pageSubscriptions : Page -> Sub Msg
+pageSubscriptions page =
+    case page of
+        Blank ->
+            Sub.none
+
+        Errored _ ->
+            Sub.none
+
+        NotFound ->
+            Sub.none
+
+        Settings _ ->
+            Sub.none
+
+        Home _ ->
+            Sub.none
+
+        Login _ ->
+            Sub.none
+
+        Register _ ->
+            Sub.none
+
+        Profile _ _ ->
+            Sub.none
+
+        Article _ ->
+            Sub.none
+
+        Editor _ _ ->
+            Sub.none
+
+
+
+-- UPDATE --
+
+
+type Msg
+    = SetRoute (Maybe Route)
+    | HomeLoaded (Result PageLoadError Home.Model)
+    | ArticleLoaded (Result PageLoadError Article.Model)
+    | ProfileLoaded Username (Result PageLoadError Profile.Model)
+    | EditArticleLoaded Slug (Result PageLoadError Editor.Model)
+    | HomeMsg Home.Msg
+    | SettingsMsg Settings.Msg
+    | SetUser (Maybe User)
+    | LoginMsg Login.Msg
+    | RegisterMsg Register.Msg
+    | ProfileMsg Profile.Msg
+    | ArticleMsg Article.Msg
+    | EditorMsg Editor.Msg
+
+
+setRoute : Maybe Route -> Model -> ( Model, Cmd Msg )
+setRoute maybeRoute model =
+    let
+        transition toMsg task =
+            { model | pageState = TransitioningFrom (getPage model.pageState) }
+                => Task.attempt toMsg task
+
+        errored =
+            pageErrored model
+    in
+    case maybeRoute of
+        Nothing ->
+            { model | pageState = Loaded NotFound } => Cmd.none
+
+        Just Route.NewArticle ->
+            case model.session.user of
+                Just user ->
+                    { model | pageState = Loaded (Editor Nothing Editor.initNew) } => Cmd.none
+
+                Nothing ->
+                    errored Page.NewArticle "You must be signed in to post an article."
+
+        Just (Route.EditArticle slug) ->
+            case model.session.user of
+                Just user ->
+                    transition (EditArticleLoaded slug) (Editor.initEdit model.session slug)
+
+                Nothing ->
+                    errored Page.Other "You must be signed in to edit an article."
+
+        Just Route.Settings ->
+            case model.session.user of
+                Just user ->
+                    { model | pageState = Loaded (Settings (Settings.init user)) } => Cmd.none
+
+                Nothing ->
+                    errored Page.Settings "You must be signed in to access your settings."
+
+        Just Route.Home ->
+            transition HomeLoaded (Home.init model.session)
+
+        Just Route.Login ->
+            { model | pageState = Loaded (Login Login.initialModel) } => Cmd.none
+
+        Just Route.Logout ->
+            let
+                session =
+                    model.session
+            in
+            { model | session = { session | user = Nothing } }
+                => Cmd.batch
+                    [ Ports.storeSession Nothing
+                    , Route.modifyUrl Route.Home
+                    ]
+
+        Just Route.Register ->
+            { model | pageState = Loaded (Register Register.initialModel) } => Cmd.none
+
+        Just (Route.Profile username) ->
+            transition (ProfileLoaded username) (Profile.init model.session username)
+
+        Just (Route.Article slug) ->
+            transition ArticleLoaded (Article.init model.session slug)
+
+
+pageErrored : Model -> ActivePage -> String -> ( Model, Cmd msg )
+pageErrored model activePage errorMessage =
+    let
+        error =
+            Errored.pageLoadError activePage errorMessage
+    in
+    { model | pageState = Loaded (Errored error) } => Cmd.none
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     let
-        conf =
-            model.json
+        _ =
+            Debug.log "msg" msg
     in
-    case msg of
-        EditorChangeToggle value ->
-            let
-                newJson =
-                    { conf | toggle = value }
-            in
-            handleNewJson model newJson
-
-        EditorChangeLogo value ->
-            let
-                newJson =
-                    { conf | logo = value }
-            in
-            handleNewJson model newJson
-
-        EditorChangeText value ->
-            let
-                newJson =
-                    { conf | text = value }
-            in
-            handleNewJson model newJson
-
-        EditorChangeJson newJsonString ->
-            let
-                oldJson =
-                    model.json
-
-                ( err, newJson ) =
-                    updateJson newJsonString oldJson
-            in
-            ( { model | json = newJson, err = err }, Cmd.none )
+    updatePage (getPage model.pageState) msg model
 
 
-handleNewJson : Model -> Data -> ( Model, Cmd msg )
-handleNewJson model newJson =
-    ( { model | json = newJson, err = "" }, Cmd.none )
-
-
-
--- INIT
-
-
-initModel : Model
-initModel =
-    { json =
-        { toggle = False
-        , logo = Elm
-        , text = "Hello!"
-        }
-    , err = ""
-    }
-
-
-init : ( Model, Cmd Msg )
-init =
+toPage :
+    Model
+    -> (d -> Page)
+    -> (a -> msg)
+    -> (e -> f -> ( d, Cmd a ))
+    -> e
+    -> f
+    -> ( Model, Cmd msg )
+toPage model toModel toMsg subUpdate subMsg subModel =
     let
-        model =
-            initModel
-
-        cmd =
-            Cmd.none
+        ( newModel, newCmd ) =
+            subUpdate subMsg subModel
     in
-    ( model, cmd )
+    ( { model | pageState = Loaded (toModel newModel) }, Cmd.map toMsg newCmd )
 
 
-jsonDecoder : Json.Decode.Decoder Data
-jsonDecoder =
-    Json.Decode.Pipeline.decode Data
-        |> Json.Decode.Pipeline.required "logo" (Json.Decode.string |> Json.Decode.andThen logoDecoder)
-        |> Json.Decode.Pipeline.required "text" Json.Decode.string
-        |> Json.Decode.Pipeline.required "toggle" Json.Decode.bool
-
-
-logoDecoder : String -> Json.Decode.Decoder Logo
-logoDecoder logoString =
-    case logoString of
-        "Elm" ->
-            Json.Decode.succeed Elm
-
-        "Strawberry" ->
-            Json.Decode.succeed Strawberry
-
-        "Watermelon" ->
-            Json.Decode.succeed Watermelon
-
-        _ ->
-            Json.Decode.fail <| "I don't know a logo named " ++ logoString
-
-
-updateJson : String -> Data -> ( String, Data )
-updateJson newJsonString oldJson =
+updatePage : Page -> Msg -> Model -> ( Model, Cmd Msg )
+updatePage page msg model =
     let
-        result =
-            Json.Decode.decodeString jsonDecoder newJsonString
+        session =
+            model.session
+
+        errored =
+            pageErrored model
+
+        _ =
+            Debug.log "xxx" toPage
     in
-    case result of
-        Ok newJson ->
-            ( "", newJson )
+    case ( msg, page ) of
+        ( SetRoute route, _ ) ->
+            setRoute route model
 
-        Err err ->
-            ( err, oldJson )
+        ( HomeLoaded (Ok subModel), _ ) ->
+            { model | pageState = Loaded (Home subModel) } => Cmd.none
+
+        ( HomeLoaded (Err error), _ ) ->
+            { model | pageState = Loaded (Errored error) } => Cmd.none
+
+        ( ProfileLoaded username (Ok subModel), _ ) ->
+            { model | pageState = Loaded (Profile username subModel) } => Cmd.none
+
+        ( ProfileLoaded username (Err error), _ ) ->
+            { model | pageState = Loaded (Errored error) } => Cmd.none
+
+        ( ArticleLoaded (Ok subModel), _ ) ->
+            { model | pageState = Loaded (Article subModel) } => Cmd.none
+
+        ( ArticleLoaded (Err error), _ ) ->
+            { model | pageState = Loaded (Errored error) } => Cmd.none
+
+        ( EditArticleLoaded slug (Ok subModel), _ ) ->
+            { model | pageState = Loaded (Editor (Just slug) subModel) } => Cmd.none
+
+        ( EditArticleLoaded slug (Err error), _ ) ->
+            { model | pageState = Loaded (Errored error) } => Cmd.none
+
+        ( SetUser user, _ ) ->
+            let
+                session =
+                    model.session
+
+                cmd =
+                    -- If we just signed out, then redirect to Home.
+                    if session.user /= Nothing && user == Nothing then
+                        Route.modifyUrl Route.Home
+                    else
+                        Cmd.none
+            in
+            { model | session = { session | user = user } }
+                => cmd
+
+        ( SettingsMsg subMsg, Settings subModel ) ->
+            let
+                ( ( pageModel, cmd ), msgFromPage ) =
+                    Settings.update model.session subMsg subModel
+
+                newModel =
+                    case msgFromPage of
+                        Settings.NoOp ->
+                            model
+
+                        Settings.SetUser user ->
+                            let
+                                session =
+                                    model.session
+                            in
+                            { model | session = { user = Just user } }
+            in
+            { newModel | pageState = Loaded (Settings pageModel) }
+                => Cmd.map SettingsMsg cmd
+
+        ( LoginMsg subMsg, Login subModel ) ->
+            let
+                ( ( pageModel, cmd ), msgFromPage ) =
+                    Login.update subMsg subModel
+
+                newModel =
+                    case msgFromPage of
+                        Login.NoOp ->
+                            model
+
+                        Login.SetUser user ->
+                            let
+                                session =
+                                    model.session
+                            in
+                            { model | session = { user = Just user } }
+            in
+            { newModel | pageState = Loaded (Login pageModel) }
+                => Cmd.map LoginMsg cmd
+
+        ( RegisterMsg subMsg, Register subModel ) ->
+            let
+                ( ( pageModel, cmd ), msgFromPage ) =
+                    Register.update subMsg subModel
+
+                newModel =
+                    case msgFromPage of
+                        Register.NoOp ->
+                            model
+
+                        Register.SetUser user ->
+                            let
+                                session =
+                                    model.session
+                            in
+                            { model | session = { user = Just user } }
+            in
+            { newModel | pageState = Loaded (Register pageModel) }
+                => Cmd.map RegisterMsg cmd
+
+        ( HomeMsg subMsg, Home subModel ) ->
+            toPage model Home HomeMsg (Home.update session) subMsg subModel
+
+        ( ProfileMsg subMsg, Profile username subModel ) ->
+            toPage model (Profile username) ProfileMsg (Profile.update model.session) subMsg subModel
+
+        ( ArticleMsg subMsg, Article subModel ) ->
+            toPage model Article ArticleMsg (Article.update model.session) subMsg subModel
+
+        ( EditorMsg subMsg, Editor slug subModel ) ->
+            case model.session.user of
+                Nothing ->
+                    if slug == Nothing then
+                        errored Page.NewArticle
+                            "You must be signed in to post articles."
+                    else
+                        errored Page.Other
+                            "You must be signed in to edit articles."
+
+                Just user ->
+                    toPage model (Editor slug) EditorMsg (Editor.update user) subMsg subModel
+
+        ( _, NotFound ) ->
+            -- Disregard incoming messages when we're on the
+            -- NotFound page.
+            model => Cmd.none
+
+        ( _, _ ) ->
+            -- Disregard incoming messages that arrived for the wrong page
+            model => Cmd.none
 
 
 
--- SUBSCRIPTIONS
+-- MAIN --
 
 
-subscriptions : Model -> Sub Msg
-subscriptions model =
-    Sub.none
-
-
-
--- VIEWS
-
-
-view : Model -> Html.Html Msg
-view model =
-    layout
-        [ Font.family
-            [ Font.typeface "Source Sans Pro"
-            , Font.sansSerif
-            ]
-        , Font.size 16
-        , Font.color <| Color.rgb 0x33 0x33 0x33
-        , Background.color <| Color.rgb 0xFF 0xFF 0xFF
-        ]
-    <|
-        row
-            [ width <| px 320
-            , alignTop
-            , paddingXY 0 20
-            ]
-            [ viewEditor model ]
-
-
-header : String -> Element msg
-header t =
-    el
-        [ Font.size 20
-        , alignLeft
-        , paddingXY 0 10
-        ]
-    <|
-        text t
-
-
-viewEditor : Model -> Element Msg
-viewEditor model =
-    let
-        prettyJson =
-            Json.Encode.encode 4 (jsonEncoder model.json)
-    in
-    column [ spacing 10 ]
-        [ el [ Font.size 28 ] <| text "Elm - Unbreakable Json"
-        , column []
-            [ header "Json"
-            , Input.spellcheckedMultiline
-                [ height <| px 130 ]
-                { onChange = Just EditorChangeJson
-                , text = prettyJson
-                , placeholder = Nothing
-                , label = Input.labelAbove [] <| text ""
-                , notice = Just <| Input.errorBelow [ Font.color Color.red ] <| paragraph [] [ text model.err ]
-                }
-            ]
-        , Input.text []
-            { label = Input.labelAbove [] <| header "Text"
-            , onChange = Just EditorChangeText
-            , notice = Nothing
-            , placeholder = Nothing
-            , text = model.json.text
-            }
-        , Input.radio []
-            { label = Input.labelAbove [] <| header "Logo"
-            , onChange = Just EditorChangeLogo
-            , notice = Nothing
-            , selected = Just model.json.logo
-            , options =
-                [ Input.option Elm
-                    (row [ padding 10, spacing 10 ]
-                        [ el [ alignLeft ] (html <| logoElm 22)
-                        , el [ alignLeft ] (text "Elm")
-                        ]
-                    )
-                , Input.option Watermelon
-                    (row [ padding 10, spacing 10 ]
-                        [ el [ alignLeft ] (html <| logoWatermelon 22)
-                        , el [ alignLeft ] (text "Watermelon")
-                        ]
-                    )
-                , Input.option Strawberry
-                    (row [ padding 10, spacing 10 ]
-                        [ el [ alignLeft ] (html <| logoStrawberry 22)
-                        , el [ alignLeft ] (text "Strawberry")
-                        ]
-                    )
-                ]
-            }
-        , paragraph []
-            [ Input.checkbox []
-                { label = Input.labelAbove [] <| header "Toggle"
-                , onChange = Just EditorChangeToggle
-                , notice = Nothing
-                , checked = model.json.toggle
-                , icon = Nothing
-                }
-            ]
-        ]
-
-
-jsonEncoder : Data -> Json.Encode.Value
-jsonEncoder conf =
-    Json.Encode.object
-        [ ( "text", Json.Encode.string <| conf.text )
-        , ( "logo", Json.Encode.string <| toString conf.logo )
-        , ( "toggle", Json.Encode.bool conf.toggle )
-        ]
-
-
-
--- MAIN
-
-
-main : Program Never Model Msg
+main : Program Value Model Msg
 main =
-    Html.program
+    Navigation.programWithFlags (Route.fromLocation >> SetRoute)
         { init = init
         , view = view
         , update = update
         , subscriptions = subscriptions
         }
-
-
-logoWatermelon : Int -> Html.Html msg
-logoWatermelon height =
-    Svg.svg
-        [ SA.viewBox "0 0 50.5 50.5"
-        , SA.height <| toString height
-        , SA.width <| toString <| floor <| toFloat height * 1
-        ]
-        [ Svg.path [ SA.fill "#88c057", SA.d "M18.4 24l1.4 4.5c.2 1.1-.6 2.2-1.7 2.6l-1.1.4-.3 1a4 4 0 0 1-2.7 2.7c-1.2.3-3.7-2.3-4.7-2.1L0 42.4A30 30 0 0 0 42.4 0l-24 24z" ] []
-        , Svg.path [ SA.fill "#e22f37", SA.d "M37 5.3L18.5 24l1.4 4.5c.2 1.1-.6 2.2-1.7 2.6l-1.1.4-.3 1a4 4 0 0 1-2.7 2.7c-1.2.3-3.7-2.3-4.7-2.1l-4 4c8.8 9.5 22.4 8.7 31.5-.3S46.6 14 37 5.3z" ] []
-        , Svg.circle [ SA.cx "4.5", SA.cy "17", SA.r "1.5", SA.fill "#231f20" ] []
-        , Svg.circle [ SA.cx "16.5", SA.cy "39", SA.r "1.5", SA.fill "#231f20" ] []
-        , Svg.circle [ SA.cx "26", SA.cy "25.6", SA.r "1.5", SA.fill "#231f20" ] []
-        , Svg.circle [ SA.cx "30.9", SA.cy "20.7", SA.r "1.5", SA.fill "#231f20" ] []
-        , Svg.circle [ SA.cx "28.1", SA.cy "37.6", SA.r "1.5", SA.fill "#231f20" ] []
-        , Svg.circle [ SA.cx "33", SA.cy "32.7", SA.r "1.5", SA.fill "#231f20" ] []
-        , Svg.circle [ SA.cx "38", SA.cy "27.7", SA.r "1.5", SA.fill "#231f20" ] []
-        , Svg.circle [ SA.cx "35.9", SA.cy "15.7", SA.r "1.5", SA.fill "#231f20" ] []
-        , Svg.circle [ SA.cx "22.4", SA.cy "36.2", SA.r "1.5", SA.fill "#231f20" ] []
-        , Svg.circle [ SA.cx "27.5", SA.cy "31", SA.r "1.5", SA.fill "#231f20" ] []
-        , Svg.circle [ SA.cx "32.5", SA.cy "26", SA.r "1.5", SA.fill "#231f20" ] []
-        , Svg.circle [ SA.cx "7.5", SA.cy "27", SA.r "1.5", SA.fill "#231f20" ] []
-        , Svg.circle [ SA.cx "13.5", SA.cy "19", SA.r "1.5", SA.fill "#231f20" ] []
-        , Svg.circle [ SA.cx "37.3", SA.cy "21.4", SA.r "1.5", SA.fill "#231f20" ] []
-        ]
-
-
-logoStrawberry : Int -> Html.Html msg
-logoStrawberry height =
-    Svg.svg
-        [ SA.viewBox "0 0 57 57"
-        , SA.height <| toString height
-        , SA.width <| toString <| floor <| toFloat height * 1
-        ]
-        [ Svg.path [ SA.fill "#659c35", SA.d "M29.8 9.4l-2.9.6L24 1.5 29 0z" ] []
-        , Svg.path [ SA.fill "#88c057", SA.d "M36.1 8.5a8 8 0 0 0 2.4-3.6c-5.5-2-7.2.6-7.2.6 0-1-.9-1.5-2-1.6l.5 5.5-2.9.6-1.8-5.2c-.5.2-.8.5-.8.7 0 0-1.7-2.6-7.2-.6a7.9 7.9 0 0 0 2.4 3.7c-4.4.6-8.4 2-10.5 5.8 10.3 3 13.4-1.9 13.4-1.9.6 6.8 5.8 8.7 6.6 9 .8-.3 6-2.2 6.6-9 0 0 1.2 5 11.4 1.9-2.2-3.7-6.5-5.3-10.9-6z" ] []
-        , Svg.path [ SA.fill "#e22f37", SA.d "M45.3 15v-.1c-8.7 2-9.7-2.4-9.7-2.4-.6 6.8-5.8 8.7-6.6 9-.8-.3-6-2.2-6.6-9 0 0-2.6 4-10.8 2.5C9.3 17.6 8 21.4 8 27c0 13 12.8 30 20.5 30C36.2 57 49 39.9 49 27c0-5.8-1.3-9.6-3.8-12h.1z" ] []
-        , Svg.path [ SA.fill "#994530", SA.d "M17.3 20.7c-.1-.4-.7-.4-.8 0 0 0-1.5 5.3-1.5 5.8a2 2 0 0 0 1.9 1.9c.5 0 1-.2 1.4-.6.3-.3.5-.8.5-1.3s-1.5-5.8-1.5-5.8zm11.8 4c-.1-.4-.7-.4-.8 0 0 0-1.5 5.3-1.5 5.8a2 2 0 0 0 2 1.9c.4 0 1-.2 1.3-.6.3-.3.5-.8.5-1.3s-1.5-5.8-1.5-5.8zm11.2-4c-.1-.4-.7-.4-.8 0 0 0-1.5 5.3-1.5 5.8a2 2 0 0 0 1.9 1.9c.5 0 1-.2 1.4-.6.3-.3.5-.8.5-1.3s-1.5-5.8-1.5-5.8zm-18.2 13c-.1-.4-.7-.4-.8 0 0 0-1.5 5.3-1.5 5.8a2 2 0 0 0 2 2c.4 0 1-.3 1.3-.7.3-.3.5-.8.5-1.3s-1.5-5.8-1.5-5.8zm7 9c-.1-.4-.7-.4-.8 0 0 0-1.5 5.3-1.5 5.8a2 2 0 0 0 2 1.9c.4 0 1-.2 1.3-.6.3-.3.5-.8.5-1.3s-1.5-5.8-1.5-5.8zm7-9c-.1-.4-.7-.4-.8 0 0 0-1.5 5.3-1.5 5.8a2 2 0 0 0 2 1.9c.4 0 1-.2 1.3-.6.3-.3.5-.8.5-1.3s-1.5-5.8-1.5-5.8z" ] []
-        ]
-
-
-logoElm : Int -> Html.Html msg
-logoElm height =
-    let
-        f =
-            SA.fill
-
-        d =
-            SA.d
-
-        p =
-            Svg.path
-
-        c =
-            { c1 = "#F0AD00"
-            , c2 = "#7FD13B"
-            , c3 = "#60B5CC"
-            , c4 = "#5A6378"
-            }
-    in
-    Svg.svg
-        [ SA.version "1"
-        , SA.viewBox "0 0 323 323"
-        , SA.height <| toString height
-        , SA.width <| toString <| floor <| toFloat height * 1
-        ]
-        [ p [ f c.c1, d "M162 153l70-70H92zm94 94l67 67V179z" ] []
-        , p [ f c.c2, d "M9 0l70 70h153L162 0zm238 85l77 76-77 77-76-77z" ] []
-        , p [ f c.c3, d "M323 144V0H180zm-161 27L9 323h305z" ] []
-        , p [ f c.c4, d "M153 162L0 9v305z" ] []
-        ]
