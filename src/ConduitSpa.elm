@@ -1,4 +1,12 @@
-module Main exposing (..)
+module ConduitSpa
+    exposing
+        ( Model
+        , Msg(SetRoute)
+        , fromLocationToMsg
+        , init
+        , update
+        , view
+        )
 
 import Data.Article exposing (Slug)
 import Data.Session as Session exposing (Session)
@@ -16,7 +24,7 @@ import Page.Profile as Profile
 import Page.Register as Register
 import Page.Settings as Settings
 import Ports
-import Route exposing (Route)
+import Route
 import Task
 import Util exposing ((=>))
 import Views.Page as Page exposing (ActivePage)
@@ -24,6 +32,11 @@ import Views.Page as Page exposing (ActivePage)
 
 -- WARNING: this whole file will become unnecessary and go away in Elm 0.19,
 -- so avoid putting things in here unless there is no alternative!
+
+
+fromLocationToMsg : Location -> Msg
+fromLocationToMsg =
+    Route.fromLocation >> SetRoute
 
 
 type Page
@@ -226,7 +239,7 @@ pageSubscriptions page =
 
 
 type Msg
-    = SetRoute (Maybe Route)
+    = SetRoute (Maybe Route.Route)
     | HomeLoaded (Result PageLoadError Home.Model)
     | ArticleLoaded (Result PageLoadError Article.Model)
     | ProfileLoaded Username (Result PageLoadError Profile.Model)
@@ -241,7 +254,7 @@ type Msg
     | EditorMsg Editor.Msg
 
 
-setRoute : Maybe Route -> Model -> ( Model, Cmd Msg )
+setRoute : Maybe Route.Route -> Model -> ( Model, Cmd Msg )
 setRoute maybeRoute model =
     let
         transition toMsg task =
@@ -348,9 +361,6 @@ updatePage page msg model =
 
         errored =
             pageErrored model
-
-        _ =
-            Debug.log "xxx" toPage
     in
     case ( msg, page ) of
         ( SetRoute route, _ ) ->
@@ -493,7 +503,7 @@ updatePage page msg model =
 
 main : Program Value Model Msg
 main =
-    Navigation.programWithFlags (Route.fromLocation >> SetRoute)
+    Navigation.programWithFlags fromLocationToMsg
         { init = init
         , view = view
         , update = update

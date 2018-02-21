@@ -1,17 +1,9 @@
 module DeviceEmulator exposing (main)
 
---import Color exposing (..)
---import Element.Area as Area
---import Element.Background as Background
---import Element.Border as Border
---import Element.Events as Events
---import Element.Font as Font
---import Element.Input as Input
--- import DeviceEmulator
--- import Element.Area as Area
---import Element.Input as Input
+-- import Route
 
 import Color exposing (..)
+import ConduitSpa as App02
 import Element exposing (..)
 import Element.Background as Background
 import Element.Border as Border
@@ -19,26 +11,32 @@ import Element.Events as Events
 import Element.Font as Font
 import Html
 import Html.Attributes
-import Main
+import Json.Decode
 import Navigation
+import SimpleSpa as App01
 import Task
 import Window
 
 
---import Html.Attributes
---import Window
+type AppType
+    = Application01
+    | Application02
 
 
 type alias Model =
-    { modelMain : Main.Model
+    { modelApp01 : App01.Model
+    , modelApp02 : App02.Model
+    , appSelected : AppType
     , modelDeviceEmulator : ModelDeviceEmulator
     }
 
 
 type Msg
-    = MsgMain Main.Msg
+    = MsgApp01 App01.Msg
+    | MsgApp02 App02.Msg
     | ToggleFullscreen
     | ChangeDevice DeviceType
+    | ChangeApp AppType
     | WindowSize Window.Size
     | UrlChange Navigation.Location
 
@@ -57,12 +55,21 @@ type alias ModelDeviceEmulator =
     }
 
 
+init :
+    Json.Decode.Value
+    -> Navigation.Location
+    -> ( Model, Cmd Msg )
 init flag location =
     let
-        ( initModel, initCmd ) =
-            Main.init flag location
+        ( initModelApp01, initCmdApp01 ) =
+            App01.init flag location
+
+        ( initModelApp02, initCmdApp02 ) =
+            App02.init flag location
     in
-    ( { modelMain = initModel
+    ( { modelApp01 = initModelApp01
+      , modelApp02 = initModelApp02
+      , appSelected = Application01
       , modelDeviceEmulator =
             { deviceType = IPhone7
             , windowSize =
@@ -73,24 +80,32 @@ init flag location =
             }
       }
     , Cmd.batch
-        [ -- initCmd
-          Task.perform WindowSize Window.size
+        [ Cmd.map MsgApp01 initCmdApp01
+        , Cmd.map MsgApp02 initCmdApp02
+        , Task.perform WindowSize Window.size
         ]
     )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case msg of
+    case msg |> Debug.log "msg" of
         UrlChange url ->
             ( model, Cmd.none )
 
-        MsgMain msg ->
+        MsgApp01 msg ->
             let
-                ( newMain, newCmd ) =
-                    Main.update msg model.modelMain
+                ( newApp01, newCmd ) =
+                    App01.update msg model.modelApp01
             in
-            ( { model | modelMain = newMain }, Cmd.map MsgMain newCmd )
+            ( { model | modelApp01 = newApp01 }, Cmd.map MsgApp01 newCmd )
+
+        MsgApp02 msg ->
+            let
+                ( newApp02, newCmd ) =
+                    App02.update msg model.modelApp02
+            in
+            ( { model | modelApp02 = newApp02 }, Cmd.map MsgApp02 newCmd )
 
         ToggleFullscreen ->
             let
@@ -112,6 +127,9 @@ update msg model =
             in
             ( { model | modelDeviceEmulator = modelDeviceEmulator }, Cmd.none )
 
+        ChangeApp appType ->
+            ( { model | appSelected = appType }, Cmd.none )
+
         WindowSize windowSize ->
             let
                 oldModel =
@@ -123,27 +141,23 @@ update msg model =
             ( { model | modelDeviceEmulator = newModel }, Cmd.none )
 
 
-
-{-
-   main : Program Never Model Msg
-   main =
-       Html.program
-           { init = init
-           , view = view
-           , update = update
-           , subscriptions = subscriptions
-           }
-
--}
-
-
 type alias Flag =
     String
 
 
+fromLocationToMsgApp01 : Navigation.Location -> Msg
+fromLocationToMsgApp01 location =
+    MsgApp01 (App01.fromLocationToMsg location)
+
+
+fromLocationToMsgApp02 : Navigation.Location -> Msg
+fromLocationToMsgApp02 location =
+    MsgApp02 (App02.fromLocationToMsg location)
+
+
+main : Program Json.Decode.Value Model Msg
 main =
-    -- Navigation.programWithFlags (Route.fromLocation >> SetRoute)
-    Navigation.programWithFlags UrlChange
+    Navigation.programWithFlags fromLocationToMsgApp01
         { init = init
         , view = view
         , update = update
@@ -181,8 +195,7 @@ view model =
             ]
             [ if model.modelDeviceEmulator.windowSize.width > 0 then
                 if model.modelDeviceEmulator.fullscreen then
-                    html (Html.map MsgMain (Main.view model.modelMain))
-                    -- text "ciao"
+                    html (Html.map MsgApp01 (App01.view model.modelApp01))
                 else
                     viewDevice model
               else
@@ -210,7 +223,32 @@ viewDevice : Model -> Element Msg
 viewDevice model =
     let
         content =
-            html (Html.map MsgMain (Main.view model.modelMain))
+            case model.appSelected of
+                Application01 ->
+                    html
+                        (Html.map MsgApp01
+                            (Html.div
+                                [ Html.Attributes.style
+                                    [ ( "white-space", "normal" )
+                                    , ( "whith", "100%" )
+                                    ]
+                                ]
+                                [ App01.view model.modelApp01 ]
+                            )
+                        )
+
+                Application02 ->
+                    html
+                        (Html.map MsgApp02
+                            (Html.div
+                                [ Html.Attributes.style
+                                    [ ( "white-space", "normal" )
+                                    , ( "whith", "100%" )
+                                    ]
+                                ]
+                                [ App02.view model.modelApp02 ]
+                            )
+                        )
 
         -- text "ciao"
         deviceBorderTop =
@@ -298,6 +336,11 @@ viewMenuStickyRight model =
                             ++ "px ✕ "
                             ++ toString windowHeight
                             ++ "px"
+                   ]
+                ++ [ if model.appSelected == Application01 then
+                        el [ Events.onClick <| ChangeApp Application01 ] <| text "App01"
+                     else
+                        el [ Events.onClick <| ChangeApp Application02 ] <| text "App02"
                    ]
                 ++ [ if model.modelDeviceEmulator.fullscreen then
                         el [ Events.onClick ToggleFullscreen ] <|
