@@ -69,10 +69,6 @@ type alias Model =
 
 init : Value -> Location -> ( Model, Cmd Msg )
 init val location =
-    let
-        _ =
-            Debug.log "init" val
-    in
     setRoute (Route.fromLocation location)
         { pageState = Loaded initialPage
         , session = { user = decodeUserFromJson val }
@@ -330,10 +326,6 @@ pageErrored model activePage errorMessage =
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    let
-        _ =
-            Debug.log "msg" msg
-    in
     updatePage (getPage model.pageState) msg model
 
 

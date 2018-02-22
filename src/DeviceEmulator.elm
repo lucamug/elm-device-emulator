@@ -89,7 +89,7 @@ init flag location =
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case msg |> Debug.log "msg" of
+    case msg of
         UrlChange url ->
             ( model, Cmd.none )
 
@@ -157,7 +157,7 @@ fromLocationToMsgApp02 location =
 
 main : Program Json.Decode.Value Model Msg
 main =
-    Navigation.programWithFlags fromLocationToMsgApp01
+    Navigation.programWithFlags fromLocationToMsgApp02
         { init = init
         , view = view
         , update = update
@@ -192,6 +192,7 @@ view model =
         row
             [ alignTop
             , height fill
+            , padding 30
             ]
             [ if model.modelDeviceEmulator.windowSize.width > 0 then
                 if model.modelDeviceEmulator.fullscreen then
@@ -337,7 +338,7 @@ viewMenuStickyRight model =
                             ++ toString windowHeight
                             ++ "px"
                    ]
-                ++ [ if model.appSelected == Application01 then
+                ++ [ if model.appSelected == Application02 then
                         el [ Events.onClick <| ChangeApp Application01 ] <| text "App01"
                      else
                         el [ Events.onClick <| ChangeApp Application02 ] <| text "App02"

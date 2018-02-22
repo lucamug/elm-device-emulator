@@ -19750,8 +19750,17 @@ var _lucamug$elm_unbreakable_json$Page_Home$view = F2(
 								_elm_lang$html$Html$div,
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$class('row'),
-									_1: {ctor: '[]'}
+									_0: _elm_lang$html$Html_Attributes$style(
+										{
+											ctor: '::',
+											_0: {ctor: '_Tuple2', _0: 'padding', _1: '16px'},
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('row'),
+										_1: {ctor: '[]'}
+									}
 								},
 								{
 									ctor: '::',
@@ -22035,7 +22044,6 @@ var _lucamug$elm_unbreakable_json$ConduitSpa$setRoute = F2(
 	});
 var _lucamug$elm_unbreakable_json$ConduitSpa$init = F2(
 	function (val, location) {
-		var _p13 = A2(_elm_lang$core$Debug$log, 'init', val);
 		return A2(
 			_lucamug$elm_unbreakable_json$ConduitSpa$setRoute,
 			_lucamug$elm_unbreakable_json$Route$fromLocation(location),
@@ -22050,23 +22058,23 @@ var _lucamug$elm_unbreakable_json$ConduitSpa$updatePage = F3(
 	function (page, msg, model) {
 		var errored = _lucamug$elm_unbreakable_json$ConduitSpa$pageErrored(model);
 		var session = model.session;
-		var _p14 = {ctor: '_Tuple2', _0: msg, _1: page};
+		var _p13 = {ctor: '_Tuple2', _0: msg, _1: page};
 		_v8_18:
 		do {
 			_v8_17:
 			do {
-				switch (_p14._0.ctor) {
+				switch (_p13._0.ctor) {
 					case 'SetRoute':
-						return A2(_lucamug$elm_unbreakable_json$ConduitSpa$setRoute, _p14._0._0, model);
+						return A2(_lucamug$elm_unbreakable_json$ConduitSpa$setRoute, _p13._0._0, model);
 					case 'HomeLoaded':
-						if (_p14._0._0.ctor === 'Ok') {
+						if (_p13._0._0.ctor === 'Ok') {
 							return A2(
 								_lucamug$elm_unbreakable_json$Util_ops['=>'],
 								_elm_lang$core$Native_Utils.update(
 									model,
 									{
 										pageState: _lucamug$elm_unbreakable_json$ConduitSpa$Loaded(
-											_lucamug$elm_unbreakable_json$ConduitSpa$Home(_p14._0._0._0))
+											_lucamug$elm_unbreakable_json$ConduitSpa$Home(_p13._0._0._0))
 									}),
 								_elm_lang$core$Platform_Cmd$none);
 						} else {
@@ -22076,19 +22084,19 @@ var _lucamug$elm_unbreakable_json$ConduitSpa$updatePage = F3(
 									model,
 									{
 										pageState: _lucamug$elm_unbreakable_json$ConduitSpa$Loaded(
-											_lucamug$elm_unbreakable_json$ConduitSpa$Errored(_p14._0._0._0))
+											_lucamug$elm_unbreakable_json$ConduitSpa$Errored(_p13._0._0._0))
 									}),
 								_elm_lang$core$Platform_Cmd$none);
 						}
 					case 'ProfileLoaded':
-						if (_p14._0._1.ctor === 'Ok') {
+						if (_p13._0._1.ctor === 'Ok') {
 							return A2(
 								_lucamug$elm_unbreakable_json$Util_ops['=>'],
 								_elm_lang$core$Native_Utils.update(
 									model,
 									{
 										pageState: _lucamug$elm_unbreakable_json$ConduitSpa$Loaded(
-											A2(_lucamug$elm_unbreakable_json$ConduitSpa$Profile, _p14._0._0, _p14._0._1._0))
+											A2(_lucamug$elm_unbreakable_json$ConduitSpa$Profile, _p13._0._0, _p13._0._1._0))
 									}),
 								_elm_lang$core$Platform_Cmd$none);
 						} else {
@@ -22098,19 +22106,19 @@ var _lucamug$elm_unbreakable_json$ConduitSpa$updatePage = F3(
 									model,
 									{
 										pageState: _lucamug$elm_unbreakable_json$ConduitSpa$Loaded(
-											_lucamug$elm_unbreakable_json$ConduitSpa$Errored(_p14._0._1._0))
+											_lucamug$elm_unbreakable_json$ConduitSpa$Errored(_p13._0._1._0))
 									}),
 								_elm_lang$core$Platform_Cmd$none);
 						}
 					case 'ArticleLoaded':
-						if (_p14._0._0.ctor === 'Ok') {
+						if (_p13._0._0.ctor === 'Ok') {
 							return A2(
 								_lucamug$elm_unbreakable_json$Util_ops['=>'],
 								_elm_lang$core$Native_Utils.update(
 									model,
 									{
 										pageState: _lucamug$elm_unbreakable_json$ConduitSpa$Loaded(
-											_lucamug$elm_unbreakable_json$ConduitSpa$Article(_p14._0._0._0))
+											_lucamug$elm_unbreakable_json$ConduitSpa$Article(_p13._0._0._0))
 									}),
 								_elm_lang$core$Platform_Cmd$none);
 						} else {
@@ -22120,12 +22128,12 @@ var _lucamug$elm_unbreakable_json$ConduitSpa$updatePage = F3(
 									model,
 									{
 										pageState: _lucamug$elm_unbreakable_json$ConduitSpa$Loaded(
-											_lucamug$elm_unbreakable_json$ConduitSpa$Errored(_p14._0._0._0))
+											_lucamug$elm_unbreakable_json$ConduitSpa$Errored(_p13._0._0._0))
 									}),
 								_elm_lang$core$Platform_Cmd$none);
 						}
 					case 'EditArticleLoaded':
-						if (_p14._0._1.ctor === 'Ok') {
+						if (_p13._0._1.ctor === 'Ok') {
 							return A2(
 								_lucamug$elm_unbreakable_json$Util_ops['=>'],
 								_elm_lang$core$Native_Utils.update(
@@ -22134,8 +22142,8 @@ var _lucamug$elm_unbreakable_json$ConduitSpa$updatePage = F3(
 										pageState: _lucamug$elm_unbreakable_json$ConduitSpa$Loaded(
 											A2(
 												_lucamug$elm_unbreakable_json$ConduitSpa$Editor,
-												_elm_lang$core$Maybe$Just(_p14._0._0),
-												_p14._0._1._0))
+												_elm_lang$core$Maybe$Just(_p13._0._0),
+												_p13._0._1._0))
 									}),
 								_elm_lang$core$Platform_Cmd$none);
 						} else {
@@ -22145,14 +22153,14 @@ var _lucamug$elm_unbreakable_json$ConduitSpa$updatePage = F3(
 									model,
 									{
 										pageState: _lucamug$elm_unbreakable_json$ConduitSpa$Loaded(
-											_lucamug$elm_unbreakable_json$ConduitSpa$Errored(_p14._0._1._0))
+											_lucamug$elm_unbreakable_json$ConduitSpa$Errored(_p13._0._1._0))
 									}),
 								_elm_lang$core$Platform_Cmd$none);
 						}
 					case 'SetUser':
-						var _p15 = _p14._0._0;
+						var _p14 = _p13._0._0;
 						var session = model.session;
-						var cmd = ((!_elm_lang$core$Native_Utils.eq(session.user, _elm_lang$core$Maybe$Nothing)) && _elm_lang$core$Native_Utils.eq(_p15, _elm_lang$core$Maybe$Nothing)) ? _lucamug$elm_unbreakable_json$Route$modifyUrl(_lucamug$elm_unbreakable_json$Route$Home) : _elm_lang$core$Platform_Cmd$none;
+						var cmd = ((!_elm_lang$core$Native_Utils.eq(session.user, _elm_lang$core$Maybe$Nothing)) && _elm_lang$core$Native_Utils.eq(_p14, _elm_lang$core$Maybe$Nothing)) ? _lucamug$elm_unbreakable_json$Route$modifyUrl(_lucamug$elm_unbreakable_json$Route$Home) : _elm_lang$core$Platform_Cmd$none;
 						return A2(
 							_lucamug$elm_unbreakable_json$Util_ops['=>'],
 							_elm_lang$core$Native_Utils.update(
@@ -22160,19 +22168,19 @@ var _lucamug$elm_unbreakable_json$ConduitSpa$updatePage = F3(
 								{
 									session: _elm_lang$core$Native_Utils.update(
 										session,
-										{user: _p15})
+										{user: _p14})
 								}),
 							cmd);
 					case 'SettingsMsg':
-						switch (_p14._1.ctor) {
+						switch (_p13._1.ctor) {
 							case 'Settings':
-								var _p16 = A3(_lucamug$elm_unbreakable_json$Page_Settings$update, model.session, _p14._0._0, _p14._1._0);
-								var pageModel = _p16._0._0;
-								var cmd = _p16._0._1;
-								var msgFromPage = _p16._1;
+								var _p15 = A3(_lucamug$elm_unbreakable_json$Page_Settings$update, model.session, _p13._0._0, _p13._1._0);
+								var pageModel = _p15._0._0;
+								var cmd = _p15._0._1;
+								var msgFromPage = _p15._1;
 								var newModel = function () {
-									var _p17 = msgFromPage;
-									if (_p17.ctor === 'NoOp') {
+									var _p16 = msgFromPage;
+									if (_p16.ctor === 'NoOp') {
 										return model;
 									} else {
 										var session = model.session;
@@ -22180,7 +22188,7 @@ var _lucamug$elm_unbreakable_json$ConduitSpa$updatePage = F3(
 											model,
 											{
 												session: {
-													user: _elm_lang$core$Maybe$Just(_p17._0)
+													user: _elm_lang$core$Maybe$Just(_p16._0)
 												}
 											});
 									}
@@ -22200,15 +22208,15 @@ var _lucamug$elm_unbreakable_json$ConduitSpa$updatePage = F3(
 								break _v8_18;
 						}
 					case 'LoginMsg':
-						switch (_p14._1.ctor) {
+						switch (_p13._1.ctor) {
 							case 'Login':
-								var _p18 = A2(_lucamug$elm_unbreakable_json$Page_Login$update, _p14._0._0, _p14._1._0);
-								var pageModel = _p18._0._0;
-								var cmd = _p18._0._1;
-								var msgFromPage = _p18._1;
+								var _p17 = A2(_lucamug$elm_unbreakable_json$Page_Login$update, _p13._0._0, _p13._1._0);
+								var pageModel = _p17._0._0;
+								var cmd = _p17._0._1;
+								var msgFromPage = _p17._1;
 								var newModel = function () {
-									var _p19 = msgFromPage;
-									if (_p19.ctor === 'NoOp') {
+									var _p18 = msgFromPage;
+									if (_p18.ctor === 'NoOp') {
 										return model;
 									} else {
 										var session = model.session;
@@ -22216,7 +22224,7 @@ var _lucamug$elm_unbreakable_json$ConduitSpa$updatePage = F3(
 											model,
 											{
 												session: {
-													user: _elm_lang$core$Maybe$Just(_p19._0)
+													user: _elm_lang$core$Maybe$Just(_p18._0)
 												}
 											});
 									}
@@ -22236,15 +22244,15 @@ var _lucamug$elm_unbreakable_json$ConduitSpa$updatePage = F3(
 								break _v8_18;
 						}
 					case 'RegisterMsg':
-						switch (_p14._1.ctor) {
+						switch (_p13._1.ctor) {
 							case 'Register':
-								var _p20 = A2(_lucamug$elm_unbreakable_json$Page_Register$update, _p14._0._0, _p14._1._0);
-								var pageModel = _p20._0._0;
-								var cmd = _p20._0._1;
-								var msgFromPage = _p20._1;
+								var _p19 = A2(_lucamug$elm_unbreakable_json$Page_Register$update, _p13._0._0, _p13._1._0);
+								var pageModel = _p19._0._0;
+								var cmd = _p19._0._1;
+								var msgFromPage = _p19._1;
 								var newModel = function () {
-									var _p21 = msgFromPage;
-									if (_p21.ctor === 'NoOp') {
+									var _p20 = msgFromPage;
+									if (_p20.ctor === 'NoOp') {
 										return model;
 									} else {
 										var session = model.session;
@@ -22252,7 +22260,7 @@ var _lucamug$elm_unbreakable_json$ConduitSpa$updatePage = F3(
 											model,
 											{
 												session: {
-													user: _elm_lang$core$Maybe$Just(_p21._0)
+													user: _elm_lang$core$Maybe$Just(_p20._0)
 												}
 											});
 									}
@@ -22272,7 +22280,7 @@ var _lucamug$elm_unbreakable_json$ConduitSpa$updatePage = F3(
 								break _v8_18;
 						}
 					case 'HomeMsg':
-						switch (_p14._1.ctor) {
+						switch (_p13._1.ctor) {
 							case 'Home':
 								return A6(
 									_lucamug$elm_unbreakable_json$ConduitSpa$toPage,
@@ -22280,31 +22288,31 @@ var _lucamug$elm_unbreakable_json$ConduitSpa$updatePage = F3(
 									_lucamug$elm_unbreakable_json$ConduitSpa$Home,
 									_lucamug$elm_unbreakable_json$ConduitSpa$HomeMsg,
 									_lucamug$elm_unbreakable_json$Page_Home$update(session),
-									_p14._0._0,
-									_p14._1._0);
+									_p13._0._0,
+									_p13._1._0);
 							case 'NotFound':
 								break _v8_17;
 							default:
 								break _v8_18;
 						}
 					case 'ProfileMsg':
-						switch (_p14._1.ctor) {
+						switch (_p13._1.ctor) {
 							case 'Profile':
 								return A6(
 									_lucamug$elm_unbreakable_json$ConduitSpa$toPage,
 									model,
-									_lucamug$elm_unbreakable_json$ConduitSpa$Profile(_p14._1._0),
+									_lucamug$elm_unbreakable_json$ConduitSpa$Profile(_p13._1._0),
 									_lucamug$elm_unbreakable_json$ConduitSpa$ProfileMsg,
 									_lucamug$elm_unbreakable_json$Page_Profile$update(model.session),
-									_p14._0._0,
-									_p14._1._1);
+									_p13._0._0,
+									_p13._1._1);
 							case 'NotFound':
 								break _v8_17;
 							default:
 								break _v8_18;
 						}
 					case 'ArticleMsg':
-						switch (_p14._1.ctor) {
+						switch (_p13._1.ctor) {
 							case 'Article':
 								return A6(
 									_lucamug$elm_unbreakable_json$ConduitSpa$toPage,
@@ -22312,29 +22320,29 @@ var _lucamug$elm_unbreakable_json$ConduitSpa$updatePage = F3(
 									_lucamug$elm_unbreakable_json$ConduitSpa$Article,
 									_lucamug$elm_unbreakable_json$ConduitSpa$ArticleMsg,
 									_lucamug$elm_unbreakable_json$Page_Article$update(model.session),
-									_p14._0._0,
-									_p14._1._0);
+									_p13._0._0,
+									_p13._1._0);
 							case 'NotFound':
 								break _v8_17;
 							default:
 								break _v8_18;
 						}
 					default:
-						switch (_p14._1.ctor) {
+						switch (_p13._1.ctor) {
 							case 'Editor':
-								var _p23 = _p14._1._0;
-								var _p22 = model.session.user;
-								if (_p22.ctor === 'Nothing') {
-									return _elm_lang$core$Native_Utils.eq(_p23, _elm_lang$core$Maybe$Nothing) ? A2(errored, _lucamug$elm_unbreakable_json$Views_Page$NewArticle, 'You must be signed in to post articles.') : A2(errored, _lucamug$elm_unbreakable_json$Views_Page$Other, 'You must be signed in to edit articles.');
+								var _p22 = _p13._1._0;
+								var _p21 = model.session.user;
+								if (_p21.ctor === 'Nothing') {
+									return _elm_lang$core$Native_Utils.eq(_p22, _elm_lang$core$Maybe$Nothing) ? A2(errored, _lucamug$elm_unbreakable_json$Views_Page$NewArticle, 'You must be signed in to post articles.') : A2(errored, _lucamug$elm_unbreakable_json$Views_Page$Other, 'You must be signed in to edit articles.');
 								} else {
 									return A6(
 										_lucamug$elm_unbreakable_json$ConduitSpa$toPage,
 										model,
-										_lucamug$elm_unbreakable_json$ConduitSpa$Editor(_p23),
+										_lucamug$elm_unbreakable_json$ConduitSpa$Editor(_p22),
 										_lucamug$elm_unbreakable_json$ConduitSpa$EditorMsg,
-										_lucamug$elm_unbreakable_json$Page_Article_Editor$update(_p22._0),
-										_p14._0._0,
-										_p14._1._1);
+										_lucamug$elm_unbreakable_json$Page_Article_Editor$update(_p21._0),
+										_p13._0._0,
+										_p13._1._1);
 								}
 							case 'NotFound':
 								break _v8_17;
@@ -22349,7 +22357,6 @@ var _lucamug$elm_unbreakable_json$ConduitSpa$updatePage = F3(
 	});
 var _lucamug$elm_unbreakable_json$ConduitSpa$update = F2(
 	function (msg, model) {
-		var _p24 = A2(_elm_lang$core$Debug$log, 'msg', msg);
 		return A3(
 			_lucamug$elm_unbreakable_json$ConduitSpa$updatePage,
 			_lucamug$elm_unbreakable_json$ConduitSpa$getPage(model.pageState),
@@ -22359,9 +22366,9 @@ var _lucamug$elm_unbreakable_json$ConduitSpa$update = F2(
 var _lucamug$elm_unbreakable_json$ConduitSpa$SetRoute = function (a) {
 	return {ctor: 'SetRoute', _0: a};
 };
-var _lucamug$elm_unbreakable_json$ConduitSpa$fromLocationToMsg = function (_p25) {
+var _lucamug$elm_unbreakable_json$ConduitSpa$fromLocationToMsg = function (_p23) {
 	return _lucamug$elm_unbreakable_json$ConduitSpa$SetRoute(
-		_lucamug$elm_unbreakable_json$Route$fromLocation(_p25));
+		_lucamug$elm_unbreakable_json$Route$fromLocation(_p23));
 };
 var _lucamug$elm_unbreakable_json$ConduitSpa$main = A2(
 	_elm_lang$navigation$Navigation$programWithFlags,
@@ -30756,7 +30763,7 @@ var _lucamug$elm_unbreakable_json$DeviceEmulator$MsgApp01 = function (a) {
 };
 var _lucamug$elm_unbreakable_json$DeviceEmulator$update = F2(
 	function (msg, model) {
-		var _p1 = A2(_elm_lang$core$Debug$log, 'msg', msg);
+		var _p1 = msg;
 		switch (_p1.ctor) {
 			case 'UrlChange':
 				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
@@ -31218,7 +31225,7 @@ var _lucamug$elm_unbreakable_json$DeviceEmulator$viewMenuStickyRight = function 
 				_elm_lang$core$Basics_ops['++'],
 				{
 					ctor: '::',
-					_0: _elm_lang$core$Native_Utils.eq(model.appSelected, _lucamug$elm_unbreakable_json$DeviceEmulator$Application01) ? A2(
+					_0: _elm_lang$core$Native_Utils.eq(model.appSelected, _lucamug$elm_unbreakable_json$DeviceEmulator$Application02) ? A2(
 						_mdgriffith$stylish_elephants$Element$el,
 						{
 							ctor: '::',
@@ -31336,7 +31343,11 @@ var _lucamug$elm_unbreakable_json$DeviceEmulator$view = function (model) {
 				_1: {
 					ctor: '::',
 					_0: _mdgriffith$stylish_elephants$Element$height(_mdgriffith$stylish_elephants$Element$fill),
-					_1: {ctor: '[]'}
+					_1: {
+						ctor: '::',
+						_0: _mdgriffith$stylish_elephants$Element$padding(30),
+						_1: {ctor: '[]'}
+					}
 				}
 			},
 			{
@@ -31358,7 +31369,7 @@ var _lucamug$elm_unbreakable_json$DeviceEmulator$view = function (model) {
 };
 var _lucamug$elm_unbreakable_json$DeviceEmulator$main = A2(
 	_elm_lang$navigation$Navigation$programWithFlags,
-	_lucamug$elm_unbreakable_json$DeviceEmulator$fromLocationToMsgApp01,
+	_lucamug$elm_unbreakable_json$DeviceEmulator$fromLocationToMsgApp02,
 	{init: _lucamug$elm_unbreakable_json$DeviceEmulator$init, view: _lucamug$elm_unbreakable_json$DeviceEmulator$view, update: _lucamug$elm_unbreakable_json$DeviceEmulator$update, subscriptions: _lucamug$elm_unbreakable_json$DeviceEmulator$subscriptions})(_elm_lang$core$Json_Decode$value);
 
 var Elm = {};
