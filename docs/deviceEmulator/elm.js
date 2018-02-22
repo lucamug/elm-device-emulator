@@ -30839,69 +30839,69 @@ var _lucamug$elm_unbreakable_json$DeviceEmulator$fromLocationToMsgApp01 = functi
 	return _lucamug$elm_unbreakable_json$DeviceEmulator$MsgApp01(
 		_lucamug$elm_unbreakable_json$SimpleSpa$fromLocationToMsg(location));
 };
+var _lucamug$elm_unbreakable_json$DeviceEmulator$content = function (model) {
+	var _p4 = model.appSelected;
+	if (_p4.ctor === 'Application01') {
+		return _mdgriffith$stylish_elephants$Element$html(
+			A2(
+				_elm_lang$html$Html$map,
+				_lucamug$elm_unbreakable_json$DeviceEmulator$MsgApp01,
+				A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$style(
+							{
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'white-space', _1: 'normal'},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'whith', _1: '100%'},
+									_1: {ctor: '[]'}
+								}
+							}),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: _lucamug$elm_unbreakable_json$SimpleSpa$view(model.modelApp01),
+						_1: {ctor: '[]'}
+					})));
+	} else {
+		return _mdgriffith$stylish_elephants$Element$html(
+			A2(
+				_elm_lang$html$Html$map,
+				_lucamug$elm_unbreakable_json$DeviceEmulator$MsgApp02,
+				A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$style(
+							{
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'white-space', _1: 'normal'},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'whith', _1: '100%'},
+									_1: {ctor: '[]'}
+								}
+							}),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: _lucamug$elm_unbreakable_json$ConduitSpa$view(model.modelApp02),
+						_1: {ctor: '[]'}
+					})));
+	}
+};
 var _lucamug$elm_unbreakable_json$DeviceEmulator$viewDevice = function (model) {
-	var _p4 = _lucamug$elm_unbreakable_json$DeviceEmulator$deviceSize(model);
-	var deviceWidth = _p4._0;
-	var deviceHeight = _p4._1;
+	var _p5 = _lucamug$elm_unbreakable_json$DeviceEmulator$deviceSize(model);
+	var deviceWidth = _p5._0;
+	var deviceHeight = _p5._1;
 	var deviceBorderSide = 10;
 	var deviceBorderBottom = 110;
 	var deviceBorderTop = 80;
-	var content = function () {
-		var _p5 = model.appSelected;
-		if (_p5.ctor === 'Application01') {
-			return _mdgriffith$stylish_elephants$Element$html(
-				A2(
-					_elm_lang$html$Html$map,
-					_lucamug$elm_unbreakable_json$DeviceEmulator$MsgApp01,
-					A2(
-						_elm_lang$html$Html$div,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$style(
-								{
-									ctor: '::',
-									_0: {ctor: '_Tuple2', _0: 'white-space', _1: 'normal'},
-									_1: {
-										ctor: '::',
-										_0: {ctor: '_Tuple2', _0: 'whith', _1: '100%'},
-										_1: {ctor: '[]'}
-									}
-								}),
-							_1: {ctor: '[]'}
-						},
-						{
-							ctor: '::',
-							_0: _lucamug$elm_unbreakable_json$SimpleSpa$view(model.modelApp01),
-							_1: {ctor: '[]'}
-						})));
-		} else {
-			return _mdgriffith$stylish_elephants$Element$html(
-				A2(
-					_elm_lang$html$Html$map,
-					_lucamug$elm_unbreakable_json$DeviceEmulator$MsgApp02,
-					A2(
-						_elm_lang$html$Html$div,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$style(
-								{
-									ctor: '::',
-									_0: {ctor: '_Tuple2', _0: 'white-space', _1: 'normal'},
-									_1: {
-										ctor: '::',
-										_0: {ctor: '_Tuple2', _0: 'whith', _1: '100%'},
-										_1: {ctor: '[]'}
-									}
-								}),
-							_1: {ctor: '[]'}
-						},
-						{
-							ctor: '::',
-							_0: _lucamug$elm_unbreakable_json$ConduitSpa$view(model.modelApp02),
-							_1: {ctor: '[]'}
-						})));
-		}
-	}();
 	return A2(
 		_mdgriffith$stylish_elephants$Element$column,
 		{
@@ -31084,7 +31084,7 @@ var _lucamug$elm_unbreakable_json$DeviceEmulator$viewDevice = function (model) {
 											}
 										}
 									},
-									content)),
+									_lucamug$elm_unbreakable_json$DeviceEmulator$content(model))),
 							_1: {ctor: '[]'}
 						}),
 					_1: {ctor: '[]'}
@@ -31246,21 +31246,28 @@ var _lucamug$elm_unbreakable_json$DeviceEmulator$viewMenuStickyRight = function 
 				},
 				{
 					ctor: '::',
-					_0: model.modelDeviceEmulator.fullscreen ? A2(
-						_mdgriffith$stylish_elephants$Element$el,
-						{
-							ctor: '::',
-							_0: _mdgriffith$stylish_elephants$Element_Events$onClick(_lucamug$elm_unbreakable_json$DeviceEmulator$ToggleFullscreen),
-							_1: {ctor: '[]'}
-						},
-						_mdgriffith$stylish_elephants$Element$text('not full screen')) : A2(
-						_mdgriffith$stylish_elephants$Element$el,
-						{
-							ctor: '::',
-							_0: _mdgriffith$stylish_elephants$Element_Events$onClick(_lucamug$elm_unbreakable_json$DeviceEmulator$ToggleFullscreen),
-							_1: {ctor: '[]'}
-						},
-						_mdgriffith$stylish_elephants$Element$text('fullscreen')),
+					_0: function () {
+						var _p9 = model.modelDeviceEmulator.fullscreen;
+						if (_p9 === true) {
+							return A2(
+								_mdgriffith$stylish_elephants$Element$el,
+								{
+									ctor: '::',
+									_0: _mdgriffith$stylish_elephants$Element_Events$onClick(_lucamug$elm_unbreakable_json$DeviceEmulator$ToggleFullscreen),
+									_1: {ctor: '[]'}
+								},
+								_mdgriffith$stylish_elephants$Element$text('not full screen'));
+						} else {
+							return A2(
+								_mdgriffith$stylish_elephants$Element$el,
+								{
+									ctor: '::',
+									_0: _mdgriffith$stylish_elephants$Element_Events$onClick(_lucamug$elm_unbreakable_json$DeviceEmulator$ToggleFullscreen),
+									_1: {ctor: '[]'}
+								},
+								_mdgriffith$stylish_elephants$Element$text('fullscreen'));
+						}
+					}(),
 					_1: {ctor: '[]'}
 				})));
 	return A2(
@@ -31321,9 +31328,9 @@ var _lucamug$elm_unbreakable_json$DeviceEmulator$viewMenuStickyRight = function 
 			menuItems));
 };
 var _lucamug$elm_unbreakable_json$DeviceEmulator$view = function (model) {
-	var _p9 = _lucamug$elm_unbreakable_json$DeviceEmulator$windowSize(model);
-	var windowWidth = _p9._0;
-	var windowHeight = _p9._1;
+	var _p10 = _lucamug$elm_unbreakable_json$DeviceEmulator$windowSize(model);
+	var windowWidth = _p10._0;
+	var windowHeight = _p10._1;
 	return A2(
 		_mdgriffith$stylish_elephants$Element$layout,
 		{
@@ -31352,11 +31359,7 @@ var _lucamug$elm_unbreakable_json$DeviceEmulator$view = function (model) {
 			},
 			{
 				ctor: '::',
-				_0: (_elm_lang$core$Native_Utils.cmp(model.modelDeviceEmulator.windowSize.width, 0) > 0) ? (model.modelDeviceEmulator.fullscreen ? _mdgriffith$stylish_elephants$Element$html(
-					A2(
-						_elm_lang$html$Html$map,
-						_lucamug$elm_unbreakable_json$DeviceEmulator$MsgApp01,
-						_lucamug$elm_unbreakable_json$SimpleSpa$view(model.modelApp01))) : _lucamug$elm_unbreakable_json$DeviceEmulator$viewDevice(model)) : A2(
+				_0: (_elm_lang$core$Native_Utils.cmp(model.modelDeviceEmulator.windowSize.width, 0) > 0) ? (model.modelDeviceEmulator.fullscreen ? _lucamug$elm_unbreakable_json$DeviceEmulator$content(model) : _lucamug$elm_unbreakable_json$DeviceEmulator$viewDevice(model)) : A2(
 					_mdgriffith$stylish_elephants$Element$el,
 					{
 						ctor: '::',

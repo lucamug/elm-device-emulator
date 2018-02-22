@@ -196,7 +196,8 @@ view model =
             ]
             [ if model.modelDeviceEmulator.windowSize.width > 0 then
                 if model.modelDeviceEmulator.fullscreen then
-                    html (Html.map MsgApp01 (App01.view model.modelApp01))
+                    -- html (Html.map MsgApp01 (App01.view model.modelApp01))
+                    content model
                 else
                     viewDevice model
               else
@@ -220,38 +221,38 @@ deviceSize model =
             ( 768, 1024 )
 
 
+content model =
+    case model.appSelected of
+        Application01 ->
+            html
+                (Html.map MsgApp01
+                    (Html.div
+                        [ Html.Attributes.style
+                            [ ( "white-space", "normal" )
+                            , ( "whith", "100%" )
+                            ]
+                        ]
+                        [ App01.view model.modelApp01 ]
+                    )
+                )
+
+        Application02 ->
+            html
+                (Html.map MsgApp02
+                    (Html.div
+                        [ Html.Attributes.style
+                            [ ( "white-space", "normal" )
+                            , ( "whith", "100%" )
+                            ]
+                        ]
+                        [ App02.view model.modelApp02 ]
+                    )
+                )
+
+
 viewDevice : Model -> Element Msg
 viewDevice model =
     let
-        content =
-            case model.appSelected of
-                Application01 ->
-                    html
-                        (Html.map MsgApp01
-                            (Html.div
-                                [ Html.Attributes.style
-                                    [ ( "white-space", "normal" )
-                                    , ( "whith", "100%" )
-                                    ]
-                                ]
-                                [ App01.view model.modelApp01 ]
-                            )
-                        )
-
-                Application02 ->
-                    html
-                        (Html.map MsgApp02
-                            (Html.div
-                                [ Html.Attributes.style
-                                    [ ( "white-space", "normal" )
-                                    , ( "whith", "100%" )
-                                    ]
-                                ]
-                                [ App02.view model.modelApp02 ]
-                            )
-                        )
-
-        -- text "ciao"
         deviceBorderTop =
             80
 
@@ -316,7 +317,7 @@ viewDevice model =
                         , style ( "max-height", toString deviceHeight ++ "px" )
                         ]
                     <|
-                        content
+                        content model
 
                 -- (Element.map MsgForm (Pages.Form.viewElement deviceWidth model.modelForm))
                 ]
@@ -343,14 +344,16 @@ viewMenuStickyRight model =
                      else
                         el [ Events.onClick <| ChangeApp Application02 ] <| text "App02"
                    ]
-                ++ [ if model.modelDeviceEmulator.fullscreen then
-                        el [ Events.onClick ToggleFullscreen ] <|
-                            -- Logo.logo Logo.ExitFullscreen 18
-                            text "not full screen"
-                     else
-                        el [ Events.onClick ToggleFullscreen ] <|
-                            -- Logo.logo Logo.Fullscreen 18
-                            text "fullscreen"
+                ++ [ case model.modelDeviceEmulator.fullscreen of
+                        True ->
+                            el [ Events.onClick ToggleFullscreen ] <|
+                                -- Logo.logo Logo.ExitFullscreen 18
+                                text "not full screen"
+
+                        False ->
+                            el [ Events.onClick ToggleFullscreen ] <|
+                                -- Logo.logo Logo.Fullscreen 18
+                                text "fullscreen"
                    ]
     in
     above True <|
