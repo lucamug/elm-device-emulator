@@ -189,20 +189,20 @@ view model =
         , viewMenuStickyRight model
         ]
     <|
-        row
+        el
             [ alignTop
             , height fill
             , padding 30
             ]
-            [ if model.modelDeviceEmulator.windowSize.width > 0 then
+            (if model.modelDeviceEmulator.windowSize.width > 0 then
                 if model.modelDeviceEmulator.fullscreen then
                     -- html (Html.map MsgApp01 (App01.view model.modelApp01))
                     content model
                 else
                     viewDevice model
-              else
+             else
                 el [ centerY ] <| text "windowSize is not set yet"
-            ]
+            )
 
 
 deviceSize : Model -> ( number, number1 )
@@ -221,6 +221,7 @@ deviceSize model =
             ( 768, 1024 )
 
 
+content : Model -> Element Msg
 content model =
     case model.appSelected of
         Application01 ->
@@ -250,6 +251,13 @@ content model =
                 )
 
 
+debugBorder : List (Attribute msg)
+debugBorder =
+    [ Border.color red
+    , Border.width 2
+    ]
+
+
 viewDevice : Model -> Element Msg
 viewDevice model =
     let
@@ -266,26 +274,32 @@ viewDevice model =
             deviceSize model
     in
     column
-        [ height shrink
-        , alignTop
-        ]
+        ([ height shrink
+         , alignTop
+         , width shrink
+         , centerX
+         ]
+            ++ debugBorder
+        )
         [ column
-            [ above True <|
+            [ above <|
                 el
                     [ Font.shadow { offset = ( -2, -2 ), blur = 0, color = black }
                     , Font.shadow { offset = ( 2, 2 ), blur = 0, color = grey3 }
                     , Font.color <| gray2
                     , Font.size 48
                     , moveDown 80
+                    , centerX
                     ]
                     (text "● ▬▬▬")
-            , below True <|
+            , below <|
                 el
                     [ Font.shadow { offset = ( -2, -2 ), blur = 0, color = black }
                     , Font.shadow { offset = ( 2, 2 ), blur = 0, color = grey3 }
                     , Font.color <| gray2
                     , Font.size 150
                     , moveUp 180
+                    , centerX
                     ]
                     (text "●")
             ]
@@ -356,7 +370,7 @@ viewMenuStickyRight model =
                                 text "fullscreen"
                    ]
     in
-    above True <|
+    above <|
         row
             [ style ( "opacity", "0.7" )
             , style ( "position", "fixed" )
@@ -436,4 +450,4 @@ grey1 =
 
 style : ( String, String ) -> Element.Attribute Msg
 style style =
-    Element.attribute (Html.Attributes.style [ style ])
+    Element.htmlAttribute (Html.Attributes.style [ style ])
