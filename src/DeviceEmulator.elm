@@ -274,13 +274,11 @@ viewDevice model =
             deviceSize model
     in
     column
-        ([ height shrink
-         , alignTop
-         , width shrink
-         , centerX
-         ]
-            ++ debugBorder
-        )
+        [ height shrink
+        , alignTop
+        , width shrink
+        , centerX
+        ]
         [ column
             [ above <|
                 el
@@ -317,7 +315,7 @@ viewDevice model =
                         }
                     , Border.rounded 50
                     , Border.color <| grey1
-                    , style ( "box-shadow", "rgba(10, 10, 10, 0.19) 5px 5px 5px 5px" )
+                    , hackStyle ( "box-shadow", "rgba(10, 10, 10, 0.19) 5px 5px 5px 5px" )
                     ]
                   <|
                     el
@@ -327,8 +325,6 @@ viewDevice model =
                         , Border.width 1
                         , Border.color black
                         , Background.color white
-                        , style ( "justify-content", "normal" )
-                        , style ( "max-height", toString deviceHeight ++ "px" )
                         ]
                     <|
                         content model
@@ -372,10 +368,10 @@ viewMenuStickyRight model =
     in
     above <|
         row
-            [ style ( "opacity", "0.7" )
-            , style ( "position", "fixed" )
-            , style ( "left", "0" )
-            , style ( "bottom", "auto" )
+            [ hackStyle ( "opacity", "0.7" )
+            , hackStyle ( "position", "fixed" )
+            , hackStyle ( "left", "0" )
+            , hackStyle ( "bottom", "auto" )
             , Background.color <| white
             , Font.size 14
             , Font.family
@@ -448,6 +444,6 @@ grey1 =
     Color.rgb 0x11 0x11 0x11
 
 
-style : ( String, String ) -> Element.Attribute Msg
-style style =
+hackStyle : ( String, String ) -> Element.Attribute Msg
+hackStyle style =
     Element.htmlAttribute (Html.Attributes.style [ style ])
